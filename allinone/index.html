@@ -35,6 +35,7 @@
         /* === Font Loading === */
         @font-face {
           font-family: 'HuWenMingChaoTi';
+          /* Ensure the path is correct relative to your HTML file or use absolute paths if needed */
           src: url('../fonts/HuWenMingChaoTi.woff2') format('woff2'),
                url('../fonts/HuWenMingChaoTi.woff') format('woff');
           font-weight: normal;
@@ -48,8 +49,8 @@
             --primary-gradient-light: linear-gradient(135deg, #005f73, #0a9396);
             --secondary-gradient-light: linear-gradient(135deg, #94d2bd, #e9d8a6);
             --background-gradient-light: linear-gradient(135deg, #001219, #005f73);
-            --text-color-light: #e9ecef;
-            --dark-text-color-light: #001219;
+            --text-color-light: #e9ecef; /* Light grey for light mode text */
+            --dark-text-color-light: #001219; /* Dark for titles on light backgrounds */
             --countdown-item-bg-light: rgba(255, 255, 255, 0.1);
             --countdown-title-color-light: var(--dark-text-color-light);
             --countdown-display-color-light: var(--text-color-light);
@@ -65,24 +66,24 @@
             --logo-focus-shadow-light: rgba(148, 210, 189, 0.5); /* Teal-ish focus */
 
             /* Dark Mode Colors */
-            --primary-gradient-dark: linear-gradient(135deg, #2c3e50, #34495e);
-            --secondary-gradient-dark: linear-gradient(135deg, #485a6d, #597085);
-            --background-gradient-dark: linear-gradient(135deg, #0f111a, #1e2430);
-            --text-color-dark: #ecf0f1;
-            --dark-text-color-dark: #bdc3c7;
-            --countdown-item-bg-dark: rgba(44, 62, 80, 0.4);
-            --countdown-title-color-dark: var(--text-color-dark);
-            --countdown-display-color-dark: var(--text-color-dark);
+            --primary-gradient-dark: linear-gradient(135deg, #2c3e50, #34495e); /* Dark Slate Blue/Grey */
+            --secondary-gradient-dark: linear-gradient(135deg, #485a6d, #597085); /* Lighter Slate Grey */
+            --background-gradient-dark: linear-gradient(135deg, #0f111a, #1e2430); /* Very Dark Blue/Grey */
+            --text-color-dark: #d8dee9; /* Soft grey-blue (Nord theme style) - MAIN TEXT COLOR */
+            --dark-text-color-dark: #b0b8c4; /* Slightly darker grey for less important text if needed */
+            --countdown-item-bg-dark: rgba(44, 62, 80, 0.4); /* Darker Transparent */
+            --countdown-title-color-dark: var(--text-color-dark); /* Inherits soft grey-blue */
+            --countdown-display-color-dark: var(--text-color-dark); /* Inherits soft grey-blue */
             --footer-gradient-dark: linear-gradient(135deg, rgba(44, 62, 80, 0.6), rgba(52, 73, 94, 0.6));
-            --footer-link-color-dark: #3498db;
-            --footer-link-hover-dark: #5dade2;
-            --button-text-color-dark: var(--text-color-dark);
+            --footer-link-color-dark: #81a1c1; /* Softer blue (Nord frost) */
+            --footer-link-hover-dark: #8fbcbb; /* Softer teal/blue (Nord frost) */
+            --button-text-color-dark: var(--text-color-dark); /* Inherits soft grey-blue */
             --button-hover-shadow-dark: 0 4px 8px rgba(0, 0, 0, 0.4);
             --progress-bar-bg-dark: rgba(255, 255, 255, 0.1);
-            --progress-bar-fill-dark: linear-gradient(135deg, #3498db, #5dade2);
+            --progress-bar-fill-dark: linear-gradient(135deg, #5e81ac, #81a1c1); /* Nord blue gradient */
             --progress-bar-border-dark: rgba(255, 255, 255, 0.05);
             --progress-bar-text-shadow-dark: 1px 1px 2px rgba(0, 0, 0, 0.8);
-            --logo-focus-shadow-dark: rgba(52, 152, 219, 0.6); /* Blueish focus */
+            --logo-focus-shadow-dark: rgba(94, 129, 172, 0.6); /* Nord blue focus */
 
             /* Default to Light Mode variables */
             --primary-gradient: var(--primary-gradient-light);
@@ -113,7 +114,7 @@
             --primary-gradient: var(--primary-gradient-dark);
             --secondary-gradient: var(--secondary-gradient-dark);
             --background-gradient: var(--background-gradient-dark);
-            --text-color: var(--text-color-dark);
+            --text-color: var(--text-color-dark); /* Uses the soft #d8dee9 */
             --dark-text-color: var(--dark-text-color-dark);
             --countdown-item-bg: var(--countdown-item-bg-dark);
             --countdown-title-color: var(--countdown-title-color-dark);
@@ -137,6 +138,10 @@
             box-sizing: border-box;
         }
 
+        html {
+             scroll-behavior: smooth; /* Optional: Smooth scrolling */
+        }
+
         body {
             font-family: 'HuWenMingChaoTi', 'Noto Sans TC', 'NotoSansCJKsc', 'Helvetica Neue', Arial, sans-serif;
             background: var(--background-gradient);
@@ -154,21 +159,28 @@
             justify-content: space-between;
             width: 100%;
             max-width: 1400px;
-            flex: 1;
+            flex: 1; /* Make container fill available vertical space */
             gap: 20px;
         }
 
         .column {
-            flex: 1;
+            flex: 1; /* Columns share space equally */
             padding: 20px;
             border-radius: 15px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px); /* Frosted glass effect */
+            -webkit-backdrop-filter: blur(10px); /* Safari support */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow */
             transition: var(--theme-transition);
+            /* Ensure columns don't shrink below content width on very large screens */
+            min-width: 0; /* Allows flex items to shrink */
         }
 
-        .left-column { background: var(--primary-gradient); }
-        .right-column { background: var(--secondary-gradient); }
+        .left-column {
+            background: var(--primary-gradient);
+        }
+        .right-column {
+            background: var(--secondary-gradient);
+        }
 
         .countdown-container {
             display: flex;
@@ -176,45 +188,45 @@
             gap: 15px;
             background: var(--primary-gradient);
             align-items: center;
-            max-width: 300px;
-            margin: 0 auto;
-            position: relative;
+            max-width: 300px; /* Limit width of middle column */
+            margin: 0 auto; /* Center middle column if container is wider */
+            position: relative; /* For potential absolute positioning inside */
         }
 
         /* === LOGO THEME TOGGLE === */
         .theme-toggle-logo-button { /* The button wrapping the logo */
-            order: -1;
+            order: -1; /* Place it at the top of the flex container */
             margin-bottom: 15px;
             padding: 0;
             border: none;
             background: none;
             cursor: pointer;
-            line-height: 0;
-            -webkit-tap-highlight-color: transparent;
+            line-height: 0; /* Prevent extra space around image */
+            -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
             border-radius: 8px; /* Match image rounding slightly */
             transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .logo-img { /* The actual logo image */
-            display: block;
-            max-width: 80px;
+            display: block; /* Prevent extra space below image */
+            max-width: 80px; /* Control logo size */
             width: 100%;
             height: auto;
             border-radius: 8px; /* Optional rounding */
         }
 
         .theme-toggle-logo-button:hover .logo-img {
-            opacity: 0.85;
-            transform: scale(1.05);
+            opacity: 0.85; /* Slight fade on hover */
+            transform: scale(1.05); /* Slight zoom effect */
         }
 
         .theme-toggle-logo-button:focus {
-            outline: none; /* Remove default outline */
+            outline: none; /* Remove default browser outline */
              /* Use variable for focus shadow color */
-            box-shadow: 0 0 0 3px var(--logo-focus-shadow);
+            box-shadow: 0 0 0 3px var(--logo-focus-shadow); /* Custom focus ring */
         }
+        /* Apply hover effects also on focus for consistency */
         .theme-toggle-logo-button:focus .logo-img {
-             /* Keep consistent visual feedback on focus */
              opacity: 0.85;
              transform: scale(1.05);
         }
@@ -239,60 +251,77 @@
         }
 
         .countdown-display {
-            font-size: 1.8rem;
+            font-size: 1.8rem; /* Base size */
             font-weight: bold;
             color: var(--countdown-display-color);
             transition: var(--theme-transition);
-            word-wrap: break-word; /* Prevent overflow on smaller screens */
+            word-wrap: break-word; /* Prevent long text from overflowing */
+            line-height: 1.3; /* Adjust line height for multiline displays */
         }
 
         /* Adjust Font Sizes for specific items */
         #gaokao-countdown .countdown-display,
         #human-timer .countdown-display {
-            font-size: 1.4rem;
-            line-height: 1.3;
+            font-size: 1.4rem; /* Slightly smaller for longer text */
         }
         #current-time .countdown-display span {
-            display: block;
-            line-height: 1.4;
+            display: block; /* Put time and date on separate lines */
+            line-height: 1.4; /* Ensure spacing */
             color: var(--countdown-display-color);
             transition: var(--theme-transition);
         }
-        #current-time .countdown-display span:not(:last-child) { margin-bottom: 5px; }
-        #current-time-clock { font-size: 1.8rem; font-weight: bold; margin-bottom: 8px !important; }
-        #current-date-gregorian { font-size: 1.1rem; opacity: 0.9; }
+        #current-time .countdown-display span:not(:last-child) {
+            margin-bottom: 5px; /* Space between time and date */
+        }
+        #current-time-clock {
+            font-size: 1.8rem; /* Keep clock larger */
+            font-weight: bold;
+            margin-bottom: 8px !important; /* Override default margin */
+        }
+        #current-date-gregorian {
+            font-size: 1.1rem; /* Date slightly smaller */
+            opacity: 0.9; /* Slightly faded */
+        }
+        #year-progress .countdown-display {
+             font-size: 1.6rem; /* Adjust size for percentage display */
+        }
 
         /* === PROGRESS BARS === */
-        .progress-item .countdown-display { display: none; }
+        .progress-item {
+            /* Ensure title and bar are laid out correctly */
+        }
+        .progress-item .countdown-display {
+            display: none; /* Hide the default text display area for progress items */
+        }
         .progress-bar-container {
-            width: 90%;
-            height: 28px;
+            width: 90%; /* Relative width */
+            height: 28px; /* Bar height */
             background-color: var(--progress-bar-bg);
-            border-radius: 15px;
-            margin: 5px auto 0;
-            position: relative;
-            overflow: hidden;
+            border-radius: 15px; /* Rounded corners */
+            margin: 5px auto 0; /* Spacing and centering */
+            position: relative; /* For positioning text */
+            overflow: hidden; /* Keep fill inside */
             border: 1px solid var(--progress-bar-border);
             transition: var(--theme-transition);
         }
         .progress-bar-fill {
             height: 100%;
-            width: 0%;
+            width: 0%; /* Initial width, set by JS */
             background: var(--progress-bar-fill);
-            border-radius: 15px;
-            transition: width 0.5s ease-out, var(--theme-transition);
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+            border-radius: 15px; /* Match container */
+            transition: width 0.5s ease-out, var(--theme-transition); /* Animate width change */
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.3); /* Inner shadow for depth */
         }
         .progress-bar-text {
-            position: absolute;
+            position: absolute; /* Overlay on the bar */
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
-            color: var(--text-color);
+            transform: translate(-50%, -50%); /* Center text */
+            color: var(--text-color); /* Use main text color for contrast */
             font-size: 0.95rem;
             font-weight: bold;
-            text-shadow: var(--progress-bar-text-shadow);
-            white-space: nowrap;
+            text-shadow: var(--progress-bar-text-shadow); /* Ensure readability */
+            white-space: nowrap; /* Prevent wrapping */
             transition: var(--theme-transition);
         }
 
@@ -301,23 +330,30 @@
             background: var(--primary-gradient);
             border-radius: 10px;
             text-align: center;
-            padding: 10px;
+            padding: 12px 10px; /* Slightly more padding */
             color: var(--button-text-color);
             text-decoration: none;
             font-weight: bold;
-            transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease; /* Smoother transitions */
             display: block;
             margin-bottom: 10px;
             border: none;
             cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0, 0.1); /* Subtle initial shadow */
         }
         .link-button:hover,
         .link-button:focus {
             background: var(--secondary-gradient);
-            transform: translateY(-2px);
-            box-shadow: var(--button-hover-shadow);
-            outline: none;
+            transform: translateY(-2px); /* Lift effect */
+            box-shadow: var(--button-hover-shadow); /* Use variable for hover shadow */
+            outline: none; /* Remove browser default focus outline */
         }
+        /* Add a subtle focus ring using outline offset for better visibility */
+        .link-button:focus-visible {
+             outline: 2px solid var(--footer-link-hover); /* Use a theme color */
+             outline-offset: 2px;
+        }
+
 
         /* === FOOTER === */
         .footer {
@@ -327,38 +363,89 @@
             padding: 20px;
             background: var(--footer-gradient);
             backdrop-filter: blur(5px);
-            border-radius: 15px 15px 0 0;
-            margin-top: 20px;
+            -webkit-backdrop-filter: blur(5px);
+            border-radius: 15px 15px 0 0; /* Rounded top corners */
+            margin-top: 20px; /* Space above footer */
             transition: var(--theme-transition);
+            color: var(--text-color); /* Ensure footer text also changes theme */
         }
         .footer a {
             color: var(--footer-link-color);
             text-decoration: none;
             transition: color 0.3s ease;
+            font-weight: bold;
         }
         .footer a:hover,
         .footer a:focus {
             color: var(--footer-link-hover);
             outline: none;
+            text-decoration: underline; /* Add underline on hover/focus */
         }
 
         /* === RESPONSIVE DESIGN === */
         @media (max-width: 1000px) {
-            .container { flex-direction: column; }
-            .column { width: 100%; margin-bottom: 20px; max-width: none; }
-            .countdown-container { max-width: 90%; }
-            .logo-img { max-width: 60px; }
-            .theme-toggle-logo-button:focus { box-shadow: 0 0 0 2px var(--logo-focus-shadow); }
+            .container {
+                flex-direction: column; /* Stack columns vertically */
+            }
+            .column {
+                width: 100%; /* Full width */
+                margin-bottom: 20px;
+                max-width: none; /* Remove max-width constraint */
+            }
+            .column:last-child {
+                margin-bottom: 0; /* No margin on last column */
+            }
+            .countdown-container {
+                 max-width: 90%; /* Adjust max width for middle column */
+                 margin-bottom: 20px; /* Ensure space before right column */
+            }
+            .logo-img {
+                max-width: 60px; /* Slightly smaller logo */
+            }
+            /* Adjust focus ring for smaller screens */
+            .theme-toggle-logo-button:focus {
+                 box-shadow: 0 0 0 2px var(--logo-focus-shadow);
+            }
         }
-        @media (max-width: 480px) {
+
+         @media (max-width: 480px) {
+            body {
+                 padding: 15px; /* Reduce padding on very small screens */
+            }
+            .column {
+                 padding: 15px;
+            }
             #gaokao-countdown .countdown-display,
-            #human-timer .countdown-display { font-size: 1.2rem; }
-            #current-time-clock { font-size: 1.5rem; }
-            #current-date-gregorian { font-size: 1.0rem; }
-            .progress-bar-container { height: 22px; }
-            .progress-bar-text { font-size: 0.8rem; }
-            .logo-img { max-width: 50px; }
-        }
+            #human-timer .countdown-display {
+                 font-size: 1.15rem; /* Further reduce font size */
+                 line-height: 1.25;
+            }
+             #current-time-clock {
+                 font-size: 1.4rem; /* Reduce clock size */
+             }
+             #current-date-gregorian {
+                 font-size: 0.95rem; /* Reduce date size */
+             }
+             #year-progress .countdown-display {
+                  font-size: 1.4rem;
+             }
+             .progress-bar-container {
+                 height: 24px; /* Slightly smaller bars */
+             }
+             .progress-bar-text {
+                 font-size: 0.8rem; /* Smaller text on bars */
+             }
+             .link-button {
+                 padding: 10px 8px; /* Adjust button padding */
+                 font-size: 0.95rem;
+             }
+             .logo-img {
+                max-width: 50px; /* Even smaller logo */
+             }
+             .footer {
+                 font-size: 0.85rem;
+             }
+         }
     </style>
 </head>
 <body>
@@ -367,8 +454,8 @@
 
         <!-- Left Column (Links) -->
         <div class="column left-column">
-            <a href="https://gk.bdfz.net" class="link-button" target="_blank" rel="noopener noreferrer" aria-label="高考">AI高考</a>
-            <a href="https://mx.bdfz.net" class="link-button" target="_blank" rel="noopener noreferrer" aria-label="高考">AI默寫</a>
+            <a href="https://gk.bdfz.net" class="link-button" target="_blank" rel="noopener noreferrer" aria-label="AI高考">AI高考</a>
+            <a href="https://mx.bdfz.net" class="link-button" target="_blank" rel="noopener noreferrer" aria-label="AI默寫">AI默寫</a>
             <a href="https://mf.bdfz.net" class="link-button" target="_blank" rel="noopener noreferrer" aria-label="訪問高考詩文">高考默寫</a>
             <a href="https://kz.bdfz.net" class="link-button" target="_blank" rel="noopener noreferrer" aria-label="AI論語">AI論語</a>
             <a href="https://hlm.bdfz.net" class="link-button" target="_blank" rel="noopener noreferrer" aria-label="AI紅樓夢">AI紅樓夢</a>
@@ -463,7 +550,7 @@
     <!-- JavaScript for Timers & Theme Toggle -->
     <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // --- Cache Timer DOM elements ---
+        // --- Cache DOM elements ---
         const gaokaoDisplay = document.querySelector('#gaokao-countdown .countdown-display');
         const yearProgressDisplay = document.querySelector('#year-progress .countdown-display');
         const humanTimeDisplay = document.getElementById('humanTime');
@@ -473,33 +560,39 @@
         const dayProgressText = document.getElementById('day-progress-text');
         const weekProgressFill = document.getElementById('week-progress-fill');
         const weekProgressText = document.getElementById('week-progress-text');
-
-        // --- Cache Theme Toggle Elements ---
-        const themeToggleButton = document.getElementById('theme-toggle-logo-button'); // Get the BUTTON
+        const themeToggleButton = document.getElementById('theme-toggle-logo-button'); // Target the button
         const bodyElement = document.body;
 
-        // --- Timer Constants ---
+        // --- Constants ---
         const MS_IN_SECOND = 1000;
         const MS_IN_MINUTE = 60 * MS_IN_SECOND;
         const MS_IN_HOUR = 60 * MS_IN_MINUTE;
         const MS_IN_DAY = 24 * MS_IN_HOUR;
+        const MS_IN_WEEK = 7 * MS_IN_DAY;
         const MS_IN_YEAR_APPROX = 365.25 * MS_IN_DAY;
         const MS_IN_TEN_THOUSAND_YEARS = 10000 * MS_IN_YEAR_APPROX;
         const GAOKAO_TARGET_TIME = new Date('2025-06-06T00:00:00').getTime();
-        const HUMAN_ORIGIN_APPROX_MS = Date.now() - (300000 * MS_IN_YEAR_APPROX); // Calculate only once
-
+        // Calculate only once for performance
+        const HUMAN_ORIGIN_APPROX_MS = Date.now() - (300000 * MS_IN_YEAR_APPROX);
         const TIME_OPTIONS = { timeZone: 'Asia/Shanghai', hour12: false };
         const DATE_OPTIONS = { timeZone: 'Asia/Shanghai', year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
 
         // --- Theme Toggle Function ---
         function toggleTheme() {
-            const isDarkMode = bodyElement.classList.toggle('dark-mode'); // Toggle and check result
+            const isDarkMode = bodyElement.classList.toggle('dark-mode'); // Toggle class and get the result
             // Update aria-label for accessibility based on the *new* state
             themeToggleButton.setAttribute('aria-label', isDarkMode ? '切換白天模式' : '切換暗黑模式');
+        }
+        // Add listener if the button exists
+        if (themeToggleButton) {
+            themeToggleButton.addEventListener('click', toggleTheme);
+        } else {
+            console.error("Theme toggle logo button not found!");
         }
 
         // --- Timer Update Functions ---
         function updateClockAndDate(now) {
+            // Use cached elements directly
             if (clockDisplay) clockDisplay.textContent = now.toLocaleTimeString('zh-CN', TIME_OPTIONS);
             if (gregorianDateDisplay) gregorianDateDisplay.textContent = now.toLocaleDateString('zh-CN', DATE_OPTIONS);
         }
@@ -507,73 +600,82 @@
         function updateSingleCountdown(targetTime, nowTime, display, endMessage) {
             if (!display) return;
             const timeLeft = targetTime - nowTime;
+
             if (timeLeft <= 0) {
                 display.textContent = endMessage;
                 return;
             }
+            // Calculate time components
             const days = Math.floor(timeLeft / MS_IN_DAY);
             const hours = Math.floor((timeLeft % MS_IN_DAY) / MS_IN_HOUR);
             const minutes = Math.floor((timeLeft % MS_IN_HOUR) / MS_IN_MINUTE);
             const seconds = Math.floor((timeLeft % MS_IN_MINUTE) / MS_IN_SECOND);
+            // Update display using non-breaking spaces for better layout
             display.innerHTML = `${days} 天 ${hours} 小時 ${minutes} 分鐘 ${seconds} 秒`;
         }
 
         function updateYearProgress(now, display) {
             if (!display) return;
             const year = now.getFullYear();
-            const yearStart = new Date(year, 0, 1).getTime();
-            const nextYearStart = new Date(year + 1, 0, 1).getTime();
-            const totalMs = nextYearStart - yearStart;
+            const yearStart = new Date(year, 0, 1).getTime(); // Start of current year
+            const nextYearStart = new Date(year + 1, 0, 1).getTime(); // Start of next year
+            const totalMsInYear = nextYearStart - yearStart;
             const elapsedMs = now.getTime() - yearStart;
-            const remainingPercentage = 100 - (elapsedMs / totalMs * 100);
+            // Calculate remaining percentage
+            const remainingPercentage = 100 - (elapsedMs / totalMsInYear * 100);
             display.textContent = `${remainingPercentage.toFixed(6)}%`; // Keep high precision
         }
 
         function updateHumanTimer(nowTime, display) {
             if (!display) return;
-            const elapsed = nowTime - HUMAN_ORIGIN_APPROX_MS;
-            const tenKYears = Math.floor(elapsed / MS_IN_TEN_THOUSAND_YEARS);
-            const remainder = elapsed % MS_IN_TEN_THOUSAND_YEARS;
-            const days = Math.floor(remainder / MS_IN_DAY);
-            const hours = Math.floor((remainder % MS_IN_DAY) / MS_IN_HOUR);
-            const minutes = Math.floor((remainder % MS_IN_HOUR) / MS_IN_MINUTE);
-            const seconds = Math.floor((remainder % MS_IN_MINUTE) / MS_IN_SECOND);
-            display.innerHTML = `${tenKYears} 萬年 ${days} 天 ${hours} 小時 ${minutes} 分鐘 ${seconds} 秒`;
+            const timeSinceHumanOrigin = nowTime - HUMAN_ORIGIN_APPROX_MS;
+            const tenThousandYears = Math.floor(timeSinceHumanOrigin / MS_IN_TEN_THOUSAND_YEARS);
+            const remainingTime = timeSinceHumanOrigin % MS_IN_TEN_THOUSAND_YEARS;
+            const days = Math.floor(remainingTime / MS_IN_DAY);
+            const hours = Math.floor((remainingTime % MS_IN_DAY) / MS_IN_HOUR);
+            const minutes = Math.floor((remainingTime % MS_IN_HOUR) / MS_IN_MINUTE);
+            const seconds = Math.floor((remainingTime % MS_IN_MINUTE) / MS_IN_SECOND);
+            // Update display using non-breaking spaces
+            display.innerHTML = `${tenThousandYears} 萬年 ${days} 天 ${hours} 小時 ${minutes} 分鐘 ${seconds} 秒`;
         }
 
         function updateProgressBar(now, fillEl, textEl, unit) {
-            if (!fillEl || !textEl) return;
+            if (!fillEl || !textEl) return; // Exit if elements not found
+
             let progress = 0;
-            let startOfUnit;
+            const nowTime = now.getTime();
 
             if (unit === 'day') {
-                startOfUnit = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-                const elapsedMs = now.getTime() - startOfUnit;
-                progress = Math.min(100, (elapsedMs / MS_IN_DAY) * 100);
+                const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+                const elapsedMs = nowTime - startOfDay;
+                progress = Math.min(100, (elapsedMs / MS_IN_DAY) * 100); // Clamp to 100%
             } else if (unit === 'week') {
-                const dayOfWeek = now.getDay(); // 0=Sun, 1=Mon,...
-                const offset = (dayOfWeek === 0) ? 6 : dayOfWeek - 1; // Days to go back to reach Monday
-                startOfUnit = new Date(now.getFullYear(), now.getMonth(), now.getDate() - offset);
-                startOfUnit.setHours(0, 0, 0, 0); // Start of Monday
-                const startOfWeekTime = startOfUnit.getTime();
-                const elapsedMs = now.getTime() - startOfWeekTime;
-                progress = Math.min(100, (elapsedMs / (7 * MS_IN_DAY)) * 100);
+                // Calculate start of the week (assuming Monday is day 1, Sunday is day 0)
+                const currentDay = now.getDay(); // 0 = Sunday, 1 = Monday, ... 6 = Saturday
+                // Calculate offset to get back to Monday.
+                const offsetToMonday = (currentDay === 0) ? 6 : currentDay - 1; // If Sunday (0), go back 6 days. Else, go back (day - 1) days.
+                const mondayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - offsetToMonday);
+                mondayStart.setHours(0, 0, 0, 0); // Set to the very beginning of Monday
+                const startOfWeekTime = mondayStart.getTime();
+                const elapsedMsWeek = nowTime - startOfWeekTime;
+                progress = Math.min(100, (elapsedMsWeek / MS_IN_WEEK) * 100); // Clamp to 100%
             }
 
-            const progressFormatted = progress.toFixed(2);
-            fillEl.style.width = `${progressFormatted}%`;
-            textEl.textContent = `${progressFormatted}%`;
+            const progressFormatted = progress.toFixed(2); // Format to 2 decimal places
+            fillEl.style.width = `${progressFormatted}%`; // Update fill width
+            textEl.textContent = `${progressFormatted}%`; // Update text display
         }
 
-        // --- Main Update Loop ---
-        let lastTimestamp = 0;
+        // --- Main Update Loop (Throttled) ---
+        let lastTimestamp = 0; // Store the timestamp of the last update
         function timerLoop(timestamp) {
-            // Update timers roughly every second, not on every frame, for performance
+            // Only run the update logic roughly every second (1000ms)
             if (timestamp - lastTimestamp >= 1000) {
-                lastTimestamp = timestamp;
-                const now = new Date();
+                lastTimestamp = timestamp; // Update the last timestamp
+                const now = new Date(); // Get current time once for all updates in this cycle
                 const nowTime = now.getTime();
 
+                // Call all update functions
                 updateClockAndDate(now);
                 updateSingleCountdown(GAOKAO_TARGET_TIME, nowTime, gaokaoDisplay, "高考已開始！");
                 updateYearProgress(now, yearProgressDisplay);
@@ -581,19 +683,12 @@
                 updateProgressBar(now, dayProgressFill, dayProgressText, 'day');
                 updateProgressBar(now, weekProgressFill, weekProgressText, 'week');
             }
-            requestAnimationFrame(timerLoop); // Continue the loop
+            // Always request the next frame to keep the loop going smoothly
+            requestAnimationFrame(timerLoop);
         }
 
         // --- Initial Setup & Start ---
-        // 1. Add Theme Toggle Listener
-        if (themeToggleButton) {
-            themeToggleButton.addEventListener('click', toggleTheme);
-        } else {
-            console.error("Theme toggle logo button not found!");
-        }
-
-        // 2. Initial Timer Update & Start Loop
-        // Perform an initial update immediately so the user sees values quickly
+        // 1. Perform an initial update immediately on load
         const initialNow = new Date();
         const initialNowTime = initialNow.getTime();
         updateClockAndDate(initialNow);
@@ -603,7 +698,8 @@
         updateProgressBar(initialNow, dayProgressFill, dayProgressText, 'day');
         updateProgressBar(initialNow, weekProgressFill, weekProgressText, 'week');
 
-        requestAnimationFrame(timerLoop); // Start the animation frame loop
+        // 2. Start the animation frame loop
+        requestAnimationFrame(timerLoop);
     });
     </script>
 </body>
