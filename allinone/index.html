@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hant"> <!-- Consider zh-CN or zh-Hans if primary content/audience is Simplified Chinese -->
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,13 +9,12 @@
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="北大附中 - 孙玉磊">
     <meta property="og:description" content="北大附中 孙玉磊 語文相關內容與資源連結">
-    <meta property="og:image" content="https://raw.githubusercontent.com/gptv/suen/main/images/Avatar-small.jpeg"> <!-- Consider self-hosting or CDN -->
-    <meta property="og:url" content="https://bdfz.net"> <!-- Verify canonical URL -->
+    <meta property="og:image" content="https://raw.githubusercontent.com/gptv/suen/main/images/Avatar-small.jpeg">
+    <meta property="og:url" content="https://bdfz.net">
     <meta property="og:type" content="website">
 
     <!-- Favicon / Icons -->
-    <!-- Ensure these files exist at the specified paths -->
-    <link rel="icon" href="/favicon.ico" sizes="any"> <!-- Recommended: Place favicon.ico in root -->
+    <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -36,36 +35,108 @@
         /* === Font Loading === */
         @font-face {
           font-family: 'HuWenMingChaoTi';
-          /* Path confirmed based on user feedback & build script copy */
           src: url('../fonts/HuWenMingChaoTi.woff2') format('woff2'),
                url('../fonts/HuWenMingChaoTi.woff') format('woff');
           font-weight: normal;
           font-style: normal;
-          font-display: swap; /* Added for performance */
+          font-display: swap;
         }
-        /* === End Font Loading === */
 
-        /* CSS Variables */
+        /* === THEME VARIABLES === */
         :root {
-            --primary-gradient: linear-gradient(135deg, #005f73, #0a9396);
-            --secondary-gradient: linear-gradient(135deg, #94d2bd, #e9d8a6);
-            --background-gradient: linear-gradient(135deg, #001219, #005f73);
-            --text-color: #e9ecef;
-            --dark-text-color: #001219;
-            /* Define colors for progress bars, can use existing palette */
-            --progress-bg-day: rgba(173, 232, 244, 0.3); /* Light Blueish */
-            --progress-bg-week: rgba(144, 224, 239, 0.3); /* Slightly different Light Blueish */
-            --progress-fill-gradient: var(--primary-gradient); /* Reuse primary gradient */
+             /* Light Mode (Default) Colors */
+            --primary-gradient-light: linear-gradient(135deg, #005f73, #0a9396);
+            --secondary-gradient-light: linear-gradient(135deg, #94d2bd, #e9d8a6);
+            --background-gradient-light: linear-gradient(135deg, #001219, #005f73);
+            --text-color-light: #e9ecef;
+            --dark-text-color-light: #001219;
+            --countdown-item-bg-light: rgba(255, 255, 255, 0.1);
+            --countdown-title-color-light: var(--dark-text-color-light);
+            --countdown-display-color-light: var(--text-color-light);
+            --footer-gradient-light: linear-gradient(135deg, rgba(0, 95, 115, 0.5), rgba(10, 147, 150, 0.5));
+            --footer-link-color-light: #e9d8a6;
+            --footer-link-hover-light: #94d2bd;
+            --button-text-color-light: var(--text-color-light);
+            --button-hover-shadow-light: 0 4px 8px rgba(0, 0, 0, 0.2);
+            --progress-bar-bg-light: rgba(0, 0, 0, 0.25);
+            --progress-bar-fill-light: var(--primary-gradient-light);
+            --progress-bar-border-light: rgba(255, 255, 255, 0.1);
+            --progress-bar-text-shadow-light: 1px 1px 3px rgba(0, 0, 0, 0.6);
+            --logo-focus-shadow-light: rgba(148, 210, 189, 0.5); /* Teal-ish focus */
+
+            /* Dark Mode Colors */
+            --primary-gradient-dark: linear-gradient(135deg, #2c3e50, #34495e);
+            --secondary-gradient-dark: linear-gradient(135deg, #485a6d, #597085);
+            --background-gradient-dark: linear-gradient(135deg, #0f111a, #1e2430);
+            --text-color-dark: #ecf0f1;
+            --dark-text-color-dark: #bdc3c7;
+            --countdown-item-bg-dark: rgba(44, 62, 80, 0.4);
+            --countdown-title-color-dark: var(--text-color-dark);
+            --countdown-display-color-dark: var(--text-color-dark);
+            --footer-gradient-dark: linear-gradient(135deg, rgba(44, 62, 80, 0.6), rgba(52, 73, 94, 0.6));
+            --footer-link-color-dark: #3498db;
+            --footer-link-hover-dark: #5dade2;
+            --button-text-color-dark: var(--text-color-dark);
+            --button-hover-shadow-dark: 0 4px 8px rgba(0, 0, 0, 0.4);
+            --progress-bar-bg-dark: rgba(255, 255, 255, 0.1);
+            --progress-bar-fill-dark: linear-gradient(135deg, #3498db, #5dade2);
+            --progress-bar-border-dark: rgba(255, 255, 255, 0.05);
+            --progress-bar-text-shadow-dark: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            --logo-focus-shadow-dark: rgba(52, 152, 219, 0.6); /* Blueish focus */
+
+            /* Default to Light Mode variables */
+            --primary-gradient: var(--primary-gradient-light);
+            --secondary-gradient: var(--secondary-gradient-light);
+            --background-gradient: var(--background-gradient-light);
+            --text-color: var(--text-color-light);
+            --dark-text-color: var(--dark-text-color-light);
+            --countdown-item-bg: var(--countdown-item-bg-light);
+            --countdown-title-color: var(--countdown-title-color-light);
+            --countdown-display-color: var(--countdown-display-color-light);
+            --footer-gradient: var(--footer-gradient-light);
+            --footer-link-color: var(--footer-link-color-light);
+            --footer-link-hover: var(--footer-link-hover-light);
+            --button-text-color: var(--button-text-color-light);
+            --button-hover-shadow: var(--button-hover-shadow-light);
+            --progress-bar-bg: var(--progress-bar-bg-light);
+            --progress-bar-fill: var(--progress-bar-fill-light);
+            --progress-bar-border: var(--progress-bar-border-light);
+            --progress-bar-text-shadow: var(--progress-bar-text-shadow-light);
+            --logo-focus-shadow: var(--logo-focus-shadow-light);
+
+            /* Transition for theme switching */
+            --theme-transition: background 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* Global Reset */
+        /* Apply Dark Mode Variables */
+        body.dark-mode {
+            --primary-gradient: var(--primary-gradient-dark);
+            --secondary-gradient: var(--secondary-gradient-dark);
+            --background-gradient: var(--background-gradient-dark);
+            --text-color: var(--text-color-dark);
+            --dark-text-color: var(--dark-text-color-dark);
+            --countdown-item-bg: var(--countdown-item-bg-dark);
+            --countdown-title-color: var(--countdown-title-color-dark);
+            --countdown-display-color: var(--countdown-display-color-dark);
+            --footer-gradient: var(--footer-gradient-dark);
+            --footer-link-color: var(--footer-link-color-dark);
+            --footer-link-hover: var(--footer-link-hover-dark);
+            --button-text-color: var(--button-text-color-dark);
+            --button-hover-shadow: var(--button-hover-shadow-dark);
+            --progress-bar-bg: var(--progress-bar-bg-dark);
+            --progress-bar-fill: var(--progress-bar-fill-dark);
+            --progress-bar-border: var(--progress-bar-border-dark);
+            --progress-bar-text-shadow: var(--progress-bar-text-shadow-dark);
+            --logo-focus-shadow: var(--logo-focus-shadow-dark);
+        }
+
+        /* === GLOBAL & LAYOUT === */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* Body Styling */
         body {
             font-family: 'HuWenMingChaoTi', 'Noto Sans TC', 'NotoSansCJKsc', 'Helvetica Neue', Arial, sans-serif;
             background: var(--background-gradient);
@@ -75,9 +146,9 @@
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            transition: var(--theme-transition);
         }
 
-        /* Main Container Layout */
         .container {
             display: flex;
             justify-content: space-between;
@@ -87,40 +158,75 @@
             gap: 20px;
         }
 
-        /* Column Styling */
         .column {
             flex: 1;
             padding: 20px;
             border-radius: 15px;
-            backdrop-filter: blur(10px); /* Performance consideration */
+            backdrop-filter: blur(10px);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: var(--theme-transition);
         }
 
-        .left-column {
-            background: var(--primary-gradient);
-        }
+        .left-column { background: var(--primary-gradient); }
+        .right-column { background: var(--secondary-gradient); }
 
-        .right-column {
-            background: var(--secondary-gradient);
-        }
-
-        /* Countdown Container (Middle Column) */
         .countdown-container {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            background: linear-gradient(135deg, #0a9396, #94d2bd);
+            background: var(--primary-gradient);
             align-items: center;
             max-width: 300px;
             margin: 0 auto;
+            position: relative;
         }
 
+        /* === LOGO THEME TOGGLE === */
+        .theme-toggle-logo-button { /* The button wrapping the logo */
+            order: -1;
+            margin-bottom: 15px;
+            padding: 0;
+            border: none;
+            background: none;
+            cursor: pointer;
+            line-height: 0;
+            -webkit-tap-highlight-color: transparent;
+            border-radius: 8px; /* Match image rounding slightly */
+            transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .logo-img { /* The actual logo image */
+            display: block;
+            max-width: 80px;
+            width: 100%;
+            height: auto;
+            border-radius: 8px; /* Optional rounding */
+        }
+
+        .theme-toggle-logo-button:hover .logo-img {
+            opacity: 0.85;
+            transform: scale(1.05);
+        }
+
+        .theme-toggle-logo-button:focus {
+            outline: none; /* Remove default outline */
+             /* Use variable for focus shadow color */
+            box-shadow: 0 0 0 3px var(--logo-focus-shadow);
+        }
+        .theme-toggle-logo-button:focus .logo-img {
+             /* Keep consistent visual feedback on focus */
+             opacity: 0.85;
+             transform: scale(1.05);
+        }
+
+        /* === COUNTDOWN ITEMS === */
         .countdown-item {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: var(--countdown-item-bg);
             border-radius: 15px;
             padding: 15px;
             text-align: center;
             width: 100%;
+            transition: var(--theme-transition);
         }
 
         .countdown-title {
@@ -128,165 +234,131 @@
             font-weight: bold;
             margin-bottom: 10px;
             letter-spacing: 2px;
-            color: var(--dark-text-color);
+            color: var(--countdown-title-color);
+            transition: var(--theme-transition);
         }
 
         .countdown-display {
-            font-size: 1.8rem; /* Default size, overridden below where needed */
+            font-size: 1.8rem;
             font-weight: bold;
-            color: var(--text-color);
+            color: var(--countdown-display-color);
+            transition: var(--theme-transition);
+            word-wrap: break-word; /* Prevent overflow on smaller screens */
         }
 
-        /* Specific Countdown Item Backgrounds */
-        #current-time { background-color: rgba(0, 95, 115, 0.35); }
-        #year-progress { background-color: rgba(10, 147, 150, 0.3); }
-        #gaokao-countdown { background-color: rgba(148, 210, 189, 0.3); }
-        #human-timer { background-color: rgba(233, 216, 166, 0.3); }
-        /* --- Added Backgrounds for Progress Bars --- */
-        #day-progress { background-color: var(--progress-bg-day); }
-        #week-progress { background-color: var(--progress-bg-week); }
-        /* --- End Added Backgrounds --- */
-
-        /* Adjust Font Sizes */
+        /* Adjust Font Sizes for specific items */
         #gaokao-countdown .countdown-display,
         #human-timer .countdown-display {
             font-size: 1.4rem;
             line-height: 1.3;
         }
-
-        /* Style Simplified Time Display */
         #current-time .countdown-display span {
             display: block;
             line-height: 1.4;
-            color: var(--text-color);
+            color: var(--countdown-display-color);
+            transition: var(--theme-transition);
         }
-        #current-time .countdown-display span:not(:last-child) {
-             margin-bottom: 5px;
-        }
-        #current-time-clock {
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin-bottom: 8px !important;
-        }
-        #current-date-gregorian {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
+        #current-time .countdown-display span:not(:last-child) { margin-bottom: 5px; }
+        #current-time-clock { font-size: 1.8rem; font-weight: bold; margin-bottom: 8px !important; }
+        #current-date-gregorian { font-size: 1.1rem; opacity: 0.9; }
 
-        /* --- Progress Bar Styles --- */
-        .progress-item .countdown-display { /* Override default if it interferes */
-             display: none; /* Hide the default display area for progress items */
-        }
+        /* === PROGRESS BARS === */
+        .progress-item .countdown-display { display: none; }
         .progress-bar-container {
-            width: 90%; /* Adjust width as needed */
-            height: 28px; /* Increased height */
-            background-color: rgba(0, 0, 0, 0.25); /* Darker background for contrast */
+            width: 90%;
+            height: 28px;
+            background-color: var(--progress-bar-bg);
             border-radius: 15px;
-            margin: 5px auto 0; /* Center and space from title */
+            margin: 5px auto 0;
             position: relative;
-            overflow: hidden; /* Keep fill within bounds */
-            border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+            overflow: hidden;
+            border: 1px solid var(--progress-bar-border);
+            transition: var(--theme-transition);
         }
         .progress-bar-fill {
             height: 100%;
-            width: 0%; /* Initial width, updated by JS */
-            background: var(--progress-fill-gradient); /* Use defined gradient */
-            border-radius: 15px; /* Match container radius */
-            transition: width 0.5s ease-out; /* Smooth animation */
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.3); /* Inner shadow for depth */
+            width: 0%;
+            background: var(--progress-bar-fill);
+            border-radius: 15px;
+            transition: width 0.5s ease-out, var(--theme-transition);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
         }
         .progress-bar-text {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: var(--text-color); /* Match other display text */
-            font-size: 0.95rem; /* Adjust size */
+            color: var(--text-color);
+            font-size: 0.95rem;
             font-weight: bold;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6); /* Stronger shadow for readability */
-            white-space: nowrap; /* Prevent text wrapping */
+            text-shadow: var(--progress-bar-text-shadow);
+            white-space: nowrap;
+            transition: var(--theme-transition);
         }
-        /* --- End Progress Bar Styles --- */
 
-        /* Link Button Styling */
+        /* === LINK BUTTONS === */
         .link-button {
             background: var(--primary-gradient);
             border-radius: 10px;
             text-align: center;
             padding: 10px;
-            color: var(--text-color);
+            color: var(--button-text-color);
             text-decoration: none;
             font-weight: bold;
-            transition: all 0.3s ease;
+            transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
             display: block;
             margin-bottom: 10px;
             border: none;
             cursor: pointer;
         }
-
-        .link-button:hover {
+        .link-button:hover,
+        .link-button:focus {
             background: var(--secondary-gradient);
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--button-hover-shadow);
+            outline: none;
         }
 
-        /* Footer Styling */
+        /* === FOOTER === */
         .footer {
             text-align: center;
             font-size: 0.9rem;
             width: 100%;
             padding: 20px;
-            background: linear-gradient(135deg, rgba(0, 95, 115, 0.5), rgba(10, 147, 150, 0.5));
+            background: var(--footer-gradient);
             backdrop-filter: blur(5px);
             border-radius: 15px 15px 0 0;
             margin-top: 20px;
+            transition: var(--theme-transition);
         }
-
         .footer a {
-            color: #e9d8a6;
+            color: var(--footer-link-color);
             text-decoration: none;
             transition: color 0.3s ease;
         }
-
-        .footer a:hover {
-            color: #94d2bd;
+        .footer a:hover,
+        .footer a:focus {
+            color: var(--footer-link-hover);
+            outline: none;
         }
 
-        /* Logo Styling */
-        .logo {
-            max-width: 80px;
-            width: 100%;
-            height: auto;
-            margin-bottom: 15px;
-        }
-
-        /* Responsive Design */
+        /* === RESPONSIVE DESIGN === */
         @media (max-width: 1000px) {
-            .container {
-                flex-direction: column;
-            }
-            .column {
-                width: 100%;
-                margin-bottom: 20px;
-                max-width: none;
-            }
-            .countdown-container {
-                 max-width: 90%;
-            }
-            .logo {
-                max-width: 60px;
-            }
+            .container { flex-direction: column; }
+            .column { width: 100%; margin-bottom: 20px; max-width: none; }
+            .countdown-container { max-width: 90%; }
+            .logo-img { max-width: 60px; }
+            .theme-toggle-logo-button:focus { box-shadow: 0 0 0 2px var(--logo-focus-shadow); }
         }
-         @media (max-width: 480px) {
+        @media (max-width: 480px) {
             #gaokao-countdown .countdown-display,
-            #human-timer .countdown-display {
-                 font-size: 1.2rem;
-            }
-             #current-time-clock { font-size: 1.5rem; }
-             #current-date-gregorian { font-size: 1.0rem; }
-             .progress-bar-container { height: 22px; }
-             .progress-bar-text { font-size: 0.8rem; }
-         }
+            #human-timer .countdown-display { font-size: 1.2rem; }
+            #current-time-clock { font-size: 1.5rem; }
+            #current-date-gregorian { font-size: 1.0rem; }
+            .progress-bar-container { height: 22px; }
+            .progress-bar-text { font-size: 0.8rem; }
+            .logo-img { max-width: 50px; }
+        }
     </style>
 </head>
 <body>
@@ -316,7 +388,10 @@
 
         <!-- Middle Countdown Column -->
         <div class="column countdown-container">
-            <img src="https://raw.githubusercontent.com/gptv/suen/main/images/slogo.png" alt="Logo" class="logo">
+             <!-- Theme Toggle Button (using the logo) -->
+            <button id="theme-toggle-logo-button" class="theme-toggle-logo-button" aria-label="切換暗黑模式">
+                <img src="https://raw.githubusercontent.com/gptv/suen/main/images/slogo.png" alt="Logo - 點擊切換主題" class="logo-img">
+            </button>
 
             <!-- Simplified Current Time / Date -->
             <div id="current-time" class="countdown-item">
@@ -328,35 +403,33 @@
             <!-- Year Progress -->
             <div id="year-progress" class="countdown-item">
                 <h2 class="countdown-title">2025年度剩餘</h2>
-                <div class="countdown-display" aria-live="polite"></div>
+                <div class="countdown-display" aria-live="polite">0.000000%</div>
             </div>
             <!-- Gaokao Countdown -->
             <div id="gaokao-countdown" class="countdown-item">
                 <h2 class="countdown-title">2025高考倒計時</h2>
-                <div class="countdown-display" aria-live="polite"></div>
+                <div class="countdown-display" aria-live="polite">計算中...</div>
             </div>
             <!-- Human Existence Timer -->
             <div id="human-timer" class="countdown-item">
                 <h2 class="countdown-title">生民以來</h2>
-                <div class="countdown-display" id="humanTime" aria-live="polite"></div>
+                <div class="countdown-display" id="humanTime" aria-live="polite">計算中...</div>
             </div>
             <!-- Day Progress -->
             <div id="day-progress" class="countdown-item progress-item">
                 <h2 class="countdown-title">今日已逝</h2>
                 <div class="progress-bar-container">
                     <div class="progress-bar-fill" id="day-progress-fill"></div>
-                    <span class="progress-bar-text" id="day-progress-text"></span>
+                    <span class="progress-bar-text" id="day-progress-text">0.00%</span>
                 </div>
-                <!-- Removed the default .countdown-display for progress items -->
             </div>
             <!-- Week Progress -->
             <div id="week-progress" class="countdown-item progress-item">
                 <h2 class="countdown-title">本週已逝</h2>
                 <div class="progress-bar-container">
                     <div class="progress-bar-fill" id="week-progress-fill"></div>
-                    <span class="progress-bar-text" id="week-progress-text"></span>
+                    <span class="progress-bar-text" id="week-progress-text">0.00%</span>
                 </div>
-                <!-- Removed the default .countdown-display for progress items -->
             </div>
         </div>
 
@@ -387,49 +460,53 @@
         <p>© 2025 <a href="https://bdfz.net" target="_blank">SUEN</a></p>
     </footer>
 
-    <!-- JavaScript for Timers -->
+    <!-- JavaScript for Timers & Theme Toggle -->
     <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // --- Cache DOM elements ---
+        // --- Cache Timer DOM elements ---
         const gaokaoDisplay = document.querySelector('#gaokao-countdown .countdown-display');
         const yearProgressDisplay = document.querySelector('#year-progress .countdown-display');
         const humanTimeDisplay = document.getElementById('humanTime');
         const clockDisplay = document.getElementById('current-time-clock');
         const gregorianDateDisplay = document.getElementById('current-date-gregorian');
-        // --- Cache Progress Bar Elements ---
         const dayProgressFill = document.getElementById('day-progress-fill');
         const dayProgressText = document.getElementById('day-progress-text');
         const weekProgressFill = document.getElementById('week-progress-fill');
         const weekProgressText = document.getElementById('week-progress-text');
 
-        // --- Constants ---
+        // --- Cache Theme Toggle Elements ---
+        const themeToggleButton = document.getElementById('theme-toggle-logo-button'); // Get the BUTTON
+        const bodyElement = document.body;
+
+        // --- Timer Constants ---
         const MS_IN_SECOND = 1000;
         const MS_IN_MINUTE = 60 * MS_IN_SECOND;
         const MS_IN_HOUR = 60 * MS_IN_MINUTE;
         const MS_IN_DAY = 24 * MS_IN_HOUR;
         const MS_IN_YEAR_APPROX = 365.25 * MS_IN_DAY;
         const MS_IN_TEN_THOUSAND_YEARS = 10000 * MS_IN_YEAR_APPROX;
+        const GAOKAO_TARGET_TIME = new Date('2025-06-06T00:00:00').getTime();
+        const HUMAN_ORIGIN_APPROX_MS = Date.now() - (300000 * MS_IN_YEAR_APPROX); // Calculate only once
 
-        const gaokaoTime = new Date('2025-06-06T00:00:00').getTime();
-        const humanOriginApprox = Date.now() - (300000 * MS_IN_YEAR_APPROX);
+        const TIME_OPTIONS = { timeZone: 'Asia/Shanghai', hour12: false };
+        const DATE_OPTIONS = { timeZone: 'Asia/Shanghai', year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
 
-        const timeOptions = { timeZone: 'Asia/Shanghai', hour12: false };
-        const dateOptions = { timeZone: 'Asia/Shanghai', year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+        // --- Theme Toggle Function ---
+        function toggleTheme() {
+            const isDarkMode = bodyElement.classList.toggle('dark-mode'); // Toggle and check result
+            // Update aria-label for accessibility based on the *new* state
+            themeToggleButton.setAttribute('aria-label', isDarkMode ? '切換白天模式' : '切換暗黑模式');
+        }
 
-        // --- Update Functions ---
+        // --- Timer Update Functions ---
         function updateClockAndDate(now) {
-            if (clockDisplay) {
-               clockDisplay.textContent = now.toLocaleTimeString('zh-CN', timeOptions);
-            }
-            if (gregorianDateDisplay) {
-                gregorianDateDisplay.textContent = now.toLocaleDateString('zh-CN', dateOptions);
-            }
+            if (clockDisplay) clockDisplay.textContent = now.toLocaleTimeString('zh-CN', TIME_OPTIONS);
+            if (gregorianDateDisplay) gregorianDateDisplay.textContent = now.toLocaleDateString('zh-CN', DATE_OPTIONS);
         }
 
         function updateSingleCountdown(targetTime, nowTime, display, endMessage) {
             if (!display) return;
             const timeLeft = targetTime - nowTime;
-
             if (timeLeft <= 0) {
                 display.textContent = endMessage;
                 return;
@@ -438,91 +515,95 @@
             const hours = Math.floor((timeLeft % MS_IN_DAY) / MS_IN_HOUR);
             const minutes = Math.floor((timeLeft % MS_IN_HOUR) / MS_IN_MINUTE);
             const seconds = Math.floor((timeLeft % MS_IN_MINUTE) / MS_IN_SECOND);
-            display.textContent = `${days} 天 ${hours} 小時 ${minutes} 分鐘 ${seconds} 秒`;
+            display.innerHTML = `${days} 天 ${hours} 小時 ${minutes} 分鐘 ${seconds} 秒`;
         }
 
         function updateYearProgress(now, display) {
-             if (!display) return;
-            const currentYear = now.getFullYear();
-            const yearStart = new Date(currentYear, 0, 1).getTime();
-            const nextYearStart = new Date(currentYear + 1, 0, 1).getTime();
-            const totalMsInYear = nextYearStart - yearStart;
+            if (!display) return;
+            const year = now.getFullYear();
+            const yearStart = new Date(year, 0, 1).getTime();
+            const nextYearStart = new Date(year + 1, 0, 1).getTime();
+            const totalMs = nextYearStart - yearStart;
             const elapsedMs = now.getTime() - yearStart;
-            const progress = (elapsedMs / totalMsInYear) * 100;
-            const remainingPercentage = 100 - progress;
-            display.textContent = `${remainingPercentage.toFixed(6)}%`;
+            const remainingPercentage = 100 - (elapsedMs / totalMs * 100);
+            display.textContent = `${remainingPercentage.toFixed(6)}%`; // Keep high precision
         }
 
         function updateHumanTimer(nowTime, display) {
-             if (!display) return;
-            const timeSinceHumanOrigin = nowTime - humanOriginApprox;
-            const tenThousandYears = Math.floor(timeSinceHumanOrigin / MS_IN_TEN_THOUSAND_YEARS);
-            const remainingTime = timeSinceHumanOrigin % MS_IN_TEN_THOUSAND_YEARS;
-            const days = Math.floor(remainingTime / MS_IN_DAY);
-            const hours = Math.floor((remainingTime % MS_IN_DAY) / MS_IN_HOUR);
-            const minutes = Math.floor((remainingTime % MS_IN_HOUR) / MS_IN_MINUTE);
-            const seconds = Math.floor((remainingTime % MS_IN_MINUTE) / MS_IN_SECOND);
-            display.textContent =
-                `${tenThousandYears} 万年 ${days} 天 ${hours} 小時 ${minutes} 分鐘 ${seconds} 秒`;
+            if (!display) return;
+            const elapsed = nowTime - HUMAN_ORIGIN_APPROX_MS;
+            const tenKYears = Math.floor(elapsed / MS_IN_TEN_THOUSAND_YEARS);
+            const remainder = elapsed % MS_IN_TEN_THOUSAND_YEARS;
+            const days = Math.floor(remainder / MS_IN_DAY);
+            const hours = Math.floor((remainder % MS_IN_DAY) / MS_IN_HOUR);
+            const minutes = Math.floor((remainder % MS_IN_HOUR) / MS_IN_MINUTE);
+            const seconds = Math.floor((remainder % MS_IN_MINUTE) / MS_IN_SECOND);
+            display.innerHTML = `${tenKYears} 萬年 ${days} 天 ${hours} 小時 ${minutes} 分鐘 ${seconds} 秒`;
         }
 
-        // --- Functions for Progress Bars ---
-         function updateDayProgress(now, fillEl, textEl) {
+        function updateProgressBar(now, fillEl, textEl, unit) {
             if (!fillEl || !textEl) return;
-            const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-            // const endOfDay = startOfDay + MS_IN_DAY; // Not needed for calculation
-            const elapsedMs = now.getTime() - startOfDay;
-            const progress = Math.min(100, (elapsedMs / MS_IN_DAY) * 100); // Ensure progress doesn't exceed 100
-            fillEl.style.width = `${progress.toFixed(2)}%`;
-            textEl.textContent = `${progress.toFixed(2)}%`;
+            let progress = 0;
+            let startOfUnit;
+
+            if (unit === 'day') {
+                startOfUnit = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+                const elapsedMs = now.getTime() - startOfUnit;
+                progress = Math.min(100, (elapsedMs / MS_IN_DAY) * 100);
+            } else if (unit === 'week') {
+                const dayOfWeek = now.getDay(); // 0=Sun, 1=Mon,...
+                const offset = (dayOfWeek === 0) ? 6 : dayOfWeek - 1; // Days to go back to reach Monday
+                startOfUnit = new Date(now.getFullYear(), now.getMonth(), now.getDate() - offset);
+                startOfUnit.setHours(0, 0, 0, 0); // Start of Monday
+                const startOfWeekTime = startOfUnit.getTime();
+                const elapsedMs = now.getTime() - startOfWeekTime;
+                progress = Math.min(100, (elapsedMs / (7 * MS_IN_DAY)) * 100);
+            }
+
+            const progressFormatted = progress.toFixed(2);
+            fillEl.style.width = `${progressFormatted}%`;
+            textEl.textContent = `${progressFormatted}%`;
         }
-
-        function updateWeekProgress(now, fillEl, textEl) {
-            if (!fillEl || !textEl) return;
-            // Calculate start of the week (assuming Monday is the first day)
-            const currentDay = now.getDay(); // 0 = Sunday, 1 = Monday, ... 6 = Saturday
-            // Calculate offset to get to Monday. If Sunday (0), offset is 6 days back. Otherwise, offset is (currentDay - 1) days back.
-            const offsetToMonday = (currentDay === 0) ? 6 : currentDay - 1;
-            const mondayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - offsetToMonday);
-            mondayStart.setHours(0, 0, 0, 0); // Set to beginning of Monday
-            const startOfWeekTime = mondayStart.getTime();
-
-            const totalMsInWeek = 7 * MS_IN_DAY;
-            const elapsedMsWeek = now.getTime() - startOfWeekTime; // Milliseconds passed since start of Monday
-
-            const progress = Math.min(100, (elapsedMsWeek / totalMsInWeek) * 100); // Ensure progress doesn't exceed 100
-
-            fillEl.style.width = `${progress.toFixed(2)}%`;
-            textEl.textContent = `${progress.toFixed(2)}%`;
-        }
-        // --- End Functions for Progress Bars ---
 
         // --- Main Update Loop ---
-        function updateAllDisplays() {
-            const now = new Date();
-            const nowTime = now.getTime();
+        let lastTimestamp = 0;
+        function timerLoop(timestamp) {
+            // Update timers roughly every second, not on every frame, for performance
+            if (timestamp - lastTimestamp >= 1000) {
+                lastTimestamp = timestamp;
+                const now = new Date();
+                const nowTime = now.getTime();
 
-            // Update clock and date
-            updateClockAndDate(now);
-
-            // Update countdowns and progress
-            updateSingleCountdown(gaokaoTime, nowTime, gaokaoDisplay, "高考已開始！");
-            updateYearProgress(now, yearProgressDisplay);
-            updateHumanTimer(nowTime, humanTimeDisplay);
-
-            // --- Update Progress Bars ---
-            updateDayProgress(now, dayProgressFill, dayProgressText);
-            updateWeekProgress(now, weekProgressFill, weekProgressText);
-            // --- End Update Progress Bars ---
-        }
-
-        function timerLoop() {
-            updateAllDisplays();
-            requestAnimationFrame(timerLoop);
+                updateClockAndDate(now);
+                updateSingleCountdown(GAOKAO_TARGET_TIME, nowTime, gaokaoDisplay, "高考已開始！");
+                updateYearProgress(now, yearProgressDisplay);
+                updateHumanTimer(nowTime, humanTimeDisplay);
+                updateProgressBar(now, dayProgressFill, dayProgressText, 'day');
+                updateProgressBar(now, weekProgressFill, weekProgressText, 'week');
+            }
+            requestAnimationFrame(timerLoop); // Continue the loop
         }
 
         // --- Initial Setup & Start ---
-        timerLoop(); // Start the main update loop
+        // 1. Add Theme Toggle Listener
+        if (themeToggleButton) {
+            themeToggleButton.addEventListener('click', toggleTheme);
+        } else {
+            console.error("Theme toggle logo button not found!");
+        }
+
+        // 2. Initial Timer Update & Start Loop
+        // Perform an initial update immediately so the user sees values quickly
+        const initialNow = new Date();
+        const initialNowTime = initialNow.getTime();
+        updateClockAndDate(initialNow);
+        updateSingleCountdown(GAOKAO_TARGET_TIME, initialNowTime, gaokaoDisplay, "高考已開始！");
+        updateYearProgress(initialNow, yearProgressDisplay);
+        updateHumanTimer(initialNowTime, humanTimeDisplay);
+        updateProgressBar(initialNow, dayProgressFill, dayProgressText, 'day');
+        updateProgressBar(initialNow, weekProgressFill, weekProgressText, 'week');
+
+        requestAnimationFrame(timerLoop); // Start the animation frame loop
     });
     </script>
 </body>
