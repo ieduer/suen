@@ -131,25 +131,29 @@
 
         /* === GLOBAL & LAYOUT === */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { height: 100%; scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; /* Removed height: 100% */ }
+        /* UPDATED: Back to Flexbox sticky footer */
         body {
             font-family: 'HuWenMingChaoTi', 'Noto Sans TC', 'NotoSansCJKsc', 'Helvetica Neue', Arial, sans-serif;
             background: var(--background-gradient);
             color: var(--text-color);
-            min-height: 100%; /* Use 100% to work with html height */
-            display: grid;
-            grid-template-rows: 1fr auto; /* Content grows, footer is auto height */
+            min-height: 100vh; /* Ensure body is at least viewport height */
+            display: flex;
+            flex-direction: column; /* Stack children vertically */
+            align-items: center; /* Center container horizontally */
+            padding: 20px; /* Padding around the entire content */
             transition: var(--theme-transition);
         }
+        /* UPDATED: Back to Flexbox sticky footer */
         .container {
             display: flex;
             justify-content: space-between;
             width: 100%;
             max-width: 1400px;
+            flex: 1 0 auto; /* Allow container to grow (1) and shrink (0), base size auto */
             gap: 20px;
-            padding: 20px;
-            margin: 0 auto; /* Center horizontally */
-            /* grid-row: 1; Implicit */
+            /* Removed padding, handled by body */
+            /* margin: 0 auto; handled by body align-items */
         }
         .column { flex: 1; padding: 20px; border-radius: 15px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); transition: var(--theme-transition); min-width: 0; }
         .left-column { background: var(--primary-gradient); }
@@ -186,37 +190,41 @@
         .link-button:focus-visible { outline: 2px solid var(--footer-link-hover); outline-offset: 2px; }
 
         /* === FOOTER === */
+         /* UPDATED: Back to Flexbox sticky footer */
         .footer {
-            /* grid-row: 2; Implicit */
             text-align: center;
             font-size: 0.9rem;
-            width: 100%;
+            width: 100%; /* Take full width available within body padding */
+            max-width: 1400px; /* Match container max-width */
             padding: 20px;
             background: var(--footer-gradient);
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
             border-radius: 15px 15px 0 0;
+            margin-top: 20px; /* Space above footer */
+            flex-shrink: 0; /* Prevent footer from shrinking */
             transition: var(--theme-transition);
             color: var(--text-color);
         }
-        .footer p { max-width: 1400px; margin: 0 auto; }
+        .footer p { /* Content alignment inside footer */
+             margin: 0 auto;
+        }
         .footer a { color: var(--footer-link-color); text-decoration: none; transition: color 0.3s ease; font-weight: bold; }
         .footer a:hover, .footer a:focus { color: var(--footer-link-hover); outline: none; text-decoration: underline; }
 
         /* === RESPONSIVE DESIGN === */
         @media (max-width: 1000px) {
-             /* body { padding: 0; } /* Removed, body grid takes care of layout */
-            .container { flex-direction: column; padding: 15px; width: 100%; max-width: none; }
+            body { padding: 15px; } /* Adjust body padding */
+            .container { flex-direction: column; /* Stack columns */ padding: 0; /* Container takes full width within body padding */}
             .column { width: 100%; margin-bottom: 20px; max-width: none; }
             .column:last-child { margin-bottom: 0; }
-            .countdown-container { max-width: 90%; }
+            .countdown-container { max-width: 100%; /* Allow full width on mobile */ }
             .theme-toggle-logo-button:focus { box-shadow: 0 0 0 2px var(--logo-focus-shadow); }
-            .footer { border-radius: 0; padding: 15px; }
+            .footer { border-radius: 15px; margin-top: 20px; /* Keep margin */ max-width: none;} /* Allow full width */
              .footer p { max-width: none; }
         }
          @media (max-width: 480px) {
-            /* body { padding: 0; } */
-            .container { padding: 10px; gap: 15px;}
+            body { padding: 10px; }
             .column { padding: 15px; margin-bottom: 15px;}
             #gaokao-countdown .countdown-display, #human-timer .countdown-display { font-size: 1.15rem; line-height: 1.25; }
             #current-time-clock { font-size: 1.4rem; }
@@ -224,12 +232,12 @@
             .progress-bar-container { height: 24px; }
             .progress-bar-text { font-size: 0.8rem; }
             .link-button { padding: 10px 8px; font-size: 0.95rem; }
-            .footer { font-size: 0.85rem; padding: 10px; }
+            .footer { font-size: 0.85rem; padding: 15px 10px; margin-top: 15px; }
          }
     </style>
 </head>
 <body>
-    <!-- Container for main content (First Grid Row) -->
+    <!-- Container for main content -->
     <div class="container">
 
         <!-- Left Column (Links) -->
@@ -290,7 +298,7 @@
        </div>
     </div>
 
-    <!-- Footer Section (Second Grid Row) -->
+    <!-- Footer Section -->
     <footer class="footer">
         <p>© 2025 <a href="https://bdfz.net" target="_blank">SUEN</a></p>
     </footer>
@@ -298,7 +306,7 @@
     <!-- JavaScript for Timers & Theme Toggle -->
     <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // --- Cache DOM elements ---
+        // Cache DOM elements
         const gaokaoDisplay = document.querySelector('#gaokao-countdown .countdown-display');
         const humanTimeDisplay = document.getElementById('humanTime');
         const clockDisplay = document.getElementById('current-time-clock');
@@ -312,7 +320,7 @@
         const themeToggleButton = document.getElementById('theme-toggle-logo-button');
         const bodyElement = document.body;
 
-        // --- Constants ---
+        // Constants
         const MS_IN_SECOND = 1000;
         const MS_IN_MINUTE = 60 * MS_IN_SECOND;
         const MS_IN_HOUR = 60 * MS_IN_MINUTE;
@@ -324,11 +332,9 @@
         const HUMAN_ORIGIN_APPROX_MS = Date.now() - (300000 * MS_IN_YEAR_APPROX);
         const TIME_OPTIONS = { timeZone: 'Asia/Shanghai', hour12: false };
         const DATE_OPTIONS = { timeZone: 'Asia/Shanghai', year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
-        const THEME_STORAGE_KEY = 'themePreference'; // Key for localStorage
+        const THEME_STORAGE_KEY = 'themePreference';
 
-        // --- Theme Functions ---
-
-        // Function to apply the visual theme and update aria-label
+        // Theme Functions
         function applyThemeVisuals(theme) {
             if (theme === 'dark') {
                 bodyElement.classList.add('dark-mode');
@@ -338,38 +344,25 @@
                 if (themeToggleButton) themeToggleButton.setAttribute('aria-label', '切換暗黑模式');
             }
         }
-
-        // Function to get the preferred theme based on system time (e.g., 6 PM to 6 AM is dark)
         function getSystemThemePreference() {
             const currentHour = new Date().getHours();
-            // Adjust the hours as needed (18 = 6 PM, 6 = 6 AM)
-            if (currentHour >= 18 || currentHour < 6) {
-                return 'dark';
-            }
-            return 'light';
+            return (currentHour >= 18 || currentHour < 6) ? 'dark' : 'light';
         }
-
-        // Function to handle the theme toggle click
         function toggleTheme() {
             const currentTheme = bodyElement.classList.contains('dark-mode') ? 'dark' : 'light';
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            applyThemeVisuals(newTheme); // Update visuals
-            // Save the user's *manual* preference to localStorage
-            try {
-                localStorage.setItem(THEME_STORAGE_KEY, newTheme);
-            } catch (e) {
-                console.error("Could not save theme preference to localStorage:", e);
-            }
+            applyThemeVisuals(newTheme);
+            try { localStorage.setItem(THEME_STORAGE_KEY, newTheme); } catch (e) { console.error("Could not save theme preference:", e); }
         }
 
-        // --- Timer Update Functions (No changes needed here) ---
-        function updateClockAndDate(now) { /* ... */ if (clockDisplay) clockDisplay.textContent = now.toLocaleTimeString('zh-CN', TIME_OPTIONS); if (gregorianDateDisplay) gregorianDateDisplay.textContent = now.toLocaleDateString('zh-CN', DATE_OPTIONS); }
-        function updateSingleCountdown(targetTime, nowTime, display, endMessage) { /* ... */ if (!display) return; const timeLeft = targetTime - nowTime; if (timeLeft <= 0) { display.textContent = endMessage; return; } const days = Math.floor(timeLeft / MS_IN_DAY); const hours = Math.floor((timeLeft % MS_IN_DAY) / MS_IN_HOUR); const minutes = Math.floor((timeLeft % MS_IN_HOUR) / MS_IN_MINUTE); const seconds = Math.floor((timeLeft % MS_IN_MINUTE) / MS_IN_SECOND); display.innerHTML = `${days}天 ${hours}小時 ${minutes}分鐘 ${seconds}秒`; }
-        function updateYearProgress(now, fillEl, textEl) { /* ... */ if (!fillEl || !textEl) return; const year = now.getFullYear(); const yearStart = new Date(year, 0, 1).getTime(); const nextYearStart = new Date(year + 1, 0, 1).getTime(); const totalMsInYear = nextYearStart - yearStart; const elapsedMs = now.getTime() - yearStart; const progress = Math.min(100, (elapsedMs / totalMsInYear * 100)); const progressFormatted = progress.toFixed(2); fillEl.style.width = `${progressFormatted}%`; textEl.textContent = `${progressFormatted}%`; }
-        function updateHumanTimer(nowTime, display) { /* ... */ if (!display) return; const timeSinceHumanOrigin = nowTime - HUMAN_ORIGIN_APPROX_MS; const tenThousandYears = Math.floor(timeSinceHumanOrigin / MS_IN_TEN_THOUSAND_YEARS); const remainingTime = timeSinceHumanOrigin % MS_IN_TEN_THOUSAND_YEARS; const days = Math.floor(remainingTime / MS_IN_DAY); const hours = Math.floor((remainingTime % MS_IN_DAY) / MS_IN_HOUR); const minutes = Math.floor((remainingTime % MS_IN_HOUR) / MS_IN_MINUTE); const seconds = Math.floor((remainingTime % MS_IN_MINUTE) / MS_IN_SECOND); display.innerHTML = `${tenThousandYears}萬年 ${days}天 ${hours}小時 ${minutes}分鐘 ${seconds}秒`; }
-        function updateProgressBar(now, fillEl, textEl, unit) { /* ... */ if (!fillEl || !textEl) return; let progress = 0; const nowTime = now.getTime(); if (unit === 'day') { const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime(); progress = Math.min(100, ((nowTime - startOfDay) / MS_IN_DAY) * 100); } else if (unit === 'week') { const currentDay = now.getDay(); const offsetToMonday = (currentDay === 0) ? 6 : currentDay - 1; const mondayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - offsetToMonday); mondayStart.setHours(0, 0, 0, 0); progress = Math.min(100, ((nowTime - mondayStart.getTime()) / MS_IN_WEEK) * 100); } const progressFormatted = progress.toFixed(2); fillEl.style.width = `${progressFormatted}%`; textEl.textContent = `${progressFormatted}%`; }
+        // Timer Updates (No changes from previous version)
+        function updateClockAndDate(now) { if (clockDisplay) clockDisplay.textContent = now.toLocaleTimeString('zh-CN', TIME_OPTIONS); if (gregorianDateDisplay) gregorianDateDisplay.textContent = now.toLocaleDateString('zh-CN', DATE_OPTIONS); }
+        function updateSingleCountdown(targetTime, nowTime, display, endMessage) { if (!display) return; const timeLeft = targetTime - nowTime; if (timeLeft <= 0) { display.textContent = endMessage; return; } const days = Math.floor(timeLeft / MS_IN_DAY); const hours = Math.floor((timeLeft % MS_IN_DAY) / MS_IN_HOUR); const minutes = Math.floor((timeLeft % MS_IN_HOUR) / MS_IN_MINUTE); const seconds = Math.floor((timeLeft % MS_IN_MINUTE) / MS_IN_SECOND); display.innerHTML = `${days}天 ${hours}小時 ${minutes}分鐘 ${seconds}秒`; }
+        function updateYearProgress(now, fillEl, textEl) { if (!fillEl || !textEl) return; const year = now.getFullYear(); const yearStart = new Date(year, 0, 1).getTime(); const nextYearStart = new Date(year + 1, 0, 1).getTime(); const totalMsInYear = nextYearStart - yearStart; const elapsedMs = now.getTime() - yearStart; const progress = Math.min(100, (elapsedMs / totalMsInYear * 100)); const progressFormatted = progress.toFixed(2); fillEl.style.width = `${progressFormatted}%`; textEl.textContent = `${progressFormatted}%`; }
+        function updateHumanTimer(nowTime, display) { if (!display) return; const timeSinceHumanOrigin = nowTime - HUMAN_ORIGIN_APPROX_MS; const tenThousandYears = Math.floor(timeSinceHumanOrigin / MS_IN_TEN_THOUSAND_YEARS); const remainingTime = timeSinceHumanOrigin % MS_IN_TEN_THOUSAND_YEARS; const days = Math.floor(remainingTime / MS_IN_DAY); const hours = Math.floor((remainingTime % MS_IN_DAY) / MS_IN_HOUR); const minutes = Math.floor((remainingTime % MS_IN_HOUR) / MS_IN_MINUTE); const seconds = Math.floor((remainingTime % MS_IN_MINUTE) / MS_IN_SECOND); display.innerHTML = `${tenThousandYears}萬年 ${days}天 ${hours}小時 ${minutes}分鐘 ${seconds}秒`; }
+        function updateProgressBar(now, fillEl, textEl, unit) { if (!fillEl || !textEl) return; let progress = 0; const nowTime = now.getTime(); if (unit === 'day') { const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime(); progress = Math.min(100, ((nowTime - startOfDay) / MS_IN_DAY) * 100); } else if (unit === 'week') { const currentDay = now.getDay(); const offsetToMonday = (currentDay === 0) ? 6 : currentDay - 1; const mondayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - offsetToMonday); mondayStart.setHours(0, 0, 0, 0); progress = Math.min(100, ((nowTime - mondayStart.getTime()) / MS_IN_WEEK) * 100); } const progressFormatted = progress.toFixed(2); fillEl.style.width = `${progressFormatted}%`; textEl.textContent = `${progressFormatted}%`; }
 
-        // --- Main Update Loop (Throttled - No changes needed) ---
+        // Main Update Loop (Throttled)
         let lastTimestamp = 0;
         function timerLoop(timestamp) {
             if (timestamp - lastTimestamp >= 1000) {
@@ -386,28 +379,27 @@
             requestAnimationFrame(timerLoop);
         }
 
-        // --- Initial Setup & Start ---
-
+        // Initial Setup & Start
         // 1. Initialize Theme
         let initialTheme;
         try {
             const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
             if (savedTheme === 'light' || savedTheme === 'dark') {
-                initialTheme = savedTheme; // Use saved preference if valid
+                initialTheme = savedTheme;
             } else {
-                initialTheme = getSystemThemePreference(); // Otherwise, use system time preference
+                initialTheme = getSystemThemePreference();
             }
         } catch (e) {
-            console.error("Could not read theme preference from localStorage:", e);
-            initialTheme = getSystemThemePreference(); // Fallback to system time if localStorage fails
+            console.error("Could not read theme preference:", e);
+            initialTheme = getSystemThemePreference();
         }
-        applyThemeVisuals(initialTheme); // Apply the determined initial theme
+        applyThemeVisuals(initialTheme);
 
         // 2. Add Theme Toggle Listener
         if (themeToggleButton) {
             themeToggleButton.addEventListener('click', toggleTheme);
         } else {
-            console.error("Theme toggle logo button not found!");
+            console.error("Theme toggle button not found!");
         }
 
         // 3. Initial Timer Update & Start Loop
@@ -419,7 +411,7 @@
         updateProgressBar(initialNow, dayProgressFill, dayProgressText, 'day');
         updateProgressBar(initialNow, weekProgressFill, weekProgressText, 'week');
         updateYearProgress(initialNow, yearProgressFill, yearProgressText);
-        requestAnimationFrame(timerLoop); // Start the loop
+        requestAnimationFrame(timerLoop);
     });
     </script>
 </body>
