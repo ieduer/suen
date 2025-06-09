@@ -53,7 +53,6 @@
             --countdown-item-bg-light: rgba(255, 255, 255, 0.1);
             --countdown-title-color-light: var(--dark-text-color-light);
             --countdown-display-color-light: var(--text-color-light);
-            --footer-gradient-light: linear-gradient(135deg, rgba(0, 95, 115, 0.5), rgba(10, 147, 150, 0.5));
             --footer-link-color-light: #e9d8a6;
             --footer-link-hover-light: #94d2bd;
             --button-text-color-light: var(--text-color-light);
@@ -73,7 +72,6 @@
             --countdown-item-bg-dark: rgba(44, 62, 80, 0.4);
             --countdown-title-color-dark: var(--text-color-dark);
             --countdown-display-color-dark: var(--text-color-dark);
-            --footer-gradient-dark: linear-gradient(135deg, rgba(44, 62, 80, 0.6), rgba(52, 73, 94, 0.6));
             --footer-link-color-dark: #81a1c1;
             --footer-link-hover-dark: #8fbcbb;
             --button-text-color-dark: var(--text-color-dark);
@@ -93,7 +91,6 @@
             --countdown-item-bg: var(--countdown-item-bg-light);
             --countdown-title-color: var(--countdown-title-color-light);
             --countdown-display-color: var(--countdown-display-color-light);
-            --footer-gradient: var(--footer-gradient-light);
             --footer-link-color: var(--footer-link-color-light);
             --footer-link-hover: var(--footer-link-hover-light);
             --button-text-color: var(--button-text-color-light);
@@ -117,7 +114,6 @@
             --countdown-item-bg: var(--countdown-item-bg-dark);
             --countdown-title-color: var(--countdown-title-color-dark);
             --countdown-display-color: var(--countdown-display-color-dark);
-            --footer-gradient: var(--footer-gradient-dark);
             --footer-link-color: var(--footer-link-color-dark);
             --footer-link-hover: var(--footer-link-hover-dark);
             --button-text-color: var(--button-text-color-dark);
@@ -131,34 +127,40 @@
 
         /* === GLOBAL & LAYOUT === */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; /* Removed height: 100% */ }
-        /* UPDATED: Back to Flexbox sticky footer */
+        html { scroll-behavior: smooth; }
         body {
             font-family: 'HuWenMingChaoTi', 'Noto Sans TC', 'NotoSansCJKsc', 'Helvetica Neue', Arial, sans-serif;
             background: var(--background-gradient);
             color: var(--text-color);
-            min-height: 100vh; /* Ensure body is at least viewport height */
+            min-height: 100vh;
             display: flex;
-            flex-direction: column; /* Stack children vertically */
-            align-items: center; /* Center container horizontally */
-            padding: 20px; /* Padding around the entire content */
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
             transition: var(--theme-transition);
         }
-        /* UPDATED: Back to Flexbox sticky footer */
         .container {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            flex-wrap: wrap;
             width: 100%;
             max-width: 1400px;
-            flex: 1 0 auto; /* Allow container to grow (1) and shrink (0), base size auto */
+            flex: 1 0 auto;
             gap: 20px;
-            /* Removed padding, handled by body */
-            /* margin: 0 auto; handled by body align-items */
         }
         .column { flex: 1; padding: 20px; border-radius: 15px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); transition: var(--theme-transition); min-width: 0; }
         .left-column { background: var(--primary-gradient); }
         .right-column { background: var(--secondary-gradient); }
-        .countdown-container { display: flex; flex-direction: column; gap: 15px; background: var(--primary-gradient); align-items: center; max-width: 300px; margin: 0 auto; position: relative; }
+
+        /* === MIDDLE COLUMN (CORRECTED WIDTH) === */
+        .countdown-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: var(--primary-gradient);
+            align-items: center;
+            /* REMOVED max-width, margin, flex-grow, flex-shrink TO RESTORE ORIGINAL BALANCE */
+        }
 
         /* === LOGO THEME TOGGLE === */
         .theme-toggle-logo-button { order: -1; margin-bottom: 15px; padding: 0; border: none; background: none; cursor: pointer; line-height: 0; -webkit-tap-highlight-color: transparent; border-radius: 8px; transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; }
@@ -178,7 +180,6 @@
         #current-date-gregorian { font-size: 1.1rem; opacity: 0.9; }
 
         /* === PROGRESS BARS === */
-        .progress-item { /* Applies to day, week, year */ }
         .progress-item .countdown-display { display: none; }
         .progress-bar-container { width: 90%; height: 28px; background-color: var(--progress-bar-bg); border-radius: 15px; margin: 5px auto 0; position: relative; overflow: hidden; border: 1px solid var(--progress-bar-border); transition: var(--theme-transition); }
         .progress-bar-fill { height: 100%; width: 0%; background: var(--progress-bar-fill); border-radius: 15px; transition: width 0.5s ease-out, var(--theme-transition); box-shadow: inset 0 1px 3px rgba(0,0,0,0.3); }
@@ -189,39 +190,27 @@
         .link-button:hover, .link-button:focus { background: var(--secondary-gradient); transform: translateY(-2px); box-shadow: var(--button-hover-shadow); outline: none; }
         .link-button:focus-visible { outline: 2px solid var(--footer-link-hover); outline-offset: 2px; }
 
-        /* === FOOTER === */
-         /* UPDATED: Back to Flexbox sticky footer */
+        /* === FOOTER (STYLED AS A COUNTDOWN-ITEM) === */
         .footer {
+            background-color: var(--countdown-item-bg);
+            border-radius: 15px;
+            padding: 15px;
             text-align: center;
+            width: 100%;
             font-size: 0.9rem;
-            width: 100%; /* Take full width available within body padding */
-            max-width: 1400px; /* Match container max-width */
-            padding: 20px;
-            background: var(--footer-gradient);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            border-radius: 15px 15px 0 0;
-            margin-top: 20px; /* Space above footer */
-            flex-shrink: 0; /* Prevent footer from shrinking */
-            transition: var(--theme-transition);
             color: var(--text-color);
+            transition: var(--theme-transition);
         }
-        .footer p { /* Content alignment inside footer */
-             margin: 0 auto;
-        }
+        .footer p { margin: 0; }
         .footer a { color: var(--footer-link-color); text-decoration: none; transition: color 0.3s ease; font-weight: bold; }
         .footer a:hover, .footer a:focus { color: var(--footer-link-hover); outline: none; text-decoration: underline; }
 
         /* === RESPONSIVE DESIGN === */
         @media (max-width: 1000px) {
-            body { padding: 15px; } /* Adjust body padding */
-            .container { flex-direction: column; /* Stack columns */ padding: 0; /* Container takes full width within body padding */}
+            body { padding: 15px; }
+            .container { flex-direction: column; padding: 0; }
             .column { width: 100%; margin-bottom: 20px; max-width: none; }
             .column:last-child { margin-bottom: 0; }
-            .countdown-container { max-width: 100%; /* Allow full width on mobile */ }
-            .theme-toggle-logo-button:focus { box-shadow: 0 0 0 2px var(--logo-focus-shadow); }
-            .footer { border-radius: 15px; margin-top: 20px; /* Keep margin */ max-width: none;} /* Allow full width */
-             .footer p { max-width: none; }
         }
          @media (max-width: 480px) {
             body { padding: 10px; }
@@ -232,7 +221,7 @@
             .progress-bar-container { height: 24px; }
             .progress-bar-text { font-size: 0.8rem; }
             .link-button { padding: 10px 8px; font-size: 0.95rem; }
-            .footer { font-size: 0.85rem; padding: 15px 10px; margin-top: 15px; }
+            .footer { font-size: 0.85rem; padding: 15px 10px; }
          }
     </style>
 </head>
@@ -264,7 +253,7 @@
         <!-- Middle Countdown Column -->
         <div class="column countdown-container">
              <!-- Theme Toggle Button -->
-            <button id="theme-toggle-logo-button" class="theme-toggle-logo-button" aria-label="切換暗黑模式"> <!-- Initial label set by JS -->
+            <button id="theme-toggle-logo-button" class="theme-toggle-logo-button" aria-label="切換暗黑模式">
                 <img src="https://img.bdfz.net/20250503003.webp" alt="Logo - 點擊切換主題" class="logo-img">
             </button>
             <!-- Countdown Items -->
@@ -274,6 +263,11 @@
             <div id="week-progress" class="countdown-item progress-item"> <h2 class="countdown-title">本週已逝</h2> <div class="progress-bar-container"> <div class="progress-bar-fill" id="week-progress-fill"></div> <span class="progress-bar-text" id="week-progress-text">0.00%</span> </div> </div>
             <div id="year-progress" class="countdown-item progress-item"> <h2 class="countdown-title">2025年度已逝</h2> <div class="progress-bar-container"> <div class="progress-bar-fill" id="year-progress-fill"></div> <span class="progress-bar-text" id="year-progress-text">0.00%</span> </div> </div>
             <div id="human-timer" class="countdown-item"> <h2 class="countdown-title">生民以來</h2> <div class="countdown-display" id="humanTime" aria-live="polite">計算中...</div> </div>
+
+            <!-- Footer Section (MOVED AND RESTYLED) -->
+            <footer class="footer">
+                <p>© 2025 <a href="https://bdfz.net" target="_blank">SUEN</a></p>
+            </footer>
         </div>
 
         <!-- Right Column (Links) -->
@@ -298,12 +292,7 @@
        </div>
     </div>
 
-    <!-- Footer Section -->
-    <footer class="footer">
-        <p>© 2025 <a href="https://bdfz.net" target="_blank">SUEN</a></p>
-    </footer>
-
-    <!-- JavaScript for Timers & Theme Toggle -->
+    <!-- JavaScript remains unchanged as it was already correct for this layout -->
     <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Cache DOM elements
@@ -355,7 +344,7 @@
             try { localStorage.setItem(THEME_STORAGE_KEY, newTheme); } catch (e) { console.error("Could not save theme preference:", e); }
         }
 
-        // Timer Updates (No changes from previous version)
+        // Timer Updates
         function updateClockAndDate(now) { if (clockDisplay) clockDisplay.textContent = now.toLocaleTimeString('zh-CN', TIME_OPTIONS); if (gregorianDateDisplay) gregorianDateDisplay.textContent = now.toLocaleDateString('zh-CN', DATE_OPTIONS); }
         function updateSingleCountdown(targetTime, nowTime, display, endMessage) { if (!display) return; const timeLeft = targetTime - nowTime; if (timeLeft <= 0) { display.textContent = endMessage; return; } const days = Math.floor(timeLeft / MS_IN_DAY); const hours = Math.floor((timeLeft % MS_IN_DAY) / MS_IN_HOUR); const minutes = Math.floor((timeLeft % MS_IN_HOUR) / MS_IN_MINUTE); const seconds = Math.floor((timeLeft % MS_IN_MINUTE) / MS_IN_SECOND); display.innerHTML = `${days}天 ${hours}小時 ${minutes}分鐘 ${seconds}秒`; }
         function updateYearProgress(now, fillEl, textEl) { if (!fillEl || !textEl) return; const year = now.getFullYear(); const yearStart = new Date(year, 0, 1).getTime(); const nextYearStart = new Date(year + 1, 0, 1).getTime(); const totalMsInYear = nextYearStart - yearStart; const elapsedMs = now.getTime() - yearStart; const progress = Math.min(100, (elapsedMs / totalMsInYear * 100)); const progressFormatted = progress.toFixed(2); fillEl.style.width = `${progressFormatted}%`; textEl.textContent = `${progressFormatted}%`; }
