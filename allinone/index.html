@@ -314,9 +314,9 @@ fetch('https://ipapi.co/json/')
             ipCityEl.textContent = `${data.ip || ''} | ${data.city || ''}`.trim();
         }
         if (orgCountryEl) {
-            // 第三行：ORG / 🇺🇸 | US | United States
+            // 第三行：ORG / 🇺🇸 | United States
             const flag = codeToFlag(data.country_code);
-            orgCountryEl.textContent = `${data.org || ''} / ${flag} | ${data.country_code || ''} | ${data.country_name || ''}`.trim();
+            orgCountryEl.textContent = `${data.org || ''} / ${flag} | ${data.country_name || ''}`.trim();
         }
     })
     .catch(err => {
