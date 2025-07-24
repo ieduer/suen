@@ -238,7 +238,7 @@
             <a href="https://hlm.bdfz.net" class="link-button" target="_blank" rel="noopener noreferrer" aria-label="AI紅樓夢">AI紅樓夢</a>
             <a href="https://kw.bdfz.net" class="link-button" target="_blank" rel="noopener noreferrer" aria-label="AI課文">AI課文</a>
             <a href="https://zi.tools/" class="link-button" target="_blank" rel="noopener noreferrer" aria-label="Status page">字統</a>
-            <a href="https://forum.rdfzer.com" class="link-button" target="_blank" rel="noopener noreferrer" aria-label="訪問彣彰典冊">彣彰典冊</a>
+            <a href="https://forum.rdfzer.com" class="link-button" target="_blank" rel="noopener noreferrer" aria-label="訪問彣彰典冊">彣彰</a>
             <a href="https://sites.google.com/view/pkuschool/info" class="link-button" target="_blank" rel="noopener noreferrer" aria-label="訪問高中語文">高中語文</a>
             <a href="https://h.bdfz.net/" class="link-button" target="_blank" rel="noopener noreferrer" aria-label="訪問家長">家長</a>
             <a href="https://matters.town/@eduer" class="link-button" target="_blank" rel="noopener noreferrer" aria-label="訪問舊地心思">舊地心思</a>
@@ -264,12 +264,12 @@
             <div id="year-progress" class="countdown-item progress-item"> <h2 class="countdown-title">2025年度已逝</h2> <div class="progress-bar-container"> <div class="progress-bar-fill" id="year-progress-fill"></div> <span class="progress-bar-text" id="year-progress-text">0.00%</span> </div> </div>
             <div id="human-timer" class="countdown-item"> <h2 class="countdown-title">生民以來</h2> <div class="countdown-display" id="humanTime" aria-live="polite">計算中...</div> </div>
 
-            <div id="visitor-ip" class="footer" style="margin-top: 10px;" aria-live="polite">IP 加載中...</div>
-
-            <!-- Footer Section (MOVED AND RESTYLED) -->
-            <footer class="footer">
-                <p>© 2025 <a href="https://bdfz.net" target="_blank">SUEN</a></p>
-            </footer>
+            <!-- Footer Section (Restyled with IP info) -->
+<footer class="footer" id="site-footer" aria-live="polite">
+    <p id="footer-copyright">© 2025 <a href="https://bdfz.net" target="_blank" rel="noopener">SUEN</a></p>
+    <p id="footer-ip-city"></p>
+    <p id="footer-org-country"></p>
+  </footer>
         </div>
 
         <!-- Right Column (Links) -->
@@ -289,7 +289,7 @@
             <a href="https://pkuschool.yuque.com/qrvbic" class="link-button" target="_blank" rel="noopener noreferrer" aria-label="訪問語雀">語雀</a>
             <a href="https://openai.com/news/" class="link-button" target="_blank" rel="noopener noreferrer" aria-label="訪問OpenAI">OpenAI</a>
             <a href="https://aistudio.google.com/prompts/new_chat" class="link-button" target="_blank" rel="noopener noreferrer" aria-label="訪問Gemini">Gemini</a>
-            <a href="https://todo.bdfz.net/" class="link-button" target="_blank" rel="noopener noreferrer" aria-label="訪問todo">每日To-Do</a>
+            <a href="https://todo.bdfz.net/" class="link-button" target="_blank" rel="noopener noreferrer" aria-label="訪問todo">To-Do</a>
             <a href="https://notebooklm.google.com/" class="link-button" target="_blank" rel="noopener noreferrer" aria-label="NotebookLM">NotebookLM</a>
        </div>
     </div>
@@ -297,22 +297,35 @@
     <!-- JavaScript remains unchanged as it was already correct for this layout -->
     <script>
 
-// 加載訪問者 IP
+    // === 訪問者資訊寫入頁腳 ===
+function codeToFlag(cc) {
+    if (!cc) return '';
+    return cc.toUpperCase().replace(/./g, c => String.fromCodePoint(127397 + c.charCodeAt(0)));
+}
+
 fetch('https://ipapi.co/json/')
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
-        const ipDiv = document.getElementById('visitor-ip');
-        if (ipDiv) {
-            ipDiv.textContent = `您的 IP：${data.ip}`;
+        const ipCityEl = document.getElementById('footer-ip-city');
+        const orgCountryEl = document.getElementById('footer-org-country');
+
+        if (ipCityEl) {
+            // 第二行：IP 和城市
+            ipCityEl.textContent = `${data.ip || ''} | ${data.city || ''}`.trim();
+        }
+        if (orgCountryEl) {
+            // 第三行：ORG / 🇺🇸 | US | United States
+            const flag = codeToFlag(data.country_code);
+            orgCountryEl.textContent = `${data.org || ''} / ${flag} | ${data.country_code || ''} | ${data.country_name || ''}`.trim();
         }
     })
     .catch(err => {
-        console.error("IP 查詢失敗：", err);
-        const ipDiv = document.getElementById('visitor-ip');
-        if (ipDiv) {
-            ipDiv.textContent = "無法獲取 IP";
-        }
+        console.error('IP 查詢失敗：', err);
+        // 可選：給個降級顯示
+        const ipCityEl = document.getElementById('footer-ip-city');
+        if (ipCityEl) ipCityEl.textContent = 'IP 資訊獲取失敗';
     });
+
 
     document.addEventListener("DOMContentLoaded", function() {
         // Cache DOM elements
