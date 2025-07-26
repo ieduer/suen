@@ -301,34 +301,95 @@
     <!-- JavaScript remains unchanged as it was already correct for this layout -->
     <script>
 
-    // === 訪問者資訊寫入頁腳 ===
+// === 訪問者資訊寫入頁腳 ===
 function codeToFlag(cc) {
     if (!cc) return '';
     return cc.toUpperCase().replace(/./g, c => String.fromCodePoint(127397 + c.charCodeAt(0)));
 }
 
-fetch('https://ipapi.co/json/')
-    .then(res => res.json())
-    .then(data => {
-        const ipCityEl = document.getElementById('footer-ip-city');
-        const orgCountryEl = document.getElementById('footer-org-country');
+(async () => {
+    const ipCityEl = document.getElementById('footer-ip-city');
+    const orgCountryEl = document.getElementById('footer-org-country');
+    if (!ipCityEl || !orgCountryEl) return;
 
-        if (ipCityEl) {
-            // 第二行：IP 和城市
-            ipCityEl.textContent = `${data.ip || ''} | ${data.city || ''}`.trim();
+    // Providers: try in order with timeout; first success wins
+    const PROVIDERS = [
+        {
+            name: 'ipwhois',
+            url: 'https://ipwho.is/',
+            ok: (status, d) => status === 200 && d && d.success !== false,
+            map: (d) => ({
+                ip: d.ip || '',
+                city: d.city || '',
+                isp: (d.connection && (d.connection.isp || d.connection.org)) || '',
+                cc: d.country_code || '',
+                country: d.country || ''
+            })
+        },
+        {
+            name: 'ipapi',
+            url: 'https://ipapi.co/json/',
+            ok: (status, d) => status === 200 && d && (d.ip || d.country_code),
+            map: (d) => ({
+                ip: d.ip || '',
+                city: d.city || '',
+                isp: d.org || d.org_name || d.asn || '',
+                cc: d.country_code || '',
+                country: d.country_name || ''
+            })
+        },
+        {
+            name: 'geojs',
+            url: 'https://get.geojs.io/v1/ip/geo.json',
+            ok: (status, d) => status === 200 && d && (d.ip || d.country_code),
+            map: (d) => ({
+                ip: d.ip || '',
+                city: d.city || '',
+                isp: d.organization || '',
+                cc: d.country_code || '',
+                country: d.country || ''
+            })
         }
-        if (orgCountryEl) {
-            // 第三行：ORG / 🇺🇸 | United States
-            const flag = codeToFlag(data.country_code);
-            orgCountryEl.textContent = `${data.org || ''} / ${flag} | ${data.country_name || ''}`.trim();
+    ];
+
+    const fetchWithTimeout = async (url, ms = 2500) => {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), ms);
+        try {
+            const res = await fetch(url, { signal: ctrl.signal });
+            const status = res.status;
+            const json = await res.json().catch(() => ({}));
+            return { status, json };
+        } catch (_) {
+            return { status: 0, json: null };
+        } finally {
+            clearTimeout(timer);
         }
-    })
-    .catch(err => {
-        console.error('IP 查詢失敗：', err);
-        // 可選：給個降級顯示
-        const ipCityEl = document.getElementById('footer-ip-city');
-        if (ipCityEl) ipCityEl.textContent = 'IP 資訊獲取失敗';
-    });
+    };
+
+    let info = null;
+    for (const p of PROVIDERS) {
+        const { status, json } = await fetchWithTimeout(p.url, 2500);
+        if (p.ok(status, json || {})) {
+            info = p.map(json || {});
+            break;
+        }
+    }
+
+    if (info) {
+        // 第二行：IP | City（保留你當前頁的顯示風格）
+        const ipCity = [info.ip, info.city].filter(Boolean).join(' | ');
+        ipCityEl.textContent = ipCity;
+
+        // 第三行：ISP / 🇺🇸 | United States
+        const countryDisplay = [codeToFlag(info.cc), info.country].filter(Boolean).join(' | ');
+        orgCountryEl.textContent = [info.isp, countryDisplay].filter(Boolean).join(' / ');
+    } else {
+        // 全部失敗就隱藏
+        ipCityEl.style.display = 'none';
+        orgCountryEl.style.display = 'none';
+    }
+})();
 
 
     document.addEventListener("DOMContentLoaded", function() {
