@@ -21,15 +21,7 @@
 
     <title>BDFZ-SUEN</title>
 
-    <!-- === Microsoft Clarity Analytics Script === -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "o84pb5g49k");
-    </script>
-    <!-- === End Clarity Script === -->
+    <!-- Clarity moved to bottom: deferred after window.load + 2000ms -->
 
     <style>
         /* === Font Loading === */
@@ -306,88 +298,136 @@ function codeToFlag(cc) {
     return cc.toUpperCase().replace(/./g, c => String.fromCodePoint(127397 + c.charCodeAt(0)));
 }
 
-(async () => {
-    const ipCityEl = document.getElementById('footer-ip-city');
-    const orgCountryEl = document.getElementById('footer-org-country');
-    if (!ipCityEl || !orgCountryEl) return;
+(function () {
+    const LS_KEY = 'ip_info_v1';
+    const DAY_MS = 86400_000;
 
-    // Providers: try in order with timeout; first success wins
-    const PROVIDERS = [
-        {
-            name: 'ipwhois',
-            url: 'https://ipwho.is/',
-            ok: (status, d) => status === 200 && d && d.success !== false,
-            map: (d) => ({
-                ip: d.ip || '',
-                city: d.city || '',
-                isp: (d.connection && (d.connection.isp || d.connection.org)) || '',
-                cc: d.country_code || '',
-                country: d.country || ''
-            })
-        },
-        {
-            name: 'ipapi',
-            url: 'https://ipapi.co/json/',
-            ok: (status, d) => status === 200 && d && (d.ip || d.country_code),
-            map: (d) => ({
-                ip: d.ip || '',
-                city: d.city || '',
-                isp: d.org || d.org_name || d.asn || '',
-                cc: d.country_code || '',
-                country: d.country_name || ''
-            })
-        },
-        {
-            name: 'geojs',
-            url: 'https://get.geojs.io/v1/ip/geo.json',
-            ok: (status, d) => status === 200 && d && (d.ip || d.country_code),
-            map: (d) => ({
-                ip: d.ip || '',
-                city: d.city || '',
-                isp: d.organization || '',
-                cc: d.country_code || '',
-                country: d.country || ''
-            })
-        }
-    ];
-
-    const fetchWithTimeout = async (url, ms = 2500) => {
-        const ctrl = new AbortController();
-        const timer = setTimeout(() => ctrl.abort(), ms);
-        try {
-            const res = await fetch(url, { signal: ctrl.signal });
-            const status = res.status;
-            const json = await res.json().catch(() => ({}));
-            return { status, json };
-        } catch (_) {
-            return { status: 0, json: null };
-        } finally {
-            clearTimeout(timer);
-        }
-    };
-
-    let info = null;
-    for (const p of PROVIDERS) {
-        const { status, json } = await fetchWithTimeout(p.url, 2500);
-        if (p.ok(status, json || {})) {
-            info = p.map(json || {});
-            break;
-        }
-    }
-
-    if (info) {
-        // 第二行：IP | City（保留你當前頁的顯示風格）
+    function render(info) {
+        const ipCityEl = document.getElementById('footer-ip-city');
+        const orgCountryEl = document.getElementById('footer-org-country');
+        if (!ipCityEl || !orgCountryEl) return;
         const ipCity = [info.ip, info.city].filter(Boolean).join(' | ');
         ipCityEl.textContent = ipCity;
-
-        // 第三行：ISP / 🇺🇸 | United States
         const countryDisplay = [codeToFlag(info.cc), info.country].filter(Boolean).join(' | ');
         orgCountryEl.textContent = [info.isp, countryDisplay].filter(Boolean).join(' / ');
-    } else {
-        // 全部失敗就隱藏
-        ipCityEl.style.display = 'none';
-        orgCountryEl.style.display = 'none';
     }
+
+    async function fetchFastest() {
+        const PROVIDERS = [
+            {
+                name: 'ipwhois',
+                url: 'https://ipwho.is/',
+                ok: (status, d) => status === 200 && d && d.success !== false,
+                map: (d) => ({
+                    ip: d.ip || '',
+                    city: d.city || '',
+                    isp: (d.connection && (d.connection.isp || d.connection.org)) || '',
+                    cc: d.country_code || '',
+                    country: d.country || ''
+                })
+            },
+            {
+                name: 'ipapi',
+                url: 'https://ipapi.co/json/',
+                ok: (status, d) => status === 200 && d && (d.ip || d.country_code),
+                map: (d) => ({
+                    ip: d.ip || '',
+                    city: d.city || '',
+                    isp: d.org || d.org_name || d.asn || '',
+                    cc: d.country_code || '',
+                    country: d.country_name || ''
+                })
+            },
+            {
+                name: 'geojs',
+                url: 'https://get.geojs.io/v1/ip/geo.json',
+                ok: (status, d) => status === 200 && d && (d.ip || d.country_code),
+                map: (d) => ({
+                    ip: d.ip || '',
+                    city: d.city || '',
+                    isp: d.organization || '',
+                    cc: d.country_code || '',
+                    country: d.country || ''
+                })
+            }
+        ];
+
+        const fetchWithTimeout = async (url, ms = 2000) => {
+            const ctrl = new AbortController();
+            const timer = setTimeout(() => ctrl.abort(), ms);
+            try {
+                const res = await fetch(url, { signal: ctrl.signal });
+                const status = res.status;
+                const json = await res.json().catch(() => ({}));
+                return { status, json };
+            } catch (_) {
+                return { status: 0, json: null };
+            } finally {
+                clearTimeout(timer);
+            }
+        };
+
+        // fire all, take first success
+        const racers = PROVIDERS.map(p =>
+            fetchWithTimeout(p.url, 2000).then(({ status, json }) => {
+                if (p.ok(status, json || {})) return p.map(json || {});
+                throw new Error(p.name);
+            })
+        );
+        try {
+            return await Promise.any(racers);
+        } catch (_) {
+            return null;
+        }
+    }
+
+    function start() {
+        const ipCityEl = document.getElementById('footer-ip-city');
+        const orgCountryEl = document.getElementById('footer-org-country');
+        if (!ipCityEl || !orgCountryEl) return;
+
+        // 1) Instant paint from cache if fresh
+        try {
+            const cached = JSON.parse(localStorage.getItem(LS_KEY) || '');
+            if (cached && Date.now() - (cached.ts || 0) < DAY_MS) {
+                render(cached);
+            }
+        } catch {}
+
+        // 2) Defer network work until footer becomes visible (saves mobile data)
+        const doFetch = async () => {
+            const info = await fetchFastest();
+            if (info) {
+                render(info);
+                try { localStorage.setItem(LS_KEY, JSON.stringify({ ...info, ts: Date.now() })); } catch {}
+            } else {
+                ipCityEl.style.display = 'none';
+                orgCountryEl.style.display = 'none';
+            }
+        };
+
+        if ('IntersectionObserver' in window) {
+            const io = new IntersectionObserver((entries, obs) => {
+                for (const e of entries) {
+                    if (e.isIntersecting) {
+                        obs.disconnect();
+                        doFetch();
+                        break;
+                    }
+                }
+            });
+            io.observe(document.getElementById('site-footer') || orgCountryEl);
+        } else {
+            // Fallback: run after load idle
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(doFetch, { timeout: 2000 });
+            } else {
+                setTimeout(doFetch, 1000);
+            }
+        }
+    }
+
+    window.addEventListener('load', start);
 })();
 
 
@@ -501,4 +541,18 @@ function codeToFlag(cc) {
     });
     </script>
 </body>
+</html>
+</body>
+<script>
+  // Defer Clarity by 2s after full load (non-blocking)
+  window.addEventListener('load', function () {
+    setTimeout(function () {
+      (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "o84pb5g49k");
+    }, 2000);
+  });
+</script>
 </html>
