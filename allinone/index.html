@@ -359,22 +359,34 @@
 
         /* === RESPONSIVE DESIGN === */
         @media (max-width: 1000px) {
-            body { padding: 15px; }
-            .container { flex-direction: column; padding: 0; }
-            .column { width: 100%; margin-bottom: 20px; max-width: none; }
+            body { padding: 15px; height: auto; min-height: 100vh; overflow-y: auto; }
+            .container { flex-direction: column; padding: 0; height: auto; gap: 12px; }
+            .column { width: 100%; margin-bottom: 20px; max-width: none; height: auto; }
             .column:last-child { margin-bottom: 0; }
+            .left-column, .right-column { justify-content: flex-start; }
+            .left-column .link-button, .right-column .link-button { margin-bottom: 8px; }
+            .countdown-container { gap: 10px; }
         }
-         @media (max-width: 480px) {
-            body { padding: 10px; }
-            .column { padding: 15px; margin-bottom: 15px;}
+        @media (max-width: 480px) {
+            body { padding: 10px; height: auto; min-height: 100vh; overflow-y: auto; }
+            .container { flex-direction: column; height: auto; gap: 10px; }
+            .column { padding: 12px; margin-bottom: 12px; height: auto; }
+            .left-column, .right-column { justify-content: flex-start; }
+            .left-column .link-button, .right-column .link-button { margin-bottom: 10px; }
+            .link-button { padding: 14px 12px; font-size: 1rem; border-radius: 12px; }
+            .theme-toggle-logo-button { margin-bottom: 10px; }
+            .logo-img { width: 56px; }
+            .countdown-container { gap: 8px; }
+            .countdown-item { padding: 10px; }
+            .countdown-title { font-size: 1rem; }
+            .countdown-display { font-size: 1.3rem; }
             #gaokao-countdown .countdown-display, #human-timer .countdown-display { font-size: 1.15rem; line-height: 1.25; }
-            #current-time-clock { font-size: 1.4rem; }
+            #current-time-clock { font-size: 1.35rem; }
             #current-date-gregorian { font-size: 0.95rem; }
-            .progress-bar-container { height: 24px; }
+            .progress-bar-container { height: 20px; width: 92%; }
             .progress-bar-text { font-size: 0.8rem; }
-            .link-button { padding: 10px 8px; font-size: 0.95rem; }
-            .footer { font-size: 0.85rem; padding: 15px 10px; }
-         }
+            .footer { font-size: 0.85rem; padding: 12px 10px; }
+        }
     </style>
 </head>
 <body>
