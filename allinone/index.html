@@ -323,11 +323,9 @@
 
         /* === SIDE LINK variant: toned surfaces to harmonize with center === */
         .side-link {
-            background: linear-gradient(145deg,
-                color-mix(in oklab, var(--panel-surface) 85%, white 15%),
-                color-mix(in oklab, var(--panel-surface) 92%, black 8%));
+            background: color-mix(in oklab, var(--panel-surface) 92%, white 8%);
             color: var(--dark-text-color);
-            box-shadow: inset 2px 2px 4px rgba(0,0,0,0.06), inset -2px -2px 4px rgba(255,255,255,0.45);
+            box-shadow: none;
             border: 1px solid color-mix(in oklab, var(--panel-surface), #000 12%);
         }
         .side-link:hover, .side-link:focus {
@@ -337,6 +335,27 @@
             box-shadow: inset 1px 1px 2px rgba(0,0,0,0.05), inset -1px -1px 2px rgba(255,255,255,0.35);
         }
         body.dark-mode .side-link { color: var(--text-color); border-color: color-mix(in oklab, var(--panel-surface), #fff 12%); }
+        /* === SIDE LINK Alternating Rhythm (odd/even) === */
+
+        /* === SIDE LINK Shoulder Highlight (Plan 3) === */
+        .left-column .side-link,
+        .right-column .side-link {
+            background:
+              linear-gradient(0deg, rgba(255,255,255,0.35), rgba(255,255,255,0) 12%),
+              linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0) 14%),
+              color-mix(in oklab, var(--panel-surface) 92%, white 8%);
+            box-shadow: none;
+            border-color: color-mix(in oklab, var(--panel-surface), #000 12%);
+        }
+        body.dark-mode .left-column .side-link,
+        body.dark-mode .right-column .side-link {
+            background:
+              linear-gradient(0deg, rgba(255,255,255,0.08), rgba(255,255,255,0) 12%),
+              linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0) 16%),
+              color-mix(in oklab, var(--panel-surface) 85%, black 15%);
+            box-shadow: none;
+            border-color: color-mix(in oklab, var(--panel-surface), #fff 10%);
+        }
 
         /* === FOOTER (STYLED AS A COUNTDOWN-ITEM) === */
         .footer {
