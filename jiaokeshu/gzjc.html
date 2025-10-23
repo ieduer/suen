@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>普通高中教科书下载列表</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #3498db;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        p {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 12px 0;
+            border-bottom: 1px dashed #ddd;
+            display: flex;
+            align-items: center;
+        }
+        li:last-child {
+            border-bottom: none;
+        }
+        li::before {
+            content: '📖';
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+        a {
+            text-decoration: none;
+            color: #2980b9;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: #e67e22;
+            text-decoration: underline;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #95a5a6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>普通高中教科书下载列表</h1>
+        <p>點擊書名即可下載對應的 PDF 文件。</p>
+
+        <div id="textbook-list">
+            <!-- JavaScript will populate this area -->
+        </div>
+    </div>
+
+    <footer>
+        <p>Generated based on index.json</p>
+    </footer>
+
+    <script>
+        const textbookData = [
+          {
+            "id": "807d9aac-53ac-4b3e-b254-e37f5298be6e",
+            "title": "普通高中教科书·数学必修 第二册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/807d9aac-53ac-4b3e-b254-e37f5298be6e.pkg/pdf.pdf"
+          },
+          {
+            "id": "5f0829b2-fc05-479b-a51e-47f871598eba",
+            "title": "普通高中教科书·英语选择性必修 第四册",
+            "subject": "英语",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/5f0829b2-fc05-479b-a51e-47f871598eba.pkg/普通高中教科书 英语 选择性必修 第四册_1756191754953.pdf"
+          },
+          {
+            "id": "ec1adf40-7bf0-48a4-9902-89162f59277d",
+            "title": "普通高中教科书·英语选择性必修 第一册",
+            "subject": "英语",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/ec1adf40-7bf0-48a4-9902-89162f59277d.pkg/普通高中教科书 英语 选择性必修 第一册_1756191751842.pdf"
+          },
+          {
+            "id": "f8c5c17e-8444-4b76-ba3a-5d6a9fce30e1",
+            "title": "普通高中教科书·英语必修 第二册",
+            "subject": "英语",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/f8c5c17e-8444-4b76-ba3a-5d6a9fce30e1.pkg/普通高中教科书  英语 必修二_1754905546125.pdf"
+          },
+          {
+            "id": "e37af837-2671-4018-af45-c82356546822",
+            "title": "普通高中教科书·英语必修 第一册",
+            "subject": "英语",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/e37af837-2671-4018-af45-c82356546822.pkg/普通高中教科书  英语 必修一_1754905545037.pdf"
+          },
+          {
+            "id": "671e59b0-608f-49c6-8f23-e076decf27e2",
+            "title": "普通高中教科书·英语选择性必修 第三册",
+            "subject": "英语",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/671e59b0-608f-49c6-8f23-e076decf27e2.pkg/普通高中教科书 英语 选择性必修 第三册_1756191754199.pdf"
+          },
+          {
+            "id": "acc5bf16-92b5-47c7-b57b-b7f4eb5f2199",
+            "title": "普通高中教科书·思想政治选择性必修2 法律与生活",
+            "subject": "思想政治",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/acc5bf16-92b5-47c7-b57b-b7f4eb5f2199.pkg/普通高中教科书 思想政治 选择性必修2 法律与生活_1756191821177.pdf"
+          },
+          {
+            "id": "59292625-06b0-4cfd-a6af-4f3039e6ad80",
+            "title": "普通高中教科书·数学必修 第四册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/59292625-06b0-4cfd-a6af-4f3039e6ad80.pkg/pdf.pdf"
+          },
+          {
+            "id": "833cae74-4d4d-4472-8f56-a99fa306af96",
+            "title": "普通高中教科书·数学选择性必修 第二册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/833cae74-4d4d-4472-8f56-a99fa306af96.pkg/普通高中教科书·数学_高二年级_选择性必修第二册_江苏凤凰教育出版社_1737863951209.pdf"
+          },
+          {
+            "id": "9ce0ef2b-139f-496a-8e55-02a599826648",
+            "title": "普通高中教科书·数学必修 第三册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/9ce0ef2b-139f-496a-8e55-02a599826648.pkg/pdf.pdf"
+          },
+          {
+            "id": "55265e13-60fd-4b6e-8eb3-c4ce84dfdbe7",
+            "title": "普通高中教科书·数学选择性必修 第一册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/55265e13-60fd-4b6e-8eb3-c4ce84dfdbe7.pkg/普通高中教科书·数学_高二年级_选择性必修第一册_江苏凤凰教育出版社_1737863950346.pdf"
+          },
+          {
+            "id": "9cee6cbd-4ce9-43a2-b884-895dafd832af",
+            "title": "普通高中教科书·思想政治选择性必修1 当代国际政治与经济",
+            "subject": "思想政治",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/9cee6cbd-4ce9-43a2-b884-895dafd832af.pkg/普通高中教科书 思想政治 选择性必修1 当代国际政治与经济_1756191820326.pdf"
+          },
+          {
+            "id": "bf54b36f-4c75-4c91-8b9c-53ce15e4f903",
+            "title": "普通高中教科书·英语必修 第三册",
+            "subject": "英语",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/bf54b36f-4c75-4c91-8b9c-53ce15e4f903.pkg/普通高中教科书 英语 必修 第三册_1756191752621.pdf"
+          },
+          {
+            "id": "5136d0eb-69b1-43cb-81e2-9f5f52ed06ca",
+            "title": "普通高中教科书·数学必修 第一册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/5136d0eb-69b1-43cb-81e2-9f5f52ed06ca.pkg/9787549986651_普通高中教科书·数学_高一年级_必修第一册_江苏凤凰教育出版社_1754905582516.pdf"
+          },
+          {
+            "id": "ffaba6c3-497d-47b0-b91a-784f43625507",
+            "title": "普通高中教科书·数学（A版）选择性必修 第三册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/ffaba6c3-497d-47b0-b91a-784f43625507.pkg/普通高中教科书 数学 选择性必修 第三册（A版）_1756191770813.pdf"
+          },
+          {
+            "id": "0cbeba0b-b97b-4289-9b4e-f3a96f1e5b85",
+            "title": "普通高中教科书·英语必修 第二册",
+            "subject": "英语",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/0cbeba0b-b97b-4289-9b4e-f3a96f1e5b85.pkg/普通高中教科书·英语_高一年级_必修第二册_译林出版社_1725097022632.pdf"
+          },
+          {
+            "id": "e1d9499b-2d8e-49c0-986a-8434ec95c8b7",
+            "title": "普通高中教科书·英语选择性必修 第二册",
+            "subject": "英语",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/e1d9499b-2d8e-49c0-986a-8434ec95c8b7.pkg/9787521317800_普通高中教科书·英语_高二年级_选择性必修第二册_外语教学与研究出版社_1754905536292.pdf"
+          },
+          {
+            "id": "adb974b6-7312-4ad5-9adc-6e8d135eddbc",
+            "title": "普通高中教科书·数学（B版）必修 第一册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/adb974b6-7312-4ad5-9adc-6e8d135eddbc.pkg/普通高中教科书 数学（B版） 必修 第一册_1756191761813.pdf"
+          },
+          {
+            "id": "33a1cf09-b3e4-4874-95f4-25d38a5847c3",
+            "title": "普通高中教科书·思想政治选择性必修3 逻辑与思维",
+            "subject": "思想政治",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/33a1cf09-b3e4-4874-95f4-25d38a5847c3.pkg/普通高中教科书 思想政治 选择性必修3 逻辑与思维_1756191821965.pdf"
+          },
+          {
+            "id": "cd1feeb4-b1db-4a44-9694-9d8c35ab02f5",
+            "title": "普通高中教科书·英语必修 第一册",
+            "subject": "英语",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/cd1feeb4-b1db-4a44-9694-9d8c35ab02f5.pkg/9787544781329_普通高中教科书·英语_高一年级_必修第一册_译林出版社_1754905544192.pdf"
+          },
+          {
+            "id": "99c1fb5b-d1e0-4238-90b9-a573ab84bf08",
+            "title": "普通高中教科书·数学（A版）选择性必修 第二册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/99c1fb5b-d1e0-4238-90b9-a573ab84bf08.pkg/普通高中教科书 数学 选择性必修 第二册（A版）_1756191770032.pdf"
+          },
+          {
+            "id": "d0fd2c1f-6b4f-43f0-8229-de0a53b197df",
+            "title": "普通高中教科书·数学（A版）选择性必修 第一册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/d0fd2c1f-6b4f-43f0-8229-de0a53b197df.pkg/普通高中教科书 数学 选择性必修 第一册（A版）_1756191769193.pdf"
+          },
+          {
+            "id": "3b7a3baf-4e1e-4380-b2cc-3bf330d00cc3",
+            "title": "普通高中教科书·语文选择性必修 上册",
+            "subject": "语文",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/3b7a3baf-4e1e-4380-b2cc-3bf330d00cc3.pkg/普通高中教科书 语文 选择性必修 上册_1756191826014.pdf"
+          },
+          {
+            "id": "d296fc79-8d47-4b18-862c-6df49adc2ce0",
+            "title": "普通高中教科书·数学（A版）必修 第二册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/d296fc79-8d47-4b18-862c-6df49adc2ce0.pkg/普通高中教科书 数学 必修 第二册（A版）_1756191768440.pdf"
+          },
+          {
+            "id": "da694670-f25b-46a0-9c3f-a31f5a2f131a",
+            "title": "普通高中教科书·语文选择性必修 中册",
+            "subject": "语文",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/da694670-f25b-46a0-9c3f-a31f5a2f131a.pkg/普通高中教科书 语文 选择性必修 中册_1756191826801.pdf"
+          },
+          {
+            "id": "9085151a-b698-4b28-8c00-2c4aaf0c91ad",
+            "title": "普通高中教科书·语文必修 下册",
+            "subject": "语文",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/9085151a-b698-4b28-8c00-2c4aaf0c91ad.pkg/普通高中教科书 语文 必修 下册_1738722779558.pdf"
+          },
+          {
+            "id": "2de54e6d-1f82-4fdc-9f26-c94dfed9c5af",
+            "title": "普通高中教科书·语文选择性必修 下册",
+            "subject": "语文",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/2de54e6d-1f82-4fdc-9f26-c94dfed9c5af.pkg/普通高中教科书 语文 选择性必修 下册_1756191824471.pdf"
+          },
+          {
+            "id": "2767a985-949c-416c-83b6-cce0bca67b03",
+            "title": "普通高中教科书·数学选择性必修 第二册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/2767a985-949c-416c-83b6-cce0bca67b03.pkg/普通高中教科书  数学 选择性必修第二册_1754905587936.pdf"
+          },
+          {
+            "id": "02011dad-8881-4a85-8476-8aeb69e6eb54",
+            "title": "普通高中教科书·数学（B版）必修 第二册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/02011dad-8881-4a85-8476-8aeb69e6eb54.pkg/普通高中教科书 数学（B版） 必修 第二册_1756191762567.pdf"
+          },
+          {
+            "id": "6fd52efc-6395-4a42-b810-8810064d075e",
+            "title": "普通高中教科书·数学选择性必修 第一册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/6fd52efc-6395-4a42-b810-8810064d075e.pkg/普通高中教科书  数学 选择性必修第一册_1754905586882.pdf"
+          },
+          {
+            "id": "b1c260b8-c917-4751-b095-9863f69c8f77",
+            "title": "普通高中教科书·数学（B版）必修 第三册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/b1c260b8-c917-4751-b095-9863f69c8f77.pkg/普通高中教科书 数学（B版） 必修 第三册_1756191764631.pdf"
+          },
+          {
+            "id": "aadd94cd-2d05-4716-aa25-dab70c9fc7a4",
+            "title": "普通高中教科书·历史必修 中外历史纲要（上）",
+            "subject": "历史",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/aadd94cd-2d05-4716-aa25-dab70c9fc7a4.pkg/普通高中教科书 历史 必修 中外历史纲要（上）_1756191818507.pdf"
+          },
+          {
+            "id": "24ca7cd7-8add-4661-85ac-5823dadf28e1",
+            "title": "普通高中教科书·数学选择性必修 第三册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/24ca7cd7-8add-4661-85ac-5823dadf28e1.pkg/pdf.pdf"
+          },
+          {
+            "id": "ac2acabd-ec0a-47be-bf73-b7e64a9cf856",
+            "title": "习近平新时代中国特色社会主义思想学生读本·高中",
+            "subject": "思想政治",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/ac2acabd-ec0a-47be-bf73-b7e64a9cf856.pkg/9787010235318_习近平新时代中国特色社会主义思想学生读本·高中_高一年级_一册_人民出版社_1754905613084.pdf"
+          },
+          {
+            "id": "ec47ff37-71bf-4a88-b4da-f934d0cc40ea",
+            "title": "普通高中教科书·历史必修 中外历史纲要（下）",
+            "subject": "历史",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/ec47ff37-71bf-4a88-b4da-f934d0cc40ea.pkg/普通高中教科书 历史 必修 中外历史纲要（下）_1737864037123.pdf"
+          },
+          {
+            "id": "89dcdee0-a094-433f-ba9f-f7a5a2dd7c24",
+            "title": "普通高中教科书·数学（B版）选择性必修 第二册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/89dcdee0-a094-433f-ba9f-f7a5a2dd7c24.pkg/普通高中教科书 数学（B版） 选择性必修 第二册_1756191765378.pdf"
+          },
+          {
+            "id": "47306eac-960e-4799-b600-1c23212779a8",
+            "title": "普通高中教科书·数学（B版）选择性必修 第一册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/47306eac-960e-4799-b600-1c23212779a8.pkg/普通高中教科书 数学（B版） 选择性必修 第一册_1756191763730.pdf"
+          },
+          {
+            "id": "7786158e-01d7-4544-a358-5759664c78ea",
+            "title": "普通高中教科书·历史选择性必修1 国家制度与社会治理",
+            "subject": "历史",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/7786158e-01d7-4544-a358-5759664c78ea.pkg/普通高中教科书 历史 选择性必修1 国家制度与社会治理_1756191819457.pdf"
+          },
+          {
+            "id": "183e709c-5a7f-44b9-a633-51eb0cd81f0b",
+            "title": "普通高中教科书·历史选择性必修2 经济与社会生活",
+            "subject": "历史",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/183e709c-5a7f-44b9-a633-51eb0cd81f0b.pkg/普通高中教科书 历史 选择性必修2 经济与社会生活_1756191816942.pdf"
+          },
+          {
+            "id": "561cdda2-8f90-4b13-b987-8d8c3bb9e554",
+            "title": "普通高中教科书·思想政治必修4 哲学与文化",
+            "subject": "思想政治",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/561cdda2-8f90-4b13-b987-8d8c3bb9e554.pkg/普通高中教科书 思想政治 必修4 哲学与文化_1737864041042.pdf"
+          },
+          {
+            "id": "350da632-7888-42fb-afc5-a022adaa28ac",
+            "title": "普通高中教科书·数学（B版）必修 第四册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/350da632-7888-42fb-afc5-a022adaa28ac.pkg/普通高中教科书 数学（B版） 必修 第四册_1756191766895.pdf"
+          },
+          {
+            "id": "92c2948c-2c0c-410b-bae0-22e9d592759b",
+            "title": "普通高中教科书·数学（B版）选择性必修 第三册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/92c2948c-2c0c-410b-bae0-22e9d592759b.pkg/普通高中教科书 数学（B版） 选择性必修 第三册_1756191766116.pdf"
+          },
+          {
+            "id": "e2c5fb9c-9a73-4f1a-8fb5-10b1299c7f5c",
+            "title": "普通高中教科书·地理必修 第一册",
+            "subject": "地理",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/e2c5fb9c-9a73-4f1a-8fb5-10b1299c7f5c.pkg/普通高中教科书 地理 必修 第一册_1756191742270.pdf"
+          },
+          {
+            "id": "373d48bd-c1b4-4edd-b148-628713692ba3",
+            "title": "普通高中教科书·地理选择性必修1 自然地理基础",
+            "subject": "地理",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/373d48bd-c1b4-4edd-b148-628713692ba3.pkg/普通高中教科书 地理 选择性必修1 自然地理基础_1756191743809.pdf"
+          },
+          {
+            "id": "8452d2cf-1a23-4656-84b9-26616cbd2eff",
+            "title": "普通高中教科书·地理必修 第二册",
+            "subject": "地理",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/8452d2cf-1a23-4656-84b9-26616cbd2eff.pkg/普通高中教科书 地理 必修 第二册_1756191742994.pdf"
+          },
+          {
+            "id": "f2442c65-9148-47ee-9d57-37e6f801fdb4",
+            "title": "普通高中教科书·历史选择性必修3 文化交流与传播",
+            "subject": "历史",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/f2442c65-9148-47ee-9d57-37e6f801fdb4.pkg/普通高中教科书 历史 选择性必修3 文化交流与传播_1756191817723.pdf"
+          },
+          {
+            "id": "db7e6c9c-44b3-4818-96c6-ce81dabb3cc7",
+            "title": "普通高中教科书·地理选择性必修2 区域发展",
+            "subject": "地理",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/db7e6c9c-44b3-4818-96c6-ce81dabb3cc7.pkg/普通高中教科书 地理 选择性必修2 区域发展.pdf"
+          },
+          {
+            "id": "b8e9a3fe-dae7-49c0-86cb-d146f883fd8e",
+            "title": "普通高中教科书·语文必修 上册",
+            "subject": "语文",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/b8e9a3fe-dae7-49c0-86cb-d146f883fd8e.pkg/普通高中教科书 语文 必修 上册_1756191825252.pdf"
+          },
+          {
+            "id": "c142386a-85de-4c44-bb42-29a70b50056e",
+            "title": "普通高中教科书·数学选择性必修 第一册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/c142386a-85de-4c44-bb42-29a70b50056e.pkg/普通高中教科书·数学_高二年级_选择性必修第一册_上海教育出版社_1737863982568.pdf"
+          },
+          {
+            "id": "e36cf7c0-c787-4b34-ba7a-84a78baac331",
+            "title": "普通高中教科书·思想政治必修2 经济与社会",
+            "subject": "思想政治",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/e36cf7c0-c787-4b34-ba7a-84a78baac331.pkg/普通高中教科书 思想政治 必修2 经济与社会_1756191823687.pdf"
+          },
+          {
+            "id": "f07377f5-2ced-4d59-a59d-fe3b37800ead",
+            "title": "普通高中教科书·地理选择性必修3 资源、环境与国家安全",
+            "subject": "地理",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/f07377f5-2ced-4d59-a59d-fe3b37800ead.pkg/普通高中教科书 地理 选择性必修3 资源、环境与国家安全.pdf"
+          },
+          {
+            "id": "507cf8b4-327e-41ad-9f6d-babb59f5eef1",
+            "title": "普通高中教科书·思想政治必修3 政治与法治",
+            "subject": "思想政治",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/507cf8b4-327e-41ad-9f6d-babb59f5eef1.pkg/普通高中教科书 思想政治 必修3 政治与法治_1737864040203.pdf"
+          },
+          {
+            "id": "c7c07640-970b-4def-814a-0f77eba4a2d9",
+            "title": "普通高中教科书·思想政治必修1 中国特色社会主义",
+            "subject": "思想政治",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/c7c07640-970b-4def-814a-0f77eba4a2d9.pkg/普通高中教科书 思想政治 必修1 中国特色社会主义_1756191822939.pdf"
+          },
+          {
+            "id": "9bea0763-c2b5-493d-8b47-d915a581429b",
+            "title": "普通高中教科书·地理图册选择性必修1 自然地理基础",
+            "subject": "地理",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/9bea0763-c2b5-493d-8b47-d915a581429b.pkg/普通高中教科书·地理图册_高二年级_选择性必修1自然地理基础_中国地图出版社(王建，田忠）_1725097074301.pdf"
+          },
+          {
+            "id": "a5b1f2b8-2b48-45be-8907-230037f8074f",
+            "title": "普通高中教科书·地理图册选择性必修3 资源、环境与国家安全",
+            "subject": "地理",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/a5b1f2b8-2b48-45be-8907-230037f8074f.pkg/普通高中教科书·地理图册_高二年级_选择性必修3资源、环境与国家安全_中国地图出版社(王建，田忠）_1725097075961.pdf"
+          },
+          {
+            "id": "3809366b-8cda-4e08-9f01-cec45606f08e",
+            "title": "普通高中教科书·地理图册选择性必修2 区域发展",
+            "subject": "地理",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/3809366b-8cda-4e08-9f01-cec45606f08e.pkg/普通高中教科书·地理图册_高二年级_选择性必修2区域发展_中国地图出版社(王建，田忠）_1725097075143.pdf"
+          },
+          {
+            "id": "1f30bcf5-87de-4875-bc3f-b26a39dd42cd",
+            "title": "普通高中教科书·地理图册必修 第二册",
+            "subject": "地理",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/1f30bcf5-87de-4875-bc3f-b26a39dd42cd.pkg/9787520412001_普通高中教科书·地理图册_高一年级_必修第二册_中国地图出版社_1754905448605.pdf"
+          },
+          {
+            "id": "78746eeb-8487-4504-b10c-7e1385ad08a1",
+            "title": "普通高中教科书·地理图册必修 第一册",
+            "subject": "地理",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/78746eeb-8487-4504-b10c-7e1385ad08a1.pkg/9787558802614_普通高中教科书·地理图册_高一年级_必修第一册_中华地图学社_1754905449533_纯图版.pdf"
+          },
+          {
+            "id": "9779b1cb-e27f-4c9d-b5ae-25b65d747e09",
+            "title": "普通高中教科书·地理图册必修 第二册",
+            "subject": "地理",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/9779b1cb-e27f-4c9d-b5ae-25b65d747e09.pkg/普通高中教科书·地理图册_高一年级_必修第二册_中华地图学社_1737864023361.pdf"
+          },
+          {
+            "id": "708256b6-6f06-4d14-89c7-4df16dfe3b81",
+            "title": "普通高中教科书·物理必修 第一册",
+            "subject": "物理",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/708256b6-6f06-4d14-89c7-4df16dfe3b81.pkg/普通高中教科书 物理 必修 第一册_1756191771583.pdf"
+          },
+          {
+            "id": "346c3c04-1663-472c-849e-ff876dcf293f",
+            "title": "普通高中教科书·物理选择性必修 第一册",
+            "subject": "物理",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/346c3c04-1663-472c-849e-ff876dcf293f.pkg/普通高中教科书 物理 选择性必修 第一册_1756191774537.pdf"
+          },
+          {
+            "id": "55baa3cc-156f-4358-8e28-bfa21a864450",
+            "title": "普通高中教科书·物理必修 第二册",
+            "subject": "物理",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/55baa3cc-156f-4358-8e28-bfa21a864450.pkg/普通高中教科书 物理 必修 第二册_1756191772391.pdf"
+          },
+          {
+            "id": "dcd8cc6b-5380-4008-a2d0-a061f24d34dd",
+            "title": "普通高中教科书·物理必修 第三册",
+            "subject": "物理",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/dcd8cc6b-5380-4008-a2d0-a061f24d34dd.pkg/普通高中教科书 物理 必修 第三册_1756191775283.pdf"
+          },
+          {
+            "id": "2109c25c-2e52-4da3-8ab3-18cbe632ec11",
+            "title": "普通高中教科书·物理选择性必修 第三册",
+            "subject": "物理",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/2109c25c-2e52-4da3-8ab3-18cbe632ec11.pkg/普通高中教科书 物理 选择性必修 第三册_1756191776814.pdf"
+          },
+          {
+            "id": "07f7d663-a867-4eb6-ad39-03b55dbd4a65",
+            "title": "普通高中教科书·化学必修 第二册",
+            "subject": "化学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/07f7d663-a867-4eb6-ad39-03b55dbd4a65.pkg/普通高中教科书 化学 必修 第二册_1756191778393.pdf"
+          },
+          {
+            "id": "5cd19072-e40d-4a73-8580-7b7ada5d4005",
+            "title": "普通高中教科书·化学必修 第一册",
+            "subject": "化学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/5cd19072-e40d-4a73-8580-7b7ada5d4005.pkg/普通高中教科书 化学 必修 第一册_1756191777628.pdf"
+          },
+          {
+            "id": "2627e1d1-bacc-47a7-83f8-f6f7bc57f3a9",
+            "title": "普通高中教科书·物理选择性必修 第二册",
+            "subject": "物理",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/2627e1d1-bacc-47a7-83f8-f6f7bc57f3a9.pkg/pdf.pdf"
+          },
+          {
+            "id": "3502fe81-b23e-4f68-aa3d-7921e7932ec9",
+            "title": "普通高中教科书·化学选择性必修1 化学反应原理",
+            "subject": "化学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/3502fe81-b23e-4f68-aa3d-7921e7932ec9.pkg/普通高中教科书 化学 选择性必修1 化学反应原理_1756191779158.pdf"
+          },
+          {
+            "id": "c561d8ee-7c06-4cb1-9a4d-e34036f02d53",
+            "title": "普通高中教科书·化学选择性必修3 有机化学基础",
+            "subject": "化学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/c561d8ee-7c06-4cb1-9a4d-e34036f02d53.pkg/普通高中教科书 化学 选择性必修3 有机化学基础_1756191780683.pdf"
+          },
+          {
+            "id": "31313b43-2159-469c-9ee8-142b29ca1b7d",
+            "title": "普通高中教科书·化学选择性必修1 化学反应原理",
+            "subject": "化学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/31313b43-2159-469c-9ee8-142b29ca1b7d.pkg/普通高中教科书·化学_高二年级_选择性必修1化学反应原理_上海科学技术出版社_1737863984310.pdf"
+          },
+          {
+            "id": "9d522562-b529-446c-9b5b-084812beee6e",
+            "title": "普通高中教科书·生物学必修1 分子与细胞",
+            "subject": "生物",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/9d522562-b529-446c-9b5b-084812beee6e.pkg/普通高中教科书 生物学 必修1 分子与细胞_1756191717269.pdf"
+          },
+          {
+            "id": "ec6ab12c-0b06-43a5-bf62-ee90b619f607",
+            "title": "普通高中教科书·生物学选择性必修1 稳态与调节",
+            "subject": "生物",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/ec6ab12c-0b06-43a5-bf62-ee90b619f607.pkg/普通高中教科书 生物学 选择性必修1 稳态与调节_1756191718941.pdf"
+          },
+          {
+            "id": "b82cefe7-d631-4bde-baf9-352ca033cba4",
+            "title": "普通高中教科书·化学选择性必修2 物质结构与性质",
+            "subject": "化学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/b82cefe7-d631-4bde-baf9-352ca033cba4.pkg/普通高中教科书 化学 选择性必修2 物质结构与性质_1756191779915.pdf"
+          },
+          {
+            "id": "2ee7d7fa-1920-4d37-a179-91d5fd59b8c1",
+            "title": "普通高中教科书·物理选择性必修 第二册",
+            "subject": "物理",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/2ee7d7fa-1920-4d37-a179-91d5fd59b8c1.pkg/普通高中教科书 物理 选择性必修 第二册_1756191776029.pdf"
+          },
+          {
+            "id": "3a58cbac-f52d-4daa-a569-1889db49ab67",
+            "title": "普通高中教科书·生物学必修2 遗传与进化",
+            "subject": "生物",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/3a58cbac-f52d-4daa-a569-1889db49ab67.pkg/9787549981298_普通高中教科书·生物学_高一年级_必修2遗传与进化_江苏凤凰教育出版社_1754905489566.pdf"
+          },
+          {
+            "id": "f89f0368-11c8-4a21-a767-a9102c9ce872",
+            "title": "普通高中教科书·生物学必修2 遗传与进化",
+            "subject": "生物",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/f89f0368-11c8-4a21-a767-a9102c9ce872.pkg/普通高中教科书 生物学 必修2 遗传与进化_1756191718143.pdf"
+          },
+          {
+            "id": "d12ff6b6-b6cd-444a-9749-4642aa350482",
+            "title": "普通高中教科书·生物学选择性必修3 生物技术与工程",
+            "subject": "生物",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/d12ff6b6-b6cd-444a-9749-4642aa350482.pkg/普通高中教科书 生物学 选择性必修3 生物技术与工程_1756191721293.pdf"
+          },
+          {
+            "id": "825baab7-f0ea-4a90-9b4a-513f338e2484",
+            "title": "普通高中教科书·生物学选择性必修2 生物与环境",
+            "subject": "生物",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/825baab7-f0ea-4a90-9b4a-513f338e2484.pkg/普通高中教科书 生物学 选择性必修2 生物与环境_1756191720337.pdf"
+          },
+          {
+            "id": "f7f22402-4ee2-4bc0-82f5-100f9201c6a6",
+            "title": "普通高中教科书·数学选择性必修 第二册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/f7f22402-4ee2-4bc0-82f5-100f9201c6a6.pkg/9787553939704_普通高中教科书·数学_高二年级_选择性必修第二册_湖南教育出版社_1754905575912.pdf"
+          },
+          {
+            "id": "a630b839-ed1d-40cb-99a0-aabfab26ab20",
+            "title": "普通高中教科书·化学选择性必修3 有机化学基础",
+            "subject": "化学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/a630b839-ed1d-40cb-99a0-aabfab26ab20.pkg/普通高中教科书·化学_高三年级_选择性必修3有机化学基础_上海科学技术出版社_1725097236767.pdf"
+          },
+          {
+            "id": "6e764703-6e5e-4ea3-9462-34652c2678ef",
+            "title": "普通高中教科书·数学（A版）必修 第一册",
+            "subject": "数学",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/6e764703-6e5e-4ea3-9462-34652c2678ef.pkg/普通高中教科书 数学 必修 第一册（A版）_1756191767678.pdf"
+          },
+          {
+            "id": "6979e325-aba2-4576-8ff6-db6a475f5321",
+            "title": "普通高中教科书·生物学必修2 遗传与进化",
+            "subject": "生物",
+            "pdf_url": "https://r1-ndr-oversea.ykt.cbern.com.cn/edu_product/esp/assets/6979e325-aba2-4576-8ff6-db6a475f5321.pkg/普通高中教科书 生物学 必修2 遗传与进化_1725097243903.pdf"
+          }
+        ];
+
+        // 1. 去重并按学科分组
+        const groupedBySubject = {};
+        const seenTitles = new Set();
+
+        textbookData.forEach(book => {
+            if (!seenTitles.has(book.title)) {
+                if (!groupedBySubject[book.subject]) {
+                    groupedBySubject[book.subject] = [];
+                }
+                groupedBySubject[book.subject].push(book);
+                seenTitles.add(book.title);
+            }
+        });
+
+        // 2. 生成 HTML
+        const listContainer = document.getElementById('textbook-list');
+        let htmlContent = '';
+
+        // 可选：按特定順序顯示學科
+        const subjectOrder = ['语文', '数学', '英语', '物理', '化学', '生物', '历史', '地理', '思想政治'];
+        const sortedSubjects = Object.keys(groupedBySubject).sort((a, b) => {
+            const indexA = subjectOrder.indexOf(a);
+            const indexB = subjectOrder.indexOf(b);
+            if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+            if (indexA !== -1) return -1;
+            if (indexB !== -1) return 1;
+            return a.localeCompare(b, 'zh-CN'); // Fallback for subjects not in the list
+        });
+        
+        sortedSubjects.forEach(subject => {
+            htmlContent += `<h2>${subject}</h2>`;
+            htmlContent += '<ul>';
+            
+            const books = groupedBySubject[subject];
+            // 可选：按书名排序
+            books.sort((a, b) => a.title.localeCompare(b.title, 'zh-CN'));
+
+            books.forEach(book => {
+                // `download` 属性建议浏览器下载文件而不是直接打开
+                htmlContent += `<li><a href="${book.pdf_url}" download>${book.title}</a></li>`;
+            });
+
+            htmlContent += '</ul>';
+        });
+
+        listContainer.innerHTML = htmlContent;
+    </script>
+</body>
+</html>
