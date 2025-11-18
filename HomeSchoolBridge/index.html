@@ -62,7 +62,7 @@
             color: #004d40; /* Dark teal text */
             line-height: 1.8;
             text-align: center;
-            font-size: 18px; /* Base font size */
+            font-size: 20px; /* Base font size (larger for readability) */
             min-height: 100vh;
             display: flex;
             flex-direction: column; /* Ensure footer stays at bottom */
@@ -100,13 +100,13 @@
         /* Paragraph Styling */
         p {
             margin-bottom: 20px;
-            font-size: 1.2em;
+            font-size: 1.25em;
             font-weight: normal;
         }
 
         /* Highlighted Text */
         .highlight {
-            font-size: 1.3em;
+            font-size: 1.4em;
             font-weight: bold;
             color: #00695c; /* Match H1 color */
         }
@@ -143,6 +143,33 @@
             gap: 30px;
             margin: 30px 0;
             flex-wrap: wrap; /* Allow buttons to wrap */
+        }
+
+        /* Score Links Styling */
+        .score-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            margin: 20px 0 10px;
+        }
+
+        .score-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            border-radius: 999px;
+            border: 1px solid #00695c;
+            background-color: #ffffff;
+            text-decoration: none;
+            font-size: 0.95em;
+            white-space: nowrap;
+        }
+
+        .score-links a:hover {
+            background-color: #00695c;
+            color: #e0f2f1;
         }
 
         /* General Link Button Styling */
@@ -267,16 +294,16 @@
         /* Responsive Design */
         @media (max-width: 768px) {
             body {
-                font-size: 16px; /* Slightly smaller base font */
+                font-size: 17px; /* Slightly smaller base font, still clear */
             }
             h1 {
-                font-size: 2.8em; /* Adjusted H1 size */
+                font-size: 3em; /* Adjusted H1 size */
             }
             h2 {
-                font-size: 1.8em; /* Adjusted H2 size */
+                font-size: 2em; /* Adjusted H2 size */
             }
-            p { font-size: 1.1em; }
-            .highlight { font-size: 1.2em; }
+            p { font-size: 1.15em; }
+            .highlight { font-size: 1.25em; }
 
             .container {
                 padding: 15px;
@@ -310,6 +337,23 @@
             }
             #section4 .link-button {
                  font-size: 1.1em; /* Keep section 4 buttons slightly larger */
+            }
+            .score-links a {
+                font-size: 1em;
+                padding: 10px 14px;
+            }
+            .score-links {
+                gap: 10px;
+            }
+            .score-links {
+                margin: 15px 0 8px;
+            }
+            .score-links a {
+                min-width: 120px;
+            }
+            .score-links {
+                flex-direction: column;
+                align-items: center;
             }
         }
 
@@ -373,19 +417,15 @@
             <!-- Added rel attribute -->
             <p>排位：究诘数字背后的真实意义。</p>
             <p>意义：真真不大。本班/标准分/海淀/北京。排名的真实意义，只是昨日我与今日我。</p>
-            <p> 🔻 </p> 
-             <p> 
-                <b> 
-                    <a href="https://www.bjeea.cn/uploads/soft/250625/172-2506250Q456.pdf" target="_blank" rel="noopener noreferrer">北京市一分档2025</a>  
-                    <a href="https://www.bjeea.cn/html/gkgz/fujian/2024/0625/85432.html" target="_blank" rel="noopener noreferrer">北京市一分档2024</a>  
-            <a href="https://www.bjeea.cn/uploads/soft/250720/178-250H0201058.pdf" target="_blank" rel="noopener noreferrer">北京市2025年高招本科普通批录取投档线</a>                     
-             <a href="https://www.bjeea.cn/html/gkgz/tzgg/2024/0720/85632.html" target="_blank" rel="noopener noreferrer">北京市2024年高招本科普通批录取投档线</a>
-                </b>
-            </p>
-             <p> 
-                <b> 如果一直不知道自己想去哪儿/要去哪儿/能去哪儿，一分档的意义是什么？</b> 
-                <b> 把成绩表交给 AI，说明分值情况转化为北京高考分，对标上述分数线。</b>
-            </p>    
+            <p> 🔻 </p>
+            <div class="score-links">
+                <a href="https://www.bjeea.cn/uploads/soft/250625/172-2506250Q456.pdf" target="_blank" rel="noopener noreferrer">北京市一分档2025</a>
+                <a href="https://www.bjeea.cn/html/gkgz/fujian/2024/0625/85432.html" target="_blank" rel="noopener noreferrer">北京市一分档2024</a>
+                <a href="https://www.bjeea.cn/uploads/soft/250720/178-250H0201058.pdf" target="_blank" rel="noopener noreferrer">北京市2025年高招本科普通批录取投档线</a>
+                <a href="https://www.bjeea.cn/html/gkgz/tzgg/2024/0720/85632.html" target="_blank" rel="noopener noreferrer">北京市2024年高招本科普通批录取投档线</a>
+            </div>
+            <p><b>如果一直不知道自己想去哪儿/要去哪儿/能去哪儿，一分档的意义是什么？</b></p>
+            <p><b>把成绩表交给 AI，说明分值情况，转化为北京高考分，对标上述分数线。</b></p>
         </section>
 
         <section id="section2">
@@ -424,15 +464,14 @@
 
         <section id="section5">
             <h2>5. 可行</h2>
-            <a href="https://class.bdfz.net/" class="link-button" target="_blank" rel="noopener noreferrer">真题王道：海淀或本校日常成题考题并无意义。</a>           
-            <p></p>
+            <p><a href="https://class.bdfz.net/" class="link-button" target="_blank" rel="noopener noreferrer">真题王道：海淀或本校日常成题考题并无意义。</a>   </p>                   
             <p>真读书难：分享有意义且有意思文字即是语文。</p>
              <!-- Added rel attribute -->
             <p><a href="https://pkuschool.yuque.com/qrvbic/books?#" target="_blank" rel="noopener noreferrer">《唐诗鉴赏辞典》《唐宋词鉴赏辞典》。</a></p>
 <!--             <p><a href="https://sites.google.com/view/pkuschool/%E9%AB%98%E8%80%83%E7%9C%9F%E9%A1%8C/%E6%96%87%E8%A8%80%E6%96%87?authuser=0" target="_blank" rel="noopener noreferrer">史记列传/先秦诸子。</a></p> -->
             <p>习字：5分？不止。在没有书法课的时候要自己来。</p>
             <p> ✳️ </p> 
-            <p> | <a href="https://gk.bdfz.net" target="_blank">AI高考</a> 🦁 | <a href="https://hlm.bdfz.net" target="_blank">AI红楼</a> 🐌 | <a href="https://kz.bdfz.net" target="_blank">AI论语</a> 🦅 | <a href="https://mf.bdfz.net" target="_blank">默写篇目</a> 🦉 | <a href="https://mx.bdfz.net" target="_blank">默写满分</a> 🪲 |  <a href="https://kw.bdfz.net" target="_blank">AI课文</a> 🐯 | <a href="https://class.bdfz.net" target="_blank">答疑</a> 🐠  </p>
+            <p> | <a href="https://gk.bdfz.net" target="_blank">AI高考</a> 🦁 | <a href="https://hlm.bdfz.net" target="_blank">AI红楼</a> 🐌 | <a href="https://kz.bdfz.net" target="_blank">AI论语</a> 🦅 | <a href="https://mf.bdfz.net" target="_blank">默写篇目</a> 🦉 | <a href="https://mx.bdfz.net" target="_blank">默写满分</a> 🪲 |  <a href="https://kw.bdfz.net" target="_blank">AI课文</a> 🐯 | <a href="https://class.bdfz.net" target="_blank">答疑</a> 🐠  |  </p>
         </section>
 
         <!-- Changed div to footer -->
