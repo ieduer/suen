@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN"> <!-- More specific language code -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,10 +26,10 @@
 
     <!-- === Microsoft Clarity Analytics Script === -->
     <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        (function (c, l, a, r, i, t, y) {
+            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
+            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
         })(window, document, "clarity", "script", "o84pb5g49k");
     </script>
     <!-- === End Clarity Script === -->
@@ -38,13 +39,15 @@
         /* Removed incorrect @font-face for FangZhengKaiTi */
 
         @font-face {
-          font-family: 'HuWenMingChaoTi';
-          /* IMPORTANT: Verify this path ('../fonts/') is correct relative to THIS HTML file's location. */
-          src: url('../fonts/HuWenMingChaoTi.woff2') format('woff2');
-          font-weight: normal;
-          font-style: normal;
-          font-display: swap; /* Good for performance */
+            font-family: 'HuWenMingChaoTi';
+            /* IMPORTANT: Verify this path ('../fonts/') is correct relative to THIS HTML file's location. */
+            src: url('../fonts/HuWenMingChaoTi.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+            /* Good for performance */
         }
+
         /* === End Font Loading === */
 
         /* Global Reset */
@@ -58,44 +61,77 @@
         body {
             /* Updated font stack */
             font-family: 'HuWenMingChaoTi', serif;
-            background-color: #e0f2f1; /* Light teal background */
-            color: #004d40; /* Dark teal text */
+            background-color: #e0f2f1;
+            /* Light teal background */
+            color: #004d40;
+            /* Dark teal text */
             line-height: 1.8;
             text-align: center;
-            font-size: 20px; /* Base font size (larger for readability) */
+            font-size: 20px;
+            /* Base font size (larger for readability) */
             min-height: 100vh;
             display: flex;
-            flex-direction: column; /* Ensure footer stays at bottom */
+            flex-direction: column;
+            /* Ensure footer stays at bottom */
         }
 
         /* Headings */
-        h1, h2 {
+        h1,
+        h2 {
             /* Updated font stack */
             font-family: 'HuWenMingChaoTi', 'Noto Serif SC', serif;
         }
 
         h1 {
             font-size: 4em;
-            color: #00695c; /* Medium teal */
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-            margin: 0; /* Reset margin if needed */
+            color: #00695c;
+            /* Medium teal */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            margin: 0;
+            /* Reset margin if needed */
         }
 
         h2 {
             font-size: 2.4em;
             margin-bottom: 25px;
             padding-bottom: 15px;
-            display: inline-block; /* Prevent border spanning full width */
+            display: inline-block;
+            /* Prevent border spanning full width */
             border-bottom-width: 2px;
             border-bottom-style: solid;
         }
 
         /* Specific Section Heading Colors & Borders */
-        #section1 h2 { color: #d32f2f; border-bottom-color: #d32f2f; } /* Red */
-        #section2 h2 { color: #1976d2; border-bottom-color: #1976d2; } /* Blue */
-        #section3 h2 { color: #388e3c; border-bottom-color: #388e3c; } /* Green */
-        #section4 h2 { color: #ffa000; border-bottom-color: #ffa000; } /* Amber */
-        #section5 h2 { color: #7b1fa2; border-bottom-color: #7b1fa2; } /* Purple */
+        #section1 h2 {
+            color: #d32f2f;
+            border-bottom-color: #d32f2f;
+        }
+
+        /* Red */
+        #section2 h2 {
+            color: #1976d2;
+            border-bottom-color: #1976d2;
+        }
+
+        /* Blue */
+        #section3 h2 {
+            color: #388e3c;
+            border-bottom-color: #388e3c;
+        }
+
+        /* Green */
+        #section4 h2 {
+            color: #ffa000;
+            border-bottom-color: #ffa000;
+        }
+
+        /* Amber */
+        #section5 h2 {
+            color: #7b1fa2;
+            border-bottom-color: #7b1fa2;
+        }
+
+        /* Purple */
 
         /* Paragraph Styling */
         p {
@@ -108,18 +144,21 @@
         .highlight {
             font-size: 1.4em;
             font-weight: bold;
-            color: #00695c; /* Match H1 color */
+            color: #00695c;
+            /* Match H1 color */
         }
 
         /* Main Container */
         .container {
-            flex: 1; /* Allows footer to be pushed down */
+            flex: 1;
+            /* Allows footer to be pushed down */
             display: flex;
             flex-direction: column;
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            gap: 30px; /* Space between header/sections/footer */
+            gap: 30px;
+            /* Space between header/sections/footer */
         }
 
         /* Section Styling */
@@ -127,13 +166,13 @@
             background-color: #fff;
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         section:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
         }
 
         /* Link Container Styling (Section 4 & 5) */
@@ -142,7 +181,8 @@
             justify-content: center;
             gap: 30px;
             margin: 30px 0;
-            flex-wrap: wrap; /* Allow buttons to wrap */
+            flex-wrap: wrap;
+            /* Allow buttons to wrap */
         }
 
         /* Score Links Styling */
@@ -174,21 +214,26 @@
 
         /* General Link Button Styling */
         .link-button {
-            display: inline-flex; /* Good for aligning text */
+            display: inline-flex;
+            /* Good for aligning text */
             align-items: center;
             justify-content: center;
-            padding: 10px 20px; /* Base padding */
+            padding: 10px 20px;
+            /* Base padding */
             text-decoration: none;
-            border-radius: 8px; /* Slightly more rounded */
+            border-radius: 8px;
+            /* Slightly more rounded */
             transition: all 0.3s ease;
             font-size: 1.1em;
             font-weight: bold;
             min-width: 120px;
             text-align: center;
             white-space: nowrap;
-            user-select: none; /* Prevent text selection */
+            user-select: none;
+            /* Prevent text selection */
             cursor: pointer;
-            border: 2px solid transparent; /* Base border */
+            border: 2px solid transparent;
+            /* Base border */
         }
 
         /* Section 4 Specific Button Styles */
@@ -196,9 +241,10 @@
             background-color: #e0f2f1;
             color: #004d40;
             padding: 15px 30px;
-            border-color: #ffa000; /* Use border-color */
+            border-color: #ffa000;
+            /* Use border-color */
             font-size: 1.2em;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         #section4 .link-button:hover {
@@ -206,20 +252,24 @@
             border-color: #ffa000;
             color: #fff;
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
         /* Section 5 Specific Button Styles */
         #section5 .link-container {
-             gap: 20px; /* Smaller gap for these buttons */
+            gap: 20px;
+            /* Smaller gap for these buttons */
         }
+
         #section5 .link-button {
             background-color: #e0f2f1;
             color: #004d40;
             padding: 10px 30px;
-            border-color: #004d40; /* Use border-color */
+            border-color: #004d40;
+            /* Use border-color */
             font-size: 1.1em;
-            font-weight: normal; /* Normal weight */
+            font-weight: normal;
+            /* Normal weight */
         }
 
         #section5 .link-button:hover {
@@ -230,23 +280,28 @@
 
         /* General Link Styling */
         a {
-            color: #00695c; /* Match H1 color */
+            color: #00695c;
+            /* Match H1 color */
             text-decoration: underline;
             transition: color 0.3s ease;
         }
 
         a:hover {
-            color: #004d40; /* Darker teal on hover */
+            color: #004d40;
+            /* Darker teal on hover */
         }
+
         /* Ensure buttons don't inherit underline */
-        .link-button, .link-button:hover {
-             text-decoration: none;
+        .link-button,
+        .link-button:hover {
+            text-decoration: none;
         }
 
         /* Header Layout */
         header {
             margin-bottom: 40px;
-            padding-top: 20px; /* Add some space above */
+            padding-top: 20px;
+            /* Add some space above */
         }
 
         .header-content {
@@ -254,7 +309,8 @@
             align-items: center;
             justify-content: center;
             gap: 30px;
-            flex-wrap: wrap; /* Allow wrapping if needed */
+            flex-wrap: wrap;
+            /* Allow wrapping if needed */
         }
 
         .qr-code {
@@ -262,14 +318,15 @@
             padding: 8px;
             background: white;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
         }
 
         .qr-code img {
             width: 100%;
             height: auto;
-            display: block; /* Remove extra space below image */
+            display: block;
+            /* Remove extra space below image */
         }
 
         .qr-code:hover {
@@ -277,80 +334,118 @@
         }
 
         /* Footer Styling - Using footer tag */
-        footer { /* Changed from .footer */
-            margin-top: auto; /* Pushes footer to bottom if content is short */
+        footer {
+            /* Changed from .footer */
+            margin-top: auto;
+            /* Pushes footer to bottom if content is short */
             padding: 20px 0;
-            border-top: 1px solid #b2dfdb; /* Lighter teal border */
+            border-top: 1px solid #b2dfdb;
+            /* Lighter teal border */
             font-size: 1em;
-            color: #00695c; /* Match H1/link color */
+            color: #00695c;
+            /* Match H1/link color */
         }
+
         footer p {
-             margin-bottom: 0; /* Remove default p margin in footer */
+            margin-bottom: 0;
+            /* Remove default p margin in footer */
         }
+
         footer a {
-             font-weight: bold;
+            font-weight: bold;
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
             body {
-                font-size: 17px; /* Slightly smaller base font, still clear */
+                font-size: 17px;
+                /* Slightly smaller base font, still clear */
             }
+
             h1 {
-                font-size: 3em; /* Adjusted H1 size */
+                font-size: 3em;
+                /* Adjusted H1 size */
             }
+
             h2 {
-                font-size: 2em; /* Adjusted H2 size */
+                font-size: 2em;
+                /* Adjusted H2 size */
             }
-            p { font-size: 1.15em; }
-            .highlight { font-size: 1.25em; }
+
+            p {
+                font-size: 1.15em;
+            }
+
+            .highlight {
+                font-size: 1.25em;
+            }
 
             .container {
                 padding: 15px;
-                gap: 20px; /* Reduced gap */
+                gap: 20px;
+                /* Reduced gap */
             }
+
             section {
                 padding: 20px;
-                border-radius: 10px; /* Slightly smaller radius */
+                border-radius: 10px;
+                /* Slightly smaller radius */
             }
-            header { margin-bottom: 20px; }
+
+            header {
+                margin-bottom: 20px;
+            }
+
             .header-content {
                 flex-direction: column;
                 gap: 15px;
             }
+
             .qr-code {
                 max-width: 100px;
             }
+
             .link-container {
                 gap: 15px;
                 margin: 20px 0;
             }
+
             #section4 .link-container {
                 flex-direction: column;
-                align-items: center; /* Center buttons when stacked */
+                align-items: center;
+                /* Center buttons when stacked */
             }
+
             .link-button {
-                 width: 90%;
-                 max-width: 300px; /* Limit max width */
-                 padding: 12px 20px;
-                 font-size: 1em;
+                width: 90%;
+                max-width: 300px;
+                /* Limit max width */
+                padding: 12px 20px;
+                font-size: 1em;
             }
+
             #section4 .link-button {
-                 font-size: 1.1em; /* Keep section 4 buttons slightly larger */
+                font-size: 1.1em;
+                /* Keep section 4 buttons slightly larger */
             }
+
             .score-links a {
                 font-size: 1em;
                 padding: 10px 14px;
             }
+
             .score-links {
                 gap: 10px;
             }
+
             .score-links {
                 margin: 15px 0 8px;
             }
+
             .score-links a {
                 min-width: 120px;
             }
+
             .score-links {
                 flex-direction: column;
                 align-items: center;
@@ -358,13 +453,23 @@
         }
 
         @media (max-width: 480px) {
-             h1 { font-size: 2.2em; }
-             h2 { font-size: 1.6em; }
-             p { font-size: 1em; }
-             .link-button {
-                 width: 95%;
-                 max-width: none; /* Remove max-width on very small screens */
-             }
+            h1 {
+                font-size: 2.2em;
+            }
+
+            h2 {
+                font-size: 1.6em;
+            }
+
+            p {
+                font-size: 1em;
+            }
+
+            .link-button {
+                width: 95%;
+                max-width: none;
+                /* Remove max-width on very small screens */
+            }
         }
 
         /* Print Styles */
@@ -372,34 +477,70 @@
             body {
                 background-color: white;
                 color: black;
-                font-size: 12pt; /* Set base print size */
+                font-size: 12pt;
+                /* Set base print size */
                 line-height: 1.4;
             }
-            header, footer, .qr-code {
-                display: none; /* Hide header, footer, QR code when printing */
+
+            header,
+            footer,
+            .qr-code {
+                display: none;
+                /* Hide header, footer, QR code when printing */
             }
+
             .container {
                 max-width: 100%;
                 padding: 0;
                 gap: 15px;
             }
+
             section {
                 box-shadow: none;
-                border: 1px solid #ccc; /* Simple border for print */
+                border: 1px solid #ccc;
+                /* Simple border for print */
                 border-radius: 0;
                 padding: 15px;
-                break-inside: avoid; /* Try to prevent sections breaking across pages */
+                break-inside: avoid;
+                /* Try to prevent sections breaking across pages */
                 margin-bottom: 15px;
             }
-            h1, h2 { text-shadow: none; color: black; }
-            h2 { border-bottom: 1px solid #000; font-size: 1.8em; }
-            p { font-size: 1.1em; margin-bottom: 10px;}
-            .highlight { color: black; font-weight: bold; }
-            a { color: black; text-decoration: underline; }
-            .link-container { display: none; } /* Hide buttons in print */
+
+            h1,
+            h2 {
+                text-shadow: none;
+                color: black;
+            }
+
+            h2 {
+                border-bottom: 1px solid #000;
+                font-size: 1.8em;
+            }
+
+            p {
+                font-size: 1.1em;
+                margin-bottom: 10px;
+            }
+
+            .highlight {
+                color: black;
+                font-weight: bold;
+            }
+
+            a {
+                color: black;
+                text-decoration: underline;
+            }
+
+            .link-container {
+                display: none;
+            }
+
+            /* Hide buttons in print */
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -407,7 +548,8 @@
                 <h1>家校谈</h1>
                 <div class="qr-code">
                     <!-- Added alt text -->
-                    <img src="https://img.bdfz.net/20250430001.webp" alt="QR Code for related content" />
+                    <img src="https://img.bdfz.net/20250430001.webp" alt="QR Code for related content" width="400"
+                        height="400" />
                 </div>
             </div>
         </header>
@@ -419,12 +561,16 @@
             <p>意义：真真不大。本班/标准分/海淀/北京。排名的真实意义，只是昨日我与今日我。</p>
             <p> 🔻 </p>
             <div class="score-links">
-                <a href="https://www.bjeea.cn/uploads/soft/250625/172-2506250Q456.pdf" target="_blank" rel="noopener noreferrer">北京市一分档2025</a>
-                <a href="https://www.bjeea.cn/html/gkgz/fujian/2024/0625/85432.html" target="_blank" rel="noopener noreferrer">北京市一分档2024</a>
+                <a href="https://www.bjeea.cn/uploads/soft/250625/172-2506250Q456.pdf" target="_blank"
+                    rel="noopener noreferrer">北京市一分档2025</a>
+                <a href="https://www.bjeea.cn/html/gkgz/fujian/2024/0625/85432.html" target="_blank"
+                    rel="noopener noreferrer">北京市一分档2024</a>
             </div>
             <div class="score-links">
-                <a href="https://www.bjeea.cn/uploads/soft/250720/178-250H0201058.pdf" target="_blank" rel="noopener noreferrer">北京市2025年高招本科普通批录取投档线</a>
-                <a href="https://www.bjeea.cn/html/gkgz/tzgg/2024/0720/85632.html" target="_blank" rel="noopener noreferrer">北京市2024年高招本科普通批录取投档线</a>
+                <a href="https://www.bjeea.cn/uploads/soft/250720/178-250H0201058.pdf" target="_blank"
+                    rel="noopener noreferrer">北京市2025年高招本科普通批录取投档线</a>
+                <a href="https://www.bjeea.cn/html/gkgz/tzgg/2024/0720/85632.html" target="_blank"
+                    rel="noopener noreferrer">北京市2024年高招本科普通批录取投档线</a>
             </div>
             <p><b>如果一直不知道自己想去哪儿/要去哪儿/能去哪儿，一分档的意义是什么？</b></p>
             <p><b>把成绩表交给 AI，说明分值情况，转化为北京高考分，对标上述分数线。</b></p>
@@ -435,10 +581,10 @@
             <p>不及：有些事只能家人说，有些事最好师者说。情绪、感情、张弛度。</p>
             <p>平衡：关心成绩更关心情绪，从考生到学生到人生，不同性格不同谈法。</p>
             <p>有过：关心具体学科实不必，过犹不及。有问题孩子找学科教师，听结果分析。看方向不抢方向盘。</p>
-            <p> ❇️ </p> 
-            <p>元培vs行知？</p> 
-            <p>承认差距，寻求可能。如果小学四年级水准可以在高二逆袭，什么是真不可能？</p> 
-            <p>关于手机：不用行不行？那家长在怎么用手机？老师在怎么用？孩子/学生……</p>             
+            <p> ❇️ </p>
+            <p>元培vs行知？</p>
+            <p>承认差距，寻求可能。如果小学四年级水准可以在高二逆袭，什么是真不可能？</p>
+            <p>关于手机：不用行不行？那家长在怎么用手机？老师在怎么用？孩子/学生……</p>
         </section>
 
         <section id="section3">
@@ -446,46 +592,57 @@
             <p>好高中好大学就好工作之路，不再通畅。有考研规划者，大学其实不再极端重要，莫焦虑。</p>
             <p>AI海啸之下，万物基于AI。</p>
             <p>正确的给压力姿势，是选校和职业。</p>
-            <p> 🔹 </p> 
+            <p> 🔹 </p>
             <p>还没想？还没想清？</p>
             <p>没有方向的动力，可以走多远？</p>
             <p>所以，以退为进，要做的职业？要学的专业？要去打大学？要考的分数？</p>
-            <p>去看看那所学校，先。</p>       
+            <p>去看看那所学校，先。</p>
         </section>
 
         <section id="section4">
             <h2>4. 语文</h2>
-        
+
             <div class="link-container">
-                <a href="https://bdfz.net/posts/rgk/" class="link-button" target="_blank" rel="noopener noreferrer">真的分数</a>
-                <a href="https://bdfz.net/posts/sc/" class="link-button" target="_blank" rel="noopener noreferrer">诗词指北</a>
-                <a href="https://bdfz.net/posts/ten/" class="link-button" target="_blank" rel="noopener noreferrer">幽微写作</a>
-                <a href="https://bdfz.net/posts/fx/" class="link-button" target="_blank" rel="noopener noreferrer">考前复习</a>
+                <a href="https://bdfz.net/posts/rgk/" class="link-button" target="_blank"
+                    rel="noopener noreferrer">真的分数</a>
+                <a href="https://bdfz.net/posts/sc/" class="link-button" target="_blank"
+                    rel="noopener noreferrer">诗词指北</a>
+                <a href="https://bdfz.net/posts/ten/" class="link-button" target="_blank"
+                    rel="noopener noreferrer">幽微写作</a>
+                <a href="https://bdfz.net/posts/fx/" class="link-button" target="_blank"
+                    rel="noopener noreferrer">考前复习</a>
             </div>
-        
+
             <div style="margin-top: 16px;">
-                <img src="https://img.bdfz.net/20251118001.webp"
-                     alt="AI"
-                     style="max-width: 100%; height: auto; border-radius: 8px;" />
+                <img src="https://img.bdfz.net/20251118001.webp" alt="AI" width="3680" height="2280"
+                    style="max-width: 100%; height: auto; border-radius: 8px;" />
             </div>
         </section>
 
         <section id="section5">
             <h2>5. 可行</h2>
-            <p><a href="https://class.bdfz.net/" class="link-button" target="_blank" rel="noopener noreferrer">真题王道：海淀或本校日常成题考题并无意义。</a>   </p>                   
+            <p><a href="https://class.bdfz.net/" class="link-button" target="_blank"
+                    rel="noopener noreferrer">真题王道：海淀或本校日常成题考题并无意义。</a> </p>
             <p>真读书难：分享有意义且有意思文字即是语文。</p>
-             <!-- Added rel attribute -->
-            <p><a href="https://pkuschool.yuque.com/qrvbic/books?#" target="_blank" rel="noopener noreferrer">《唐诗鉴赏辞典》《唐宋词鉴赏辞典》。</a></p>
+            <!-- Added rel attribute -->
+            <p><a href="https://pkuschool.yuque.com/qrvbic/books?#" target="_blank"
+                    rel="noopener noreferrer">《唐诗鉴赏辞典》《唐宋词鉴赏辞典》。</a></p>
             <p>习字：5分？不止。在没有书法课的时候要自己来。</p>
-            <p> ✳️ </p> 
-            <p> | <a href="https://gk.bdfz.net" target="_blank">AI高考</a> 🦁 | <a href="https://hlm.bdfz.net" target="_blank">AI红楼</a> 🐌 | <a href="https://kz.bdfz.net" target="_blank">AI论语</a> 🦅 | <a href="https://mf.bdfz.net" target="_blank">默写篇目</a> 🦉 | <a href="https://mx.bdfz.net" target="_blank">默写满分</a> 🪲 |  <a href="https://jc.bdfz.net" target="_blank">AI课文</a> 🐯 | <a href="https://class.bdfz.net" target="_blank">答疑</a> 🐠  |  </p>
+            <p> ✳️ </p>
+            <p> | <a href="https://gk.bdfz.net" target="_blank">AI高考</a> 🦁 | <a href="https://hlm.bdfz.net"
+                    target="_blank">AI红楼</a> 🐌 | <a href="https://kz.bdfz.net" target="_blank">AI论语</a> 🦅 | <a
+                    href="https://mf.bdfz.net" target="_blank">默写篇目</a> 🦉 | <a href="https://mx.bdfz.net"
+                    target="_blank">默写满分</a> 🪲 | <a href="https://jc.bdfz.net" target="_blank">AI课文</a> 🐯 | <a
+                    href="https://class.bdfz.net" target="_blank">答疑</a> 🐠 | </p>
         </section>
 
         <!-- Changed div to footer -->
         <footer>
-             <!-- Added rel attribute -->
-            <p>© 2025 <a href="mailto:daoshi@i.pkuschool.edu.cn" target="_blank" rel="noopener noreferrer">SUEN</a> | 北大附中</p>
+            <!-- Added rel attribute -->
+            <p>© 2025 <a href="mailto:daoshi@i.pkuschool.edu.cn" target="_blank" rel="noopener noreferrer">SUEN</a> |
+                北大附中</p>
         </footer>
     </div>
 </body>
+
 </html>
