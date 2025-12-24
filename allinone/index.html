@@ -3,15 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="北大附中 孙玉磊 ">
+    <meta name="description" content="北大附中 孙玉磊">
     <meta name="robots" content="index, follow">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
 
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="北大附中 - 孙玉磊">
-    <meta property="og:description" content="北大附中 孙玉磊 ">
+    <meta property="og:description" content="北大附中 孙玉磊">
     <meta property="og:image" content="https://raw.githubusercontent.com/gptv/suen/main/images/Avatar-small.jpeg">
     <meta property="og:url" content="https://bdfz.net">
     <meta property="og:type" content="website">
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#e9edf3" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#1e222a" media="(prefers-color-scheme: dark)">
 
     <!-- Favicon / Icons -->
     <link rel="icon" href="/favicon.ico" sizes="any">
@@ -19,7 +24,31 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
+    <!-- Performance hints -->
+    <link rel="preconnect" href="https://img.bdfz.net" crossorigin>
+    <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin>
+    <link rel="preconnect" href="https://ipwho.is" crossorigin>
+    <link rel="preconnect" href="https://ipapi.co" crossorigin>
+    <link rel="preconnect" href="https://get.geojs.io" crossorigin>
+    <link rel="preload" href="../fonts/HuWenMingChaoTi.woff2" as="font" type="font/woff2" crossorigin>
+
     <title>BDFZ-SUEN</title>
+
+    <!-- Avoid theme flash: apply saved/system theme BEFORE first paint -->
+    <script>
+    (() => {
+        const KEY = 'themePreference';
+        let saved = null;
+        try { saved = localStorage.getItem(KEY); } catch (_) {}
+        const hour = new Date().getHours();
+        const sys = (hour >= 18 || hour < 6) ? 'dark' : 'light';
+        const theme = (saved === 'dark' || saved === 'light') ? saved : sys;
+
+        document.documentElement.classList.toggle('dark-mode', theme === 'dark');
+        // Let UA pick correct form controls/scrollbars
+        document.documentElement.style.colorScheme = (theme === 'dark') ? 'dark' : 'light';
+    })();
+    </script>
 
     <style>
         /* === Font Loading === */
@@ -103,7 +132,8 @@
             --theme-transition: background 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* Apply Dark Mode Variables */
+        /* Apply Dark Mode Variables (support html.dark-mode OR body.dark-mode) */
+        html.dark-mode body,
         body.dark-mode {
             --primary-gradient: var(--primary-gradient-dark);
             --secondary-gradient: var(--secondary-gradient-dark);
@@ -130,11 +160,12 @@
         /* ===== Neumorphism (新拟物) styles ===== */
         :root {
           /* base for light mode */
-          --neo-bg: #e9edf3;                         /* surface color close to Kigen screenshot */
+          --neo-bg: #e9edf3;                         /* surface color */
           --neo-light: rgba(255,255,255,0.95);       /* highlight */
           --neo-dark:  rgba(163,177,198,0.60);       /* shadow */
         }
         /* dark mode overrides */
+        html.dark-mode body,
         body.dark-mode {
           --neo-bg: #1e222a;
           --neo-light: rgba(255,255,255,0.06);
@@ -185,10 +216,10 @@
         /* tracks (progress, sliders) use concave look */
         .neo-track {
           background: var(--neo-bg);
-          border-radius: 12px;
+          border-radius: 999px;
           box-shadow:
-            inset 6px 6px 12px var(--neo-dark),
-            inset -6px -6px 12px var(--neo-light);
+            inset 7px 7px 14px var(--neo-dark),
+            inset -7px -7px 14px var(--neo-light);
         }
 
         /* optional thin border for accessibility on low-contrast displays */
@@ -197,7 +228,6 @@
         /* component-specific overrides so neo wins over previously defined backgrounds */
         .link-button.neo { background: var(--primary-gradient); color: var(--button-text-color); box-shadow: 0 2px 5px rgba(0,0,0, 0.1); }
         .countdown-item.neo { background: var(--neo-bg); }
-        .progress-bar-container.neo-track { background: var(--neo-bg); border: none; }
         .footer.neo { background: var(--neo-bg); color: var(--dark-text-color); }
 
         /* === GLOBAL & LAYOUT === */
@@ -216,6 +246,22 @@
             align-items: center;
             transition: var(--theme-transition);
         }
+
+        /* A11y: Skip link */
+        .skip-link {
+            position: absolute;
+            left: -9999px;
+            top: 8px;
+            z-index: 9999;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: var(--neo-bg);
+            color: var(--dark-text-color);
+            border: 1px solid color-mix(in oklab, var(--neo-bg), #000 12%);
+            box-shadow: 6px 6px 12px var(--neo-dark), -6px -6px 12px var(--neo-light);
+        }
+        .skip-link:focus { left: 12px; outline: none; }
+
         .container {
             display: flex;
             justify-content: center;
@@ -226,6 +272,7 @@
             gap: 16px;
             height: calc(100vh - 32px); /* body padding top+bottom (16*2) */
         }
+
         /* === HEIGHT-BASED FIT === */
         @media (max-height: 900px) {
             .column { padding: 16px; }
@@ -236,7 +283,7 @@
             .countdown-display { font-size: 1.6rem; }
             #gaokao-countdown .countdown-display, #human-timer .countdown-display { font-size: 1.25rem; }
             .logo-img { width: 64px; }
-            .progress-bar-container { height: 24px; }
+            .progress-bar-container { height: 26px; }
         }
         @media (max-height: 800px) {
             .column { padding: 12px; }
@@ -247,7 +294,7 @@
             .countdown-display { font-size: 1.4rem; }
             #gaokao-countdown .countdown-display, #human-timer .countdown-display { font-size: 1.15rem; }
             .logo-img { width: 56px; }
-            .progress-bar-container { height: 22px; }
+            .progress-bar-container { height: 24px; }
         }
         @media (max-height: 720px) {
             .column { padding: 10px; }
@@ -258,13 +305,25 @@
             .countdown-display { font-size: 1.25rem; }
             #current-time-clock { font-size: 1.3rem; }
             .logo-img { width: 52px; }
-            .progress-bar-container { height: 20px; }
+            .progress-bar-container { height: 22px; }
         }
+
         /* brand accent color for SUEN */
         .brand-accent { color: #d9244c !important; }
         .footer a .brand-accent { color: #d9244c !important; }
         .footer a:hover .brand-accent, .footer a:focus .brand-accent { color: #d9244c !important; text-decoration: underline; }
-        .column { flex: 1; padding: 16px; border-radius: 15px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); transition: var(--theme-transition); min-width: 0; height: 100%; }
+
+        .column {
+            flex: 1;
+            padding: 16px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            transition: var(--theme-transition);
+            min-width: 0;
+            height: 100%;
+        }
         .left-column { background: var(--surface-left); --panel-surface: var(--surface-left); }
         .right-column { background: var(--surface-right); --panel-surface: var(--surface-right); }
 
@@ -272,7 +331,7 @@
         .left-column, .right-column { display: flex; flex-direction: column; justify-content: space-between; }
         .left-column .link-button, .right-column .link-button { margin-bottom: 0; }
 
-        /* === MIDDLE COLUMN (CORRECTED WIDTH) === */
+        /* === MIDDLE COLUMN === */
         .countdown-container {
             display: flex;
             flex-direction: column;
@@ -280,44 +339,201 @@
             background: var(--surface-main);
             align-items: center;
             justify-content: space-between;
-            /* REMOVED max-width, margin, flex-grow, flex-shrink TO RESTORE ORIGINAL BALANCE */
         }
 
         /* === LOGO THEME TOGGLE === */
-        .theme-toggle-logo-button { order: -1; margin-bottom: 15px; padding: 0; border: none; background: none; cursor: pointer; line-height: 0; -webkit-tap-highlight-color: transparent; border-radius: 8px; transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; }
+        .theme-toggle-logo-button {
+            order: -1;
+            margin-bottom: 15px;
+            padding: 0;
+            border: none;
+            background: none;
+            cursor: pointer;
+            line-height: 0;
+            -webkit-tap-highlight-color: transparent;
+            border-radius: 8px;
+            transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
         .logo-img { display: block; width: 72px; height: auto; border-radius: 8px; }
         .theme-toggle-logo-button:hover .logo-img { opacity: 0.85; transform: scale(1.05); }
         .theme-toggle-logo-button:focus { outline: none; box-shadow: 0 0 0 3px var(--logo-focus-shadow); }
         .theme-toggle-logo-button:focus .logo-img { opacity: 0.85; transform: scale(1.05); }
 
         /* === COUNTDOWN ITEMS === */
-        .countdown-item { background-color: var(--countdown-item-bg); border-radius: 15px; padding: 12px; text-align: center; width: 100%; transition: var(--theme-transition); }
-        .countdown-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 10px; letter-spacing: 2px; color: var(--countdown-title-color); transition: var(--theme-transition); }
-        .countdown-display { font-size: 1.6rem; font-weight: bold; color: var(--countdown-display-color); transition: var(--theme-transition); word-wrap: break-word; line-height: 1.3; }
+        .countdown-item {
+            background-color: var(--countdown-item-bg);
+            border-radius: 15px;
+            padding: 12px;
+            text-align: center;
+            width: 100%;
+            transition: var(--theme-transition);
+        }
+        .countdown-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            color: var(--countdown-title-color);
+            transition: var(--theme-transition);
+        }
+        .countdown-display {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--countdown-display-color);
+            transition: var(--theme-transition);
+            word-wrap: break-word;
+            line-height: 1.3;
+        }
         #gaokao-countdown .countdown-display, #human-timer .countdown-display { font-size: 1.4rem; }
         #current-time .countdown-display span { display: block; line-height: 1.4; color: var(--countdown-display-color); transition: var(--theme-transition); }
         #current-time .countdown-display span:not(:last-child) { margin-bottom: 5px; }
-        #current-time-clock { font-size: 1.6rem; font-weight: bold; margin-bottom: 8px !important; }
+        #current-time-clock { font-size: 1.6rem; font-weight: 900; margin-bottom: 8px !important; }
         #current-date-gregorian { font-size: 1rem; opacity: 0.9; }
 
-        /* === PROGRESS BARS === */
+        /* === PROGRESS BARS (UPGRADED: clearer, no extra numbers) === */
         .progress-item .countdown-display { display: none; }
-        .progress-bar-container { width: 90%; height: 24px; background-color: var(--progress-bar-bg); border-radius: 15px; margin: 5px auto 0; position: relative; overflow: hidden; border: 1px solid var(--progress-bar-border); transition: var(--theme-transition); }
-        .progress-bar-fill { height: 100%; width: 0%; background: var(--progress-bar-fill); border-radius: 15px; transition: width 0.5s ease-out, var(--theme-transition); box-shadow: inset 0 1px 3px rgba(0,0,0,0.3); }
-        .progress-bar-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--text-color); font-size: 0.95rem; font-weight: bold; text-shadow: var(--progress-bar-text-shadow); white-space: nowrap; transition: var(--theme-transition); }
+
+        .progress-bar-container {
+            width: 92%;
+            height: 28px;
+            margin: 6px auto 0;
+            position: relative;
+            overflow: hidden;
+            border-radius: 999px;
+            border: 1px solid color-mix(in oklab, var(--neo-bg), #000 16%);
+            background: linear-gradient(180deg,
+                color-mix(in oklab, var(--neo-bg) 92%, white 8%),
+                var(--neo-bg));
+            box-shadow:
+              inset 7px 7px 14px var(--neo-dark),
+              inset -7px -7px 14px var(--neo-light);
+            transition: var(--theme-transition);
+        }
+
+        /* Fill: smooth gradient + “moving sheen” => time flowing */
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            position: relative;
+            transition: width 0.5s ease-out, var(--theme-transition);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.25);
+            overflow: hidden;
+        }
+        /* End-cap marker (more intuitive reading of current position) */
+        .progress-bar-fill::before {
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.55);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+            filter: blur(0.0px);
+            opacity: 0.95;
+        }
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg,
+                rgba(255,255,255,0.00) 0%,
+                rgba(255,255,255,0.30) 35%,
+                rgba(255,255,255,0.00) 70%);
+            transform: translateX(-60%);
+            animation: progressSheen 2.8s ease-in-out infinite;
+            pointer-events: none;
+            mix-blend-mode: soft-light;
+        }
+        @keyframes progressSheen {
+            0% { transform: translateX(-60%); }
+            55% { transform: translateX(10%); }
+            100% { transform: translateX(80%); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .progress-bar-fill { transition: none; }
+            .progress-bar-fill::after { animation: none; }
+        }
+
+        /* Centered percentage only */
+        .progress-bar-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.95rem;
+            font-weight: 900;
+            letter-spacing: 0.4px;
+            white-space: nowrap;
+            user-select: none;
+            color: var(--dark-text-color);
+            text-shadow: none;
+            transition: var(--theme-transition);
+        }
+        html.dark-mode .progress-bar-text,
+        body.dark-mode .progress-bar-text { color: var(--text-color); }
+
+        /* Per-unit colors (more intuitive mapping) */
+        .progress-day  .progress-bar-fill { background: linear-gradient(90deg, #2ecc71, #0a9396); }
+        .progress-week .progress-bar-fill { background: linear-gradient(90deg, #f39c12, #e67e22); }
+        .progress-year .progress-bar-fill { background: linear-gradient(90deg, #5e81ac, #9b59b6); }
 
         /* === PROGRESS BAR ENDING (last 5%) === */
         .progress-bar-fill.is-ending {
             background: #d9244c !important;
         }
+        .progress-bar-fill.is-ending::before { background: rgba(255,255,255,0.75); }
         .progress-bar-text.is-ending {
             color: #ffffff;
             text-shadow: none;
         }
+        /* Subtle pulse when ending (but respects reduced motion) */
+        .progress-bar-container.is-ending {
+            box-shadow:
+              inset 7px 7px 14px var(--neo-dark),
+              inset -7px -7px 14px var(--neo-light),
+              0 0 0 0 rgba(217,36,76,0.0);
+            animation: endPulse 1.6s ease-in-out infinite;
+        }
+        @keyframes endPulse {
+            0%, 100% { box-shadow:
+              inset 7px 7px 14px var(--neo-dark),
+              inset -7px -7px 14px var(--neo-light),
+              0 0 0 0 rgba(217,36,76,0.0); }
+            55% { box-shadow:
+              inset 7px 7px 14px var(--neo-dark),
+              inset -7px -7px 14px var(--neo-light),
+              0 0 0 6px rgba(217,36,76,0.18); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .progress-bar-container.is-ending { animation: none; }
+        }
 
         /* === LINK BUTTONS === */
-        .link-button { background: var(--primary-gradient); border-radius: 10px; text-align: center; padding: 10px 8px; color: var(--button-text-color); text-decoration: none; font-weight: bold; transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease; display: block; margin-bottom: 8px; border: none; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0, 0.1); }
-        .link-button:hover, .link-button:focus { background: var(--secondary-gradient); transform: translateY(-2px); box-shadow: var(--button-hover-shadow); outline: none; }
+        .link-button {
+            background: var(--primary-gradient);
+            border-radius: 10px;
+            text-align: center;
+            padding: 10px 8px;
+            color: var(--button-text-color);
+            text-decoration: none;
+            font-weight: 800;
+            transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            display: block;
+            margin-bottom: 8px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0, 0.1);
+        }
+        .link-button:hover, .link-button:focus {
+            background: var(--secondary-gradient);
+            transform: translateY(-2px);
+            box-shadow: var(--button-hover-shadow);
+            outline: none;
+        }
         .link-button:focus-visible { outline: 2px solid var(--footer-link-hover); outline-offset: 2px; }
 
         /* === SIDE LINK variant: toned surfaces to harmonize with center === */
@@ -333,10 +549,10 @@
                 color-mix(in oklab, var(--panel-surface) 88%, black 12%));
             box-shadow: inset 1px 1px 2px rgba(0,0,0,0.05), inset -1px -1px 2px rgba(255,255,255,0.35);
         }
+        html.dark-mode .side-link,
         body.dark-mode .side-link { color: var(--text-color); border-color: color-mix(in oklab, var(--panel-surface), #fff 12%); }
-        /* === SIDE LINK Alternating Rhythm (odd/even) === */
 
-        /* === SIDE LINK Shoulder Highlight (Plan 3) === */
+        /* === SIDE LINK Shoulder Highlight === */
         .left-column .side-link,
         .right-column .side-link {
             background:
@@ -346,6 +562,8 @@
             box-shadow: none;
             border-color: color-mix(in oklab, var(--panel-surface), #000 12%);
         }
+        html.dark-mode .left-column .side-link,
+        html.dark-mode .right-column .side-link,
         body.dark-mode .left-column .side-link,
         body.dark-mode .right-column .side-link {
             background:
@@ -369,10 +587,8 @@
         }
         .footer p { margin: 0; }
         #footer-copyright,
-        #footer-ip-city {
-           margin-bottom: 1em;  /* 第一、第二行都留空 */
-        }
-        .footer a { color: var(--footer-link-color); text-decoration: none; transition: color 0.3s ease; font-weight: bold; }
+        #footer-ip-city { margin-bottom: 1em; }
+        .footer a { color: var(--footer-link-color); text-decoration: none; transition: color 0.3s ease; font-weight: 900; }
         .footer a:hover, .footer a:focus { color: var(--footer-link-hover); outline: none; text-decoration: underline; }
 
         /* === RESPONSIVE DESIGN === */
@@ -401,18 +617,20 @@
             #gaokao-countdown .countdown-display, #human-timer .countdown-display { font-size: 1.15rem; line-height: 1.25; }
             #current-time-clock { font-size: 1.35rem; }
             #current-date-gregorian { font-size: 0.95rem; }
-            .progress-bar-container { height: 20px; width: 92%; }
+            .progress-bar-container { height: 22px; width: 92%; }
             .progress-bar-text { font-size: 0.8rem; }
             .footer { font-size: 0.85rem; padding: 12px 10px; }
         }
     </style>
 </head>
 <body>
+    <a class="skip-link" href="#main">跳到主內容</a>
+
     <!-- Container for main content -->
-    <div class="container">
+    <div class="container" id="main">
 
         <!-- Left Column (Links) -->
-        <div class="column left-column neo-scope">
+        <nav class="column left-column neo-scope" aria-label="左側導航">
             <a href="https://gk.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI高考">AI 高考</a>
             <a href="https://mx.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI默寫">AI 默寫</a>
             <a href="https://mf.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問高考詩文">高考默寫</a>
@@ -420,121 +638,115 @@
             <a href="https://hlm.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI紅樓夢">AI 紅樓夢</a>
             <a href="https://kw.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI課文">AI 課文</a>
             <a href="https://jc.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI教材">AI 教材</a>
-            <a href="https://www.12.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="Status page">教材 PDF</a>
-            <a href="https://forum.rdfzer.com" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問彣彰典冊">彣彰</a>
-            <a href="https://class.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問高中語文">高中語文</a>
-            <a href="https://h.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問家長">家長</a>
+            <a href="https://www.12.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="教材PDF">教材 PDF</a>
+            <a href="https://forum.rdfzer.com" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="彣彰">彣彰</a>
+            <a href="https://class.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="高中語文">高中語文</a>
+            <a href="https://h.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="家長">家長</a>
             <a href="https://seiue.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="50塊">50 塊</a>
-            <a href="https://xz.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="Web">YT-DLP</a>
-            <a href="https://wx.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="Fwechat">FWechat</a>
-            <a href="https://todo.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問todo">To-Do</a>
-            <a href="https://github.com/ieduer" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問GitHub-Suen">GitHub</a>
-            <a href="https://x.com/ieduer" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問x-Me">X</a>
-        </div>
+            <a href="https://xz.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="YT-DLP">YT-DLP</a>
+            <a href="https://wx.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="FWechat">FWechat</a>
+            <a href="https://todo.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="To-Do">To-Do</a>
+            <a href="https://github.com/ieduer" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub-Suen">GitHub</a>
+            <a href="https://x.com/ieduer" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="X">X</a>
+        </nav>
 
         <!-- Middle Countdown Column -->
-        <div class="column countdown-container neo-scope">
+        <main class="column countdown-container neo-scope" aria-label="時間與倒計時">
              <!-- Theme Toggle Button -->
-            <button id="theme-toggle-logo-button" class="theme-toggle-logo-button neo neo-round" aria-label="切換暗黑模式">
-                <img src="https://img.bdfz.net/20250503003.webp" alt="Logo - 點擊切換主題" class="logo-img">
+            <button id="theme-toggle-logo-button" class="theme-toggle-logo-button neo neo-round" aria-label="切換暗黑模式" type="button">
+                <img src="https://img.bdfz.net/20250503003.webp" alt="Logo - 點擊切換主題" class="logo-img" loading="lazy">
             </button>
+
             <!-- Countdown Items -->
-            <div id="current-time" class="countdown-item neo neo-gradient"> <div class="countdown-display"> <span id="current-time-clock">--:--:--</span> <span id="current-date-gregorian">----年--月--日 ---</span> </div> </div>
-            <div id="gaokao-countdown" class="countdown-item neo neo-gradient"> <h2 class="countdown-title">2026高考倒計時</h2> <div class="countdown-display" aria-live="polite">計算中...</div> </div>
-            <div id="day-progress" class="countdown-item progress-item neo neo-gradient"> <h2 class="countdown-title" id="day-progress-title">今日已逝</h2> <div class="progress-bar-container neo-track"> <div class="progress-bar-fill" id="day-progress-fill"></div> <span class="progress-bar-text" id="day-progress-text">0.00%</span> </div> </div>
-            <div id="week-progress" class="countdown-item progress-item neo neo-gradient"> <h2 class="countdown-title" id="week-progress-title">本週已逝</h2> <div class="progress-bar-container neo-track"> <div class="progress-bar-fill" id="week-progress-fill"></div> <span class="progress-bar-text" id="week-progress-text">0.00%</span> </div> </div>
-            <div id="year-progress" class="countdown-item progress-item neo neo-gradient"> <h2 class="countdown-title" id="year-progress-title">年度已逝</h2> <div class="progress-bar-container neo-track"> <div class="progress-bar-fill" id="year-progress-fill"></div> <span class="progress-bar-text" id="year-progress-text">0.00%</span> </div> </div>
-            <div id="human-timer" class="countdown-item neo neo-gradient"> <h2 class="countdown-title">生民以來</h2> <div class="countdown-display" id="humanTime" aria-live="polite">計算中...</div> </div>
+            <section id="current-time" class="countdown-item neo neo-gradient" aria-label="當前時間">
+                <div class="countdown-display">
+                    <span id="current-time-clock">--:--:--</span>
+                    <span id="current-date-gregorian">----年--月--日 ---</span>
+                </div>
+            </section>
+
+            <section id="gaokao-countdown" class="countdown-item neo neo-gradient" aria-label="2026高考倒計時">
+                <h2 class="countdown-title">2026高考倒計時</h2>
+                <div class="countdown-display" aria-live="polite">計算中...</div>
+            </section>
+
+            <section id="day-progress" class="countdown-item progress-item neo neo-gradient progress-day" aria-label="今日進度">
+                <h2 class="countdown-title" id="day-progress-title">今日已逝</h2>
+                <div class="progress-bar-container neo-track" role="progressbar" aria-label="今日已逝進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                    <div class="progress-bar-fill" id="day-progress-fill"></div>
+                    <span class="progress-bar-text" id="day-progress-text">0.00%</span>
+                </div>
+            </section>
+
+            <section id="week-progress" class="countdown-item progress-item neo neo-gradient progress-week" aria-label="本週進度">
+                <h2 class="countdown-title" id="week-progress-title">本週已逝</h2>
+                <div class="progress-bar-container neo-track" role="progressbar" aria-label="本週已逝進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                    <div class="progress-bar-fill" id="week-progress-fill"></div>
+                    <span class="progress-bar-text" id="week-progress-text">0.00%</span>
+                </div>
+            </section>
+
+            <section id="year-progress" class="countdown-item progress-item neo neo-gradient progress-year" aria-label="年度進度">
+                <h2 class="countdown-title" id="year-progress-title">年度已逝</h2>
+                <div class="progress-bar-container neo-track" role="progressbar" aria-label="年度已逝進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                    <div class="progress-bar-fill" id="year-progress-fill"></div>
+                    <span class="progress-bar-text" id="year-progress-text">0.00%</span>
+                </div>
+            </section>
+
+            <section id="human-timer" class="countdown-item neo neo-gradient" aria-label="生民以來">
+                <h2 class="countdown-title">生民以來</h2>
+                <div class="countdown-display" id="humanTime" aria-live="polite">計算中...</div>
+            </section>
 
             <!-- Footer Section (Restyled with IP info) -->
-<footer class="footer neo neo-gradient" id="site-footer" aria-live="polite">
-    <p id="footer-copyright">© 2025 <a href="https://signal.me/#eu/iHIf8I5xEy7Rf14je_bFWgCInCewjlbiTH_FcxHq-CATrKyfihdBwIUD-QBlDS0G" target="_blank" rel="noopener noreferrer"><span class="brand-accent">SUEN</span></a></p>
-    <p id="footer-ip-city"></p>
-    <p id="footer-org-country"></p>
-  </footer>
-        </div>
+            <footer class="footer neo neo-gradient" id="site-footer" aria-live="polite">
+                <p id="footer-copyright">© 2025 <a href="https://signal.me/#eu/iHIf8I5xEy7Rf14je_bFWgCInCewjlbiTH_FcxHq-CATrKyfihdBwIUD-QBlDS0G" target="_blank" rel="noopener noreferrer"><span class="brand-accent">SUEN</span></a></p>
+                <p id="footer-ip-city"></p>
+                <p id="footer-org-country"></p>
+            </footer>
+        </main>
 
         <!-- Right Column (Links) -->
-        <div class="column right-column neo-scope">
-            <a href="https://bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="ME">SUEN</a>
-            <a href="https://750.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI 選校">AI 選校</a>
-            <a href="https://tree.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問樹洞">樹洞</a>
-            <a href="https://chat.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問Anon">Anon Hourly Chat</a>
-            <a href="https://user.growp.net/user/gateway" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問校內門戶">門戶</a>
-            <a href="https://chalk-c3.seiue.com/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問希悦">希悦</a>
-            <a href="https://www.office.com/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問M365">M365</a>
+        <nav class="column right-column neo-scope" aria-label="右側導航">
+            <a href="https://bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="SUEN">SUEN</a>
+            <a href="https://750.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI選校">AI 選校</a>
+            <a href="https://tree.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="樹洞">樹洞</a>
+            <a href="https://chat.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="Anon Hourly Chat">Anon Hourly Chat</a>
+            <a href="https://user.growp.net/user/gateway" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="校內門戶">門戶</a>
+            <a href="https://chalk-c3.seiue.com/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="希悦">希悦</a>
+            <a href="https://www.office.com/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="M365">M365</a>
             <a href="https://www.bjeea.cn/html/gkgz/index.html" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="北京教育考試院">北京教育考試院</a>
-            <a href="http://www.moe.gov.cn/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問教育部">教育部</a>
-            <a href="https://basic.smartedu.cn/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問中小學智慧教育">中小學智慧教育</a>
-            <a href="https://ctext.org/zh" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問中國哲學書電子化計劃">中國哲學書電子化計劃</a>
-            <a href="https://www.duxiu.com/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問讀秀">讀秀</a>
-            <a href="https://www.yuque.com/r/organizations/bdfz/join?token=8jDK7qvJ741Gnw2p&source=org#" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問語雀">語雀</a>
-            <a href="https://openai.com/news/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問OpenAI">OpenAI</a>
-            <a href="https://aistudio.google.com/prompts/new_chat" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問Gemini">Gemini</a>
+            <a href="http://www.moe.gov.cn/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="教育部">教育部</a>
+            <a href="https://basic.smartedu.cn/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="中小學智慧教育">中小學智慧教育</a>
+            <a href="https://ctext.org/zh" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="中國哲學書電子化計劃">中國哲學書電子化計劃</a>
+            <a href="https://www.duxiu.com/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="讀秀">讀秀</a>
+            <a href="https://www.yuque.com/r/organizations/bdfz/join?token=8jDK7qvJ741Gnw2p&source=org#" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="語雀">語雀</a>
+            <a href="https://openai.com/news/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="OpenAI">OpenAI</a>
+            <a href="https://aistudio.google.com/prompts/new_chat" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="Gemini">Gemini</a>
             <a href="https://archive.org/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="Internet Archive">Internet Archive</a>
             <a href="https://notebooklm.google.com/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="NotebookLM">NotebookLM</a>
-       </div>
+        </nav>
     </div>
 
-    <!-- JavaScript remains unchanged as it was already correct for this layout -->
+    <noscript>
+        <div style="margin-top:12px;padding:12px;border-radius:12px;background:#fff;color:#000;max-width:960px;">
+            本頁需要啟用 JavaScript 以顯示倒計時與進度條。
+        </div>
+    </noscript>
+
     <script>
+    // === 訪問者資訊寫入頁腳（加入 sessionStorage 緩存，避免每次刷新都打 API） ===
+    function codeToFlag(cc) {
+        if (!cc) return '';
+        return cc.toUpperCase().replace(/./g, c => String.fromCodePoint(127397 + c.charCodeAt(0)));
+    }
 
-// === 訪問者資訊寫入頁腳 ===
-function codeToFlag(cc) {
-    if (!cc) return '';
-    return cc.toUpperCase().replace(/./g, c => String.fromCodePoint(127397 + c.charCodeAt(0)));
-}
-
-(async () => {
-    const ipCityEl = document.getElementById('footer-ip-city');
-    const orgCountryEl = document.getElementById('footer-org-country');
-    if (!ipCityEl || !orgCountryEl) return;
-
-    // Providers: try in order with timeout; first success wins
-    const PROVIDERS = [
-        {
-            name: 'ipwhois',
-            url: 'https://ipwho.is/',
-            ok: (status, d) => status === 200 && d && d.success !== false,
-            map: (d) => ({
-                ip: d.ip || '',
-                city: d.city || '',
-                isp: (d.connection && (d.connection.isp || d.connection.org)) || '',
-                cc: d.country_code || '',
-                country: d.country || ''
-            })
-        },
-        {
-            name: 'ipapi',
-            url: 'https://ipapi.co/json/',
-            ok: (status, d) => status === 200 && d && (d.ip || d.country_code),
-            map: (d) => ({
-                ip: d.ip || '',
-                city: d.city || '',
-                isp: d.org || d.org_name || d.asn || '',
-                cc: d.country_code || '',
-                country: d.country_name || ''
-            })
-        },
-        {
-            name: 'geojs',
-            url: 'https://get.geojs.io/v1/ip/geo.json',
-            ok: (status, d) => status === 200 && d && (d.ip || d.country_code),
-            map: (d) => ({
-                ip: d.ip || '',
-                city: d.city || '',
-                isp: d.organization || '',
-                cc: d.country_code || '',
-                country: d.country || ''
-            })
-        }
-    ];
-
-    const fetchWithTimeout = async (url, ms = 2500) => {
+    async function fetchWithTimeout(url, ms = 2500) {
         const ctrl = new AbortController();
         const timer = setTimeout(() => ctrl.abort(), ms);
         try {
-            const res = await fetch(url, { signal: ctrl.signal });
+            const res = await fetch(url, { signal: ctrl.signal, cache: 'no-store' });
             const status = res.status;
             const json = await res.json().catch(() => ({}));
             return { status, json };
@@ -543,32 +755,98 @@ function codeToFlag(cc) {
         } finally {
             clearTimeout(timer);
         }
-    };
+    }
 
-    let info = null;
-    for (const p of PROVIDERS) {
-        const { status, json } = await fetchWithTimeout(p.url, 2500);
-        if (p.ok(status, json || {})) {
-            info = p.map(json || {});
-            break;
+    async function loadVisitorInfo() {
+        const ipCityEl = document.getElementById('footer-ip-city');
+        const orgCountryEl = document.getElementById('footer-org-country');
+        if (!ipCityEl || !orgCountryEl) return;
+
+        const CACHE_KEY = 'visitorInfoCacheV1';
+        const CACHE_TTL_MS = 12 * 60 * 60 * 1000; // 12h
+
+        // 1) Try cache first
+        try {
+            const cachedRaw = sessionStorage.getItem(CACHE_KEY);
+            if (cachedRaw) {
+                const cached = JSON.parse(cachedRaw);
+                if (cached && cached.t && cached.info && (Date.now() - cached.t) < CACHE_TTL_MS) {
+                    const info = cached.info;
+                    const ipCity = [info.ip, info.city].filter(Boolean).join(' | ');
+                    const countryDisplay = [codeToFlag(info.cc), info.country].filter(Boolean).join(' | ');
+                    ipCityEl.textContent = ipCity;
+                    orgCountryEl.textContent = [info.isp, countryDisplay].filter(Boolean).join(' / ');
+                    return;
+                }
+            }
+        } catch (_) {}
+
+        // 2) Providers: try in order with timeout; first success wins
+        const PROVIDERS = [
+            {
+                name: 'ipwhois',
+                url: 'https://ipwho.is/',
+                ok: (status, d) => status === 200 && d && d.success !== false,
+                map: (d) => ({
+                    ip: d.ip || '',
+                    city: d.city || '',
+                    isp: (d.connection && (d.connection.isp || d.connection.org)) || '',
+                    cc: d.country_code || '',
+                    country: d.country || ''
+                })
+            },
+            {
+                name: 'ipapi',
+                url: 'https://ipapi.co/json/',
+                ok: (status, d) => status === 200 && d && (d.ip || d.country_code),
+                map: (d) => ({
+                    ip: d.ip || '',
+                    city: d.city || '',
+                    isp: d.org || d.org_name || d.asn || '',
+                    cc: d.country_code || '',
+                    country: d.country_name || ''
+                })
+            },
+            {
+                name: 'geojs',
+                url: 'https://get.geojs.io/v1/ip/geo.json',
+                ok: (status, d) => status === 200 && d && (d.ip || d.country_code),
+                map: (d) => ({
+                    ip: d.ip || '',
+                    city: d.city || '',
+                    isp: d.organization || '',
+                    cc: d.country_code || '',
+                    country: d.country || ''
+                })
+            }
+        ];
+
+        let info = null;
+        for (const p of PROVIDERS) {
+            const { status, json } = await fetchWithTimeout(p.url, 2500);
+            if (p.ok(status, json || {})) {
+                info = p.map(json || {});
+                break;
+            }
+        }
+
+        if (info) {
+            const ipCity = [info.ip, info.city].filter(Boolean).join(' | ');
+            const countryDisplay = [codeToFlag(info.cc), info.country].filter(Boolean).join(' | ');
+            ipCityEl.textContent = ipCity;
+            orgCountryEl.textContent = [info.isp, countryDisplay].filter(Boolean).join(' / ');
+
+            try {
+                sessionStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), info }));
+            } catch (_) {}
+        } else {
+            ipCityEl.style.display = 'none';
+            orgCountryEl.style.display = 'none';
         }
     }
 
-    if (info) {
-        // 第二行：IP | City（保留你當前頁的顯示風格）
-        const ipCity = [info.ip, info.city].filter(Boolean).join(' | ');
-        ipCityEl.textContent = ipCity;
-
-        // 第三行：ISP / 🇺🇸 | United States
-        const countryDisplay = [codeToFlag(info.cc), info.country].filter(Boolean).join(' | ');
-        orgCountryEl.textContent = [info.isp, countryDisplay].filter(Boolean).join(' / ');
-    } else {
-        // 全部失敗就隱藏
-        ipCityEl.style.display = 'none';
-        orgCountryEl.style.display = 'none';
-    }
-})();
-
+    // Load footer info after first paint
+    requestAnimationFrame(() => { loadVisitorInfo(); });
 
     document.addEventListener("DOMContentLoaded", function() {
         // Cache DOM elements
@@ -576,17 +854,20 @@ function codeToFlag(cc) {
         const humanTimeDisplay = document.getElementById('humanTime');
         const clockDisplay = document.getElementById('current-time-clock');
         const gregorianDateDisplay = document.getElementById('current-date-gregorian');
+
         const dayProgressFill = document.getElementById('day-progress-fill');
         const dayProgressText = document.getElementById('day-progress-text');
         const weekProgressFill = document.getElementById('week-progress-fill');
         const weekProgressText = document.getElementById('week-progress-text');
         const yearProgressFill = document.getElementById('year-progress-fill');
         const yearProgressText = document.getElementById('year-progress-text');
+
         const dayProgressTitle = document.getElementById('day-progress-title');
         const weekProgressTitle = document.getElementById('week-progress-title');
         const yearProgressTitle = document.getElementById('year-progress-title');
+
         const themeToggleButton = document.getElementById('theme-toggle-logo-button');
-        const bodyElement = document.body;
+        const rootEl = document.documentElement;
 
         // Constants
         const MS_IN_SECOND = 1000;
@@ -596,6 +877,7 @@ function codeToFlag(cc) {
         const MS_IN_WEEK = 7 * MS_IN_DAY;
         const MS_IN_YEAR_APPROX = 365.25 * MS_IN_DAY;
         const MS_IN_TEN_THOUSAND_YEARS = 10000 * MS_IN_YEAR_APPROX;
+
         const GAOKAO_TARGET_TIME = new Date('2026-06-07T09:00:00').getTime();
         const HUMAN_ORIGIN_APPROX_MS = Date.now() - (300000 * MS_IN_YEAR_APPROX);
 
@@ -607,21 +889,21 @@ function codeToFlag(cc) {
 
         // Theme Functions
         function applyThemeVisuals(theme) {
-            if (theme === 'dark') {
-                bodyElement.classList.add('dark-mode');
-                if (themeToggleButton) themeToggleButton.setAttribute('aria-label', '切換白天模式');
-            } else {
-                bodyElement.classList.remove('dark-mode');
-                if (themeToggleButton) themeToggleButton.setAttribute('aria-label', '切換暗黑模式');
-            }
+            const isDark = theme === 'dark';
+            rootEl.classList.toggle('dark-mode', isDark);
+            document.body.classList.toggle('dark-mode', isDark);
+            rootEl.style.colorScheme = isDark ? 'dark' : 'light';
+            if (themeToggleButton) themeToggleButton.setAttribute('aria-label', isDark ? '切換白天模式' : '切換暗黑模式');
         }
+
         function getSystemThemePreference() {
             const currentHour = new Date().getHours();
             return (currentHour >= 18 || currentHour < 6) ? 'dark' : 'light';
         }
+
         function toggleTheme() {
-            const currentTheme = bodyElement.classList.contains('dark-mode') ? 'dark' : 'light';
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            const isDark = rootEl.classList.contains('dark-mode') || document.body.classList.contains('dark-mode');
+            const newTheme = isDark ? 'light' : 'dark';
             applyThemeVisuals(newTheme);
             try { localStorage.setItem(THEME_STORAGE_KEY, newTheme); } catch (e) { console.error("Could not save theme preference:", e); }
         }
@@ -659,33 +941,19 @@ function codeToFlag(cc) {
         }
 
         function pad2(n) { return String(n).padStart(2, '0'); }
-        function formatYMD(d) {
-            const y = d.getFullYear();
-            const m = pad2(d.getMonth() + 1);
-            const day = pad2(d.getDate());
-            return `${y}-${m}-${day}`;
-        }
         function formatMD(d) {
             const m = pad2(d.getMonth() + 1);
             const day = pad2(d.getDate());
             return `${m}/${day}`;
-        }
-        function formatRemaining(ms) {
-            const total = Math.max(0, ms);
-            const days = Math.floor(total / MS_IN_DAY);
-            const hours = Math.floor((total % MS_IN_DAY) / MS_IN_HOUR);
-            const minutes = Math.floor((total % MS_IN_HOUR) / MS_IN_MINUTE);
-            const seconds = Math.floor((total % MS_IN_MINUTE) / MS_IN_SECOND);
-            if (days > 0) {
-                return `${days}天 ${pad2(hours)}:${pad2(minutes)}:${pad2(seconds)}`;
-            }
-            return `${pad2(hours)}:${pad2(minutes)}:${pad2(seconds)}`;
         }
 
         function setEndingVisual(fillEl, textEl, isEnding) {
             if (!fillEl || !textEl) return;
             fillEl.classList.toggle('is-ending', isEnding);
             textEl.classList.toggle('is-ending', isEnding);
+
+            const container = fillEl.closest('.progress-bar-container');
+            if (container) container.classList.toggle('is-ending', isEnding);
         }
 
         function updateProgressBar(now, fillEl, textEl, unit, titleEl) {
@@ -701,7 +969,7 @@ function codeToFlag(cc) {
                 const end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
                 startMs = start.getTime();
                 endMs = end.getTime();
-                titleText = `今日已逝 · ${formatYMD(now)}`;
+                titleText = `今日已逝`;
             } else if (unit === 'week') {
                 const currentDay = now.getDay();
                 const offsetToMonday = (currentDay === 0) ? 6 : currentDay - 1;
@@ -728,19 +996,17 @@ function codeToFlag(cc) {
 
             const total = Math.max(1, endMs - startMs);
             const elapsed = Math.max(0, Math.min(total, nowTime - startMs));
-            const remaining = Math.max(0, endMs - nowTime);
             const progress = Math.min(100, (elapsed / total) * 100);
             const progressFormatted = progress.toFixed(2);
 
             fillEl.style.width = `${progressFormatted}%`;
-            textEl.textContent = `${progressFormatted}% · 剩${formatRemaining(remaining)}`;
+            textEl.textContent = `${progressFormatted}%`;
+
+            const container = fillEl.closest('.progress-bar-container');
+            if (container) container.setAttribute('aria-valuenow', progressFormatted);
 
             // Last 5% => red
             setEndingVisual(fillEl, textEl, progress >= 95);
-        }
-
-        function updateYearProgress(now, fillEl, textEl, titleEl) {
-            updateProgressBar(now, fillEl, textEl, 'year', titleEl);
         }
 
         function updateAll() {
@@ -753,11 +1019,10 @@ function codeToFlag(cc) {
 
             updateProgressBar(now, dayProgressFill, dayProgressText, 'day', dayProgressTitle);
             updateProgressBar(now, weekProgressFill, weekProgressText, 'week', weekProgressTitle);
-            updateYearProgress(now, yearProgressFill, yearProgressText, yearProgressTitle);
+            updateProgressBar(now, yearProgressFill, yearProgressText, 'year', yearProgressTitle);
         }
 
         // Initial Setup & Start
-        // 1. Initialize Theme
         let initialTheme;
         try {
             const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
@@ -772,16 +1037,31 @@ function codeToFlag(cc) {
         }
         applyThemeVisuals(initialTheme);
 
-        // 2. Add Theme Toggle Listener
-        if (themeToggleButton) {
-            themeToggleButton.addEventListener('click', toggleTheme);
-        } else {
-            console.error("Theme toggle button not found!");
+        if (themeToggleButton) themeToggleButton.addEventListener('click', toggleTheme);
+
+        // CPU-friendly ticking: pause when tab is hidden
+        let timerId = null;
+        function startTick() {
+            if (timerId) return;
+            updateAll();
+            const alignMs = 1000 - (Date.now() % 1000);
+            timerId = setTimeout(() => {
+                updateAll();
+                timerId = setInterval(updateAll, 1000);
+            }, alignMs);
+        }
+        function stopTick() {
+            if (!timerId) return;
+            clearTimeout(timerId);
+            clearInterval(timerId);
+            timerId = null;
         }
 
-        // 3. Initial Update & Interval (CPU-friendly)
-        updateAll();
-        setInterval(updateAll, 1000);
+        startTick();
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) stopTick();
+            else startTick();
+        }, { passive: true });
     });
     </script>
 </body>
