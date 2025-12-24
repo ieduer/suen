@@ -306,6 +306,15 @@
         .progress-bar-fill { height: 100%; width: 0%; background: var(--progress-bar-fill); border-radius: 15px; transition: width 0.5s ease-out, var(--theme-transition); box-shadow: inset 0 1px 3px rgba(0,0,0,0.3); }
         .progress-bar-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--text-color); font-size: 0.95rem; font-weight: bold; text-shadow: var(--progress-bar-text-shadow); white-space: nowrap; transition: var(--theme-transition); }
 
+        /* === PROGRESS BAR ENDING (last 5%) === */
+        .progress-bar-fill.is-ending {
+            background: #d9244c !important;
+        }
+        .progress-bar-text.is-ending {
+            color: #ffffff;
+            text-shadow: none;
+        }
+
         /* === LINK BUTTONS === */
         .link-button { background: var(--primary-gradient); border-radius: 10px; text-align: center; padding: 10px 8px; color: var(--button-text-color); text-decoration: none; font-weight: bold; transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease; display: block; margin-bottom: 8px; border: none; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0, 0.1); }
         .link-button:hover, .link-button:focus { background: var(--secondary-gradient); transform: translateY(-2px); box-shadow: var(--button-hover-shadow); outline: none; }
@@ -410,7 +419,7 @@
             <a href="https://kz.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI論語">AI 論語</a>
             <a href="https://hlm.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI紅樓夢">AI 紅樓夢</a>
             <a href="https://kw.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI課文">AI 課文</a>
-            <a href="https://jc.bdfz.net " class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI教材">AI 教材</a>
+            <a href="https://jc.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI教材">AI 教材</a>
             <a href="https://www.12.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="Status page">教材 PDF</a>
             <a href="https://forum.rdfzer.com" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問彣彰典冊">彣彰</a>
             <a href="https://class.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問高中語文">高中語文</a>
@@ -432,14 +441,14 @@
             <!-- Countdown Items -->
             <div id="current-time" class="countdown-item neo neo-gradient"> <div class="countdown-display"> <span id="current-time-clock">--:--:--</span> <span id="current-date-gregorian">----年--月--日 ---</span> </div> </div>
             <div id="gaokao-countdown" class="countdown-item neo neo-gradient"> <h2 class="countdown-title">2026高考倒計時</h2> <div class="countdown-display" aria-live="polite">計算中...</div> </div>
-            <div id="day-progress" class="countdown-item progress-item neo neo-gradient"> <h2 class="countdown-title">今日已逝</h2> <div class="progress-bar-container neo-track"> <div class="progress-bar-fill" id="day-progress-fill"></div> <span class="progress-bar-text" id="day-progress-text">0.00%</span> </div> </div>
-            <div id="week-progress" class="countdown-item progress-item neo neo-gradient"> <h2 class="countdown-title">本週已逝</h2> <div class="progress-bar-container neo-track"> <div class="progress-bar-fill" id="week-progress-fill"></div> <span class="progress-bar-text" id="week-progress-text">0.00%</span> </div> </div>
-            <div id="year-progress" class="countdown-item progress-item neo neo-gradient"> <h2 class="countdown-title">2025年度已逝</h2> <div class="progress-bar-container neo-track"> <div class="progress-bar-fill" id="year-progress-fill"></div> <span class="progress-bar-text" id="year-progress-text">0.00%</span> </div> </div>
+            <div id="day-progress" class="countdown-item progress-item neo neo-gradient"> <h2 class="countdown-title" id="day-progress-title">今日已逝</h2> <div class="progress-bar-container neo-track"> <div class="progress-bar-fill" id="day-progress-fill"></div> <span class="progress-bar-text" id="day-progress-text">0.00%</span> </div> </div>
+            <div id="week-progress" class="countdown-item progress-item neo neo-gradient"> <h2 class="countdown-title" id="week-progress-title">本週已逝</h2> <div class="progress-bar-container neo-track"> <div class="progress-bar-fill" id="week-progress-fill"></div> <span class="progress-bar-text" id="week-progress-text">0.00%</span> </div> </div>
+            <div id="year-progress" class="countdown-item progress-item neo neo-gradient"> <h2 class="countdown-title" id="year-progress-title">年度已逝</h2> <div class="progress-bar-container neo-track"> <div class="progress-bar-fill" id="year-progress-fill"></div> <span class="progress-bar-text" id="year-progress-text">0.00%</span> </div> </div>
             <div id="human-timer" class="countdown-item neo neo-gradient"> <h2 class="countdown-title">生民以來</h2> <div class="countdown-display" id="humanTime" aria-live="polite">計算中...</div> </div>
 
             <!-- Footer Section (Restyled with IP info) -->
 <footer class="footer neo neo-gradient" id="site-footer" aria-live="polite">
-    <p id="footer-copyright">© 2025 <a href="https://signal.me/#eu/iHIf8I5xEy7Rf14je_bFWgCInCewjlbiTH_FcxHq-CATrKyfihdBwIUD-QBlDS0G" target="_blank" rel="noopener"><span class="brand-accent">SUEN</span></a></p>
+    <p id="footer-copyright">© 2025 <a href="https://signal.me/#eu/iHIf8I5xEy7Rf14je_bFWgCInCewjlbiTH_FcxHq-CATrKyfihdBwIUD-QBlDS0G" target="_blank" rel="noopener noreferrer"><span class="brand-accent">SUEN</span></a></p>
     <p id="footer-ip-city"></p>
     <p id="footer-org-country"></p>
   </footer>
@@ -573,6 +582,9 @@ function codeToFlag(cc) {
         const weekProgressText = document.getElementById('week-progress-text');
         const yearProgressFill = document.getElementById('year-progress-fill');
         const yearProgressText = document.getElementById('year-progress-text');
+        const dayProgressTitle = document.getElementById('day-progress-title');
+        const weekProgressTitle = document.getElementById('week-progress-title');
+        const yearProgressTitle = document.getElementById('year-progress-title');
         const themeToggleButton = document.getElementById('theme-toggle-logo-button');
         const bodyElement = document.body;
 
@@ -586,8 +598,11 @@ function codeToFlag(cc) {
         const MS_IN_TEN_THOUSAND_YEARS = 10000 * MS_IN_YEAR_APPROX;
         const GAOKAO_TARGET_TIME = new Date('2026-06-07T09:00:00').getTime();
         const HUMAN_ORIGIN_APPROX_MS = Date.now() - (300000 * MS_IN_YEAR_APPROX);
-        const TIME_OPTIONS = { timeZone: 'Asia/Shanghai', hour12: false };
-        const DATE_OPTIONS = { timeZone: 'Asia/Shanghai', year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+
+        // Use visitor's local computer time (no fixed timezone)
+        const TIME_OPTIONS = { hour12: false };
+        const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+
         const THEME_STORAGE_KEY = 'themePreference';
 
         // Theme Functions
@@ -612,27 +627,133 @@ function codeToFlag(cc) {
         }
 
         // Timer Updates
-        function updateClockAndDate(now) { if (clockDisplay) clockDisplay.textContent = now.toLocaleTimeString('zh-CN', TIME_OPTIONS); if (gregorianDateDisplay) gregorianDateDisplay.textContent = now.toLocaleDateString('zh-CN', DATE_OPTIONS); }
-        function updateSingleCountdown(targetTime, nowTime, display, endMessage) { if (!display) return; const timeLeft = targetTime - nowTime; if (timeLeft <= 0) { display.textContent = endMessage; return; } const days = Math.floor(timeLeft / MS_IN_DAY); const hours = Math.floor((timeLeft % MS_IN_DAY) / MS_IN_HOUR); const minutes = Math.floor((timeLeft % MS_IN_HOUR) / MS_IN_MINUTE); const seconds = Math.floor((timeLeft % MS_IN_MINUTE) / MS_IN_SECOND); display.innerHTML = `${days}天 ${hours}小時 ${minutes}分鐘 ${seconds}秒`; }
-        function updateYearProgress(now, fillEl, textEl) { if (!fillEl || !textEl) return; const year = now.getFullYear(); const yearStart = new Date(year, 0, 1).getTime(); const nextYearStart = new Date(year + 1, 0, 1).getTime(); const totalMsInYear = nextYearStart - yearStart; const elapsedMs = now.getTime() - yearStart; const progress = Math.min(100, (elapsedMs / totalMsInYear * 100)); const progressFormatted = progress.toFixed(2); fillEl.style.width = `${progressFormatted}%`; textEl.textContent = `${progressFormatted}%`; }
-        function updateHumanTimer(nowTime, display) { if (!display) return; const timeSinceHumanOrigin = nowTime - HUMAN_ORIGIN_APPROX_MS; const tenThousandYears = Math.floor(timeSinceHumanOrigin / MS_IN_TEN_THOUSAND_YEARS); const remainingTime = timeSinceHumanOrigin % MS_IN_TEN_THOUSAND_YEARS; const days = Math.floor(remainingTime / MS_IN_DAY); const hours = Math.floor((remainingTime % MS_IN_DAY) / MS_IN_HOUR); const minutes = Math.floor((remainingTime % MS_IN_HOUR) / MS_IN_MINUTE); const seconds = Math.floor((remainingTime % MS_IN_MINUTE) / MS_IN_SECOND); display.innerHTML = `${tenThousandYears}萬年 ${days}天 ${hours}小時 ${minutes}分鐘 ${seconds}秒`; }
-        function updateProgressBar(now, fillEl, textEl, unit) { if (!fillEl || !textEl) return; let progress = 0; const nowTime = now.getTime(); if (unit === 'day') { const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime(); progress = Math.min(100, ((nowTime - startOfDay) / MS_IN_DAY) * 100); } else if (unit === 'week') { const currentDay = now.getDay(); const offsetToMonday = (currentDay === 0) ? 6 : currentDay - 1; const mondayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - offsetToMonday); mondayStart.setHours(0, 0, 0, 0); progress = Math.min(100, ((nowTime - mondayStart.getTime()) / MS_IN_WEEK) * 100); } const progressFormatted = progress.toFixed(2); fillEl.style.width = `${progressFormatted}%`; textEl.textContent = `${progressFormatted}%`; }
+        function updateClockAndDate(now) {
+            if (clockDisplay) clockDisplay.textContent = now.toLocaleTimeString('zh-CN', TIME_OPTIONS);
+            if (gregorianDateDisplay) gregorianDateDisplay.textContent = now.toLocaleDateString('zh-CN', DATE_OPTIONS);
+        }
 
-        // Main Update Loop (Throttled)
-        let lastTimestamp = 0;
-        function timerLoop(timestamp) {
-            if (timestamp - lastTimestamp >= 1000) {
-                lastTimestamp = timestamp;
-                const now = new Date();
-                const nowTime = now.getTime();
-                updateClockAndDate(now);
-                updateSingleCountdown(GAOKAO_TARGET_TIME, nowTime, gaokaoDisplay, "高考已開始！");
-                updateHumanTimer(nowTime, humanTimeDisplay);
-                updateProgressBar(now, dayProgressFill, dayProgressText, 'day');
-                updateProgressBar(now, weekProgressFill, weekProgressText, 'week');
-                updateYearProgress(now, yearProgressFill, yearProgressText);
+        function updateSingleCountdown(targetTime, nowTime, display, endMessage) {
+            if (!display) return;
+            const timeLeft = targetTime - nowTime;
+            if (timeLeft <= 0) {
+                display.textContent = endMessage;
+                return;
             }
-            requestAnimationFrame(timerLoop);
+            const days = Math.floor(timeLeft / MS_IN_DAY);
+            const hours = Math.floor((timeLeft % MS_IN_DAY) / MS_IN_HOUR);
+            const minutes = Math.floor((timeLeft % MS_IN_HOUR) / MS_IN_MINUTE);
+            const seconds = Math.floor((timeLeft % MS_IN_MINUTE) / MS_IN_SECOND);
+            display.innerHTML = `${days}天 ${hours}小時 ${minutes}分鐘 ${seconds}秒`;
+        }
+
+        function updateHumanTimer(nowTime, display) {
+            if (!display) return;
+            const timeSinceHumanOrigin = nowTime - HUMAN_ORIGIN_APPROX_MS;
+            const tenThousandYears = Math.floor(timeSinceHumanOrigin / MS_IN_TEN_THOUSAND_YEARS);
+            const remainingTime = timeSinceHumanOrigin % MS_IN_TEN_THOUSAND_YEARS;
+            const days = Math.floor(remainingTime / MS_IN_DAY);
+            const hours = Math.floor((remainingTime % MS_IN_DAY) / MS_IN_HOUR);
+            const minutes = Math.floor((remainingTime % MS_IN_HOUR) / MS_IN_MINUTE);
+            const seconds = Math.floor((remainingTime % MS_IN_MINUTE) / MS_IN_SECOND);
+            display.innerHTML = `${tenThousandYears}萬年 ${days}天 ${hours}小時 ${minutes}分鐘 ${seconds}秒`;
+        }
+
+        function pad2(n) { return String(n).padStart(2, '0'); }
+        function formatYMD(d) {
+            const y = d.getFullYear();
+            const m = pad2(d.getMonth() + 1);
+            const day = pad2(d.getDate());
+            return `${y}-${m}-${day}`;
+        }
+        function formatMD(d) {
+            const m = pad2(d.getMonth() + 1);
+            const day = pad2(d.getDate());
+            return `${m}/${day}`;
+        }
+        function formatRemaining(ms) {
+            const total = Math.max(0, ms);
+            const days = Math.floor(total / MS_IN_DAY);
+            const hours = Math.floor((total % MS_IN_DAY) / MS_IN_HOUR);
+            const minutes = Math.floor((total % MS_IN_HOUR) / MS_IN_MINUTE);
+            const seconds = Math.floor((total % MS_IN_MINUTE) / MS_IN_SECOND);
+            if (days > 0) {
+                return `${days}天 ${pad2(hours)}:${pad2(minutes)}:${pad2(seconds)}`;
+            }
+            return `${pad2(hours)}:${pad2(minutes)}:${pad2(seconds)}`;
+        }
+
+        function setEndingVisual(fillEl, textEl, isEnding) {
+            if (!fillEl || !textEl) return;
+            fillEl.classList.toggle('is-ending', isEnding);
+            textEl.classList.toggle('is-ending', isEnding);
+        }
+
+        function updateProgressBar(now, fillEl, textEl, unit, titleEl) {
+            if (!fillEl || !textEl) return;
+
+            const nowTime = now.getTime();
+            let startMs = 0;
+            let endMs = 0;
+            let titleText = '';
+
+            if (unit === 'day') {
+                const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                const end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+                startMs = start.getTime();
+                endMs = end.getTime();
+                titleText = `今日已逝 · ${formatYMD(now)}`;
+            } else if (unit === 'week') {
+                const currentDay = now.getDay();
+                const offsetToMonday = (currentDay === 0) ? 6 : currentDay - 1;
+                const mondayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - offsetToMonday);
+                mondayStart.setHours(0, 0, 0, 0);
+                const nextMonday = new Date(mondayStart.getTime() + MS_IN_WEEK);
+                startMs = mondayStart.getTime();
+                endMs = nextMonday.getTime();
+
+                const weekEnd = new Date(endMs - MS_IN_DAY); // Sunday (local)
+                titleText = `本週已逝 · ${formatMD(mondayStart)}–${formatMD(weekEnd)}`;
+            } else if (unit === 'year') {
+                const year = now.getFullYear();
+                const yearStart = new Date(year, 0, 1);
+                const nextYearStart = new Date(year + 1, 0, 1);
+                startMs = yearStart.getTime();
+                endMs = nextYearStart.getTime();
+                titleText = `${year}年度已逝`;
+            } else {
+                return;
+            }
+
+            if (titleEl) titleEl.textContent = titleText;
+
+            const total = Math.max(1, endMs - startMs);
+            const elapsed = Math.max(0, Math.min(total, nowTime - startMs));
+            const remaining = Math.max(0, endMs - nowTime);
+            const progress = Math.min(100, (elapsed / total) * 100);
+            const progressFormatted = progress.toFixed(2);
+
+            fillEl.style.width = `${progressFormatted}%`;
+            textEl.textContent = `${progressFormatted}% · 剩${formatRemaining(remaining)}`;
+
+            // Last 5% => red
+            setEndingVisual(fillEl, textEl, progress >= 95);
+        }
+
+        function updateYearProgress(now, fillEl, textEl, titleEl) {
+            updateProgressBar(now, fillEl, textEl, 'year', titleEl);
+        }
+
+        function updateAll() {
+            const now = new Date();
+            const nowTime = now.getTime();
+
+            updateClockAndDate(now);
+            updateSingleCountdown(GAOKAO_TARGET_TIME, nowTime, gaokaoDisplay, "高考已開始！");
+            updateHumanTimer(nowTime, humanTimeDisplay);
+
+            updateProgressBar(now, dayProgressFill, dayProgressText, 'day', dayProgressTitle);
+            updateProgressBar(now, weekProgressFill, weekProgressText, 'week', weekProgressTitle);
+            updateYearProgress(now, yearProgressFill, yearProgressText, yearProgressTitle);
         }
 
         // Initial Setup & Start
@@ -658,16 +779,9 @@ function codeToFlag(cc) {
             console.error("Theme toggle button not found!");
         }
 
-        // 3. Initial Timer Update & Start Loop
-        const initialNow = new Date();
-        const initialNowTime = initialNow.getTime();
-        updateClockAndDate(initialNow);
-        updateSingleCountdown(GAOKAO_TARGET_TIME, initialNowTime, gaokaoDisplay, "高考已開始！");
-        updateHumanTimer(initialNowTime, humanTimeDisplay);
-        updateProgressBar(initialNow, dayProgressFill, dayProgressText, 'day');
-        updateProgressBar(initialNow, weekProgressFill, weekProgressText, 'week');
-        updateYearProgress(initialNow, yearProgressFill, yearProgressText);
-        requestAnimationFrame(timerLoop);
+        // 3. Initial Update & Interval (CPU-friendly)
+        updateAll();
+        setInterval(updateAll, 1000);
     });
     </script>
 </body>
