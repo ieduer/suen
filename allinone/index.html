@@ -481,6 +481,85 @@
         .progress-week .progress-bar-fill { background: linear-gradient(90deg, #f39c12, #e67e22); }
         .progress-year .progress-bar-fill { background: linear-gradient(90deg, #5e81ac, #9b59b6); }
 
+        /* === RADIAL (CONIC) PROGRESS RINGS: elegant + instantly readable === */
+        .progress-row {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            justify-content: center;
+        }
+        /* Let the bar stretch naturally inside the row */
+        .progress-row .progress-bar-container {
+            width: 100%;
+            flex: 1 1 auto;
+            margin: 6px 0 0;
+        }
+
+        /* Per-unit ring colors match the bar */
+        .progress-day  { --ring-from: #2ecc71; --ring-to: #0a9396; }
+        .progress-week { --ring-from: #f39c12; --ring-to: #e67e22; }
+        .progress-year { --ring-from: #5e81ac; --ring-to: #9b59b6; }
+
+        .progress-ring {
+            --p: 0;                 /* 0..100 number, set by JS */
+            --size: 52px;
+            --thickness: 10px;
+            width: var(--size);
+            height: var(--size);
+            border-radius: 999px;
+            flex: 0 0 var(--size);
+            position: relative;
+            background:
+              conic-gradient(from 270deg,
+                var(--ring-from) 0%,
+                var(--ring-to) calc(var(--p) * 1%),
+                color-mix(in oklab, var(--neo-bg) 80%, #000 20%) 0);
+            box-shadow:
+              7px 7px 14px var(--neo-dark),
+              -7px -7px 14px var(--neo-light);
+            transition: var(--theme-transition);
+        }
+        /* Inner cutout with subtle inset (neumorphic donut) */
+        .progress-ring::before {
+            content: '';
+            position: absolute;
+            inset: var(--thickness);
+            border-radius: 999px;
+            background: var(--neo-bg);
+            box-shadow:
+              inset 6px 6px 12px var(--neo-dark),
+              inset -6px -6px 12px var(--neo-light);
+        }
+        /* Glassy highlight sweep */
+        .progress-ring::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 999px;
+            background: radial-gradient(circle at 30% 20%,
+              rgba(255,255,255,0.55),
+              rgba(255,255,255,0.0) 55%);
+            mix-blend-mode: soft-light;
+            pointer-events: none;
+            opacity: 0.9;
+        }
+
+        /* Ending state sync (last 5%) */
+        .progress-ring.is-ending {
+            background:
+              conic-gradient(from 270deg,
+                #d9244c 0%,
+                #d9244c calc(var(--p) * 1%),
+                color-mix(in oklab, var(--neo-bg) 80%, #000 20%) 0) !important;
+        }
+
+        /* Small-screen spacing */
+        @media (max-width: 480px) {
+            .progress-ring { --size: 46px; --thickness: 9px; }
+            .progress-row { gap: 10px; }
+        }
+
         /* === PROGRESS BAR ENDING (last 5%) === */
         .progress-bar-fill.is-ending {
             background: #d9244c !important;
@@ -672,25 +751,34 @@
 
             <section id="day-progress" class="countdown-item progress-item neo neo-gradient progress-day" aria-label="今日進度">
                 <h2 class="countdown-title" id="day-progress-title">今日已逝</h2>
-                <div class="progress-bar-container neo-track" role="progressbar" aria-label="今日已逝進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                    <div class="progress-bar-fill" id="day-progress-fill"></div>
-                    <span class="progress-bar-text" id="day-progress-text">0.00%</span>
+                <div class="progress-row">
+                    <div class="progress-ring" id="day-progress-ring" aria-hidden="true"></div>
+                    <div class="progress-bar-container neo-track" role="progressbar" aria-label="今日已逝進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                        <div class="progress-bar-fill" id="day-progress-fill"></div>
+                        <span class="progress-bar-text" id="day-progress-text">0.00%</span>
+                    </div>
                 </div>
             </section>
 
             <section id="week-progress" class="countdown-item progress-item neo neo-gradient progress-week" aria-label="本週進度">
                 <h2 class="countdown-title" id="week-progress-title">本週已逝</h2>
-                <div class="progress-bar-container neo-track" role="progressbar" aria-label="本週已逝進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                    <div class="progress-bar-fill" id="week-progress-fill"></div>
-                    <span class="progress-bar-text" id="week-progress-text">0.00%</span>
+                <div class="progress-row">
+                    <div class="progress-ring" id="week-progress-ring" aria-hidden="true"></div>
+                    <div class="progress-bar-container neo-track" role="progressbar" aria-label="本週已逝進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                        <div class="progress-bar-fill" id="week-progress-fill"></div>
+                        <span class="progress-bar-text" id="week-progress-text">0.00%</span>
+                    </div>
                 </div>
             </section>
 
             <section id="year-progress" class="countdown-item progress-item neo neo-gradient progress-year" aria-label="年度進度">
                 <h2 class="countdown-title" id="year-progress-title">年度已逝</h2>
-                <div class="progress-bar-container neo-track" role="progressbar" aria-label="年度已逝進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                    <div class="progress-bar-fill" id="year-progress-fill"></div>
-                    <span class="progress-bar-text" id="year-progress-text">0.00%</span>
+                <div class="progress-row">
+                    <div class="progress-ring" id="year-progress-ring" aria-hidden="true"></div>
+                    <div class="progress-bar-container neo-track" role="progressbar" aria-label="年度已逝進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                        <div class="progress-bar-fill" id="year-progress-fill"></div>
+                        <span class="progress-bar-text" id="year-progress-text">0.00%</span>
+                    </div>
                 </div>
             </section>
 
@@ -861,6 +949,9 @@
         const weekProgressText = document.getElementById('week-progress-text');
         const yearProgressFill = document.getElementById('year-progress-fill');
         const yearProgressText = document.getElementById('year-progress-text');
+        const dayProgressRing = document.getElementById('day-progress-ring');
+        const weekProgressRing = document.getElementById('week-progress-ring');
+        const yearProgressRing = document.getElementById('year-progress-ring');
 
         const dayProgressTitle = document.getElementById('day-progress-title');
         const weekProgressTitle = document.getElementById('week-progress-title');
@@ -947,16 +1038,17 @@
             return `${m}/${day}`;
         }
 
-        function setEndingVisual(fillEl, textEl, isEnding) {
+        function setEndingVisual(fillEl, textEl, ringEl, isEnding) {
             if (!fillEl || !textEl) return;
             fillEl.classList.toggle('is-ending', isEnding);
             textEl.classList.toggle('is-ending', isEnding);
+            if (ringEl) ringEl.classList.toggle('is-ending', isEnding);
 
             const container = fillEl.closest('.progress-bar-container');
             if (container) container.classList.toggle('is-ending', isEnding);
         }
 
-        function updateProgressBar(now, fillEl, textEl, unit, titleEl) {
+        function updateProgressBar(now, fillEl, textEl, unit, titleEl, ringEl) {
             if (!fillEl || !textEl) return;
 
             const nowTime = now.getTime();
@@ -1005,8 +1097,11 @@
             const container = fillEl.closest('.progress-bar-container');
             if (container) container.setAttribute('aria-valuenow', progressFormatted);
 
+            // Sync ring (CSS conic-gradient) if present
+            if (ringEl) ringEl.style.setProperty('--p', progressFormatted);
+
             // Last 5% => red
-            setEndingVisual(fillEl, textEl, progress >= 95);
+            setEndingVisual(fillEl, textEl, ringEl, progress >= 95);
         }
 
         function updateAll() {
@@ -1017,9 +1112,9 @@
             updateSingleCountdown(GAOKAO_TARGET_TIME, nowTime, gaokaoDisplay, "高考已開始！");
             updateHumanTimer(nowTime, humanTimeDisplay);
 
-            updateProgressBar(now, dayProgressFill, dayProgressText, 'day', dayProgressTitle);
-            updateProgressBar(now, weekProgressFill, weekProgressText, 'week', weekProgressTitle);
-            updateProgressBar(now, yearProgressFill, yearProgressText, 'year', yearProgressTitle);
+            updateProgressBar(now, dayProgressFill, dayProgressText, 'day', dayProgressTitle, dayProgressRing);
+            updateProgressBar(now, weekProgressFill, weekProgressText, 'week', weekProgressTitle, weekProgressRing);
+            updateProgressBar(now, yearProgressFill, yearProgressText, 'year', yearProgressTitle, yearProgressRing);
         }
 
         // Initial Setup & Start
