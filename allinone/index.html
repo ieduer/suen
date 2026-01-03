@@ -390,9 +390,15 @@
         #current-time-clock { font-size: 1.6rem; font-weight: 900; margin-bottom: 8px !important; }
         #current-date-gregorian { font-size: 1rem; opacity: 0.9; }
 
-        /* === PROGRESS BARS (UPGRADED: clearer, no extra numbers) === */
+        /* === PROGRESS BARS (GEEK/HUD: no text pill, no “backfill bubble”, clearer read) === */
         .progress-item .countdown-display { display: none; }
 
+        /* Per-unit accent (keeps your semantic colors, but in a HUD style) */
+        .progress-day  { --hud-accent: #00d084; }
+        .progress-week { --hud-accent: #ffb020; }
+        .progress-year { --hud-accent: #9a7dff; }
+
+        /* Track: darker “HUD panel” with grid + scanline (subtle) */
         .progress-bar-container {
             width: 92%;
             height: 28px;
@@ -400,147 +406,190 @@
             position: relative;
             overflow: hidden;
             border-radius: 999px;
-            border: 1px solid color-mix(in oklab, var(--neo-bg), #000 16%);
+
+            /* HUD track surface */
             background:
               linear-gradient(180deg,
-                color-mix(in oklab, var(--neo-bg) 92%, white 8%),
-                var(--neo-bg));
+                color-mix(in oklab, var(--neo-bg) 78%, #000 22%),
+                color-mix(in oklab, var(--neo-bg) 70%, #000 30%));
+
+            border: 1px solid color-mix(in oklab, var(--neo-bg), #000 28%);
             box-shadow:
-              inset 7px 7px 14px var(--neo-dark),
-              inset -7px -7px 14px var(--neo-light);
+              inset 0 0 0 1px rgba(255,255,255,0.06),
+              inset 10px 10px 22px rgba(0,0,0,0.18),
+              inset -10px -10px 22px rgba(255,255,255,0.06);
+
             transition: var(--theme-transition);
         }
 
-        /* Track scale ticks (subtle; improves readability without adding numbers) */
+        /* Grid ticks (tech look, but not noisy) */
         .progress-bar-container::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: repeating-linear-gradient(
+            background:
+              repeating-linear-gradient(
                 to right,
-                rgba(255,255,255,0.28) 0,
-                rgba(255,255,255,0.28) 1px,
+                rgba(255,255,255,0.20) 0,
+                rgba(255,255,255,0.20) 1px,
                 rgba(255,255,255,0.00) 1px,
-                rgba(255,255,255,0.00) 10%);
-            opacity: 0.22;
-            mix-blend-mode: overlay;
+                rgba(255,255,255,0.00) 12px);
+            opacity: 0.18;
             pointer-events: none;
-        }
-        html.dark-mode .progress-bar-container::before,
-        body.dark-mode .progress-bar-container::before {
-            background: repeating-linear-gradient(
-                to right,
-                rgba(255,255,255,0.14) 0,
-                rgba(255,255,255,0.14) 1px,
-                rgba(255,255,255,0.00) 1px,
-                rgba(255,255,255,0.00) 10%);
-            opacity: 0.20;
+            mix-blend-mode: overlay;
         }
 
-        /* Fill: smooth gradient + “moving sheen” => time flowing */
+        /* Scanline sweep (very subtle, reads “geek”) */
+        .progress-bar-container::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg,
+              rgba(255,255,255,0.00) 0%,
+              rgba(255,255,255,0.14) 35%,
+              rgba(255,255,255,0.00) 70%);
+            transform: translateX(-70%);
+            animation: hudScan 3.4s ease-in-out infinite;
+            opacity: 0.35;
+            pointer-events: none;
+            mix-blend-mode: soft-light;
+        }
+        @keyframes hudScan {
+            0% { transform: translateX(-70%); }
+            55% { transform: translateX(10%); }
+            100% { transform: translateX(85%); }
+        }
+
+        /* Fill: solid + stripes + endpoint line (NO bubble cap) */
         .progress-bar-fill {
             height: 100%;
             width: 0%;
-            border-radius: 999px;
             position: relative;
-            transition: width 0.5s ease-out, var(--theme-transition);
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.25);
             overflow: hidden;
+
+            /* avoid “rounded bubble backfill” */
+            border-radius: 999px 6px 6px 999px;
+
+            background: linear-gradient(90deg,
+                color-mix(in oklab, var(--hud-accent) 88%, #fff 12%),
+                color-mix(in oklab, var(--hud-accent) 92%, #000 8%));
+
+            box-shadow:
+              inset 0 0 0 1px rgba(255,255,255,0.10),
+              0 0 14px color-mix(in oklab, var(--hud-accent), #fff 25%);
+
+            transition: width 0.5s ease-out, var(--theme-transition);
         }
-        /* End-cap marker (more intuitive reading of current position) */
-        .progress-bar-fill::before {
-            content: '';
-            position: absolute;
-            right: -10px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 18px;
-            height: 18px;
-            border-radius: 999px;
-            background: rgba(255,255,255,0.55);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.18);
-            filter: blur(0.0px);
-            opacity: 0.95;
-        }
+
+        /* stripes overlay */
         .progress-bar-fill::after {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(120deg,
-                rgba(255,255,255,0.00) 0%,
-                rgba(255,255,255,0.30) 35%,
-                rgba(255,255,255,0.00) 70%);
-            transform: translateX(-60%);
-            animation: progressSheen 2.8s ease-in-out infinite;
+            background:
+              repeating-linear-gradient(
+                135deg,
+                rgba(255,255,255,0.18) 0,
+                rgba(255,255,255,0.18) 8px,
+                rgba(255,255,255,0.00) 8px,
+                rgba(255,255,255,0.00) 16px);
+            opacity: 0.35;
+            transform: translateX(0);
+            animation: hudStripes 1.8s linear infinite;
             pointer-events: none;
-            mix-blend-mode: soft-light;
+            mix-blend-mode: overlay;
         }
-        @keyframes progressSheen {
-            0% { transform: translateX(-60%); }
-            55% { transform: translateX(10%); }
-            100% { transform: translateX(80%); }
+        @keyframes hudStripes {
+            0% { transform: translateX(-18px); }
+            100% { transform: translateX(18px); }
         }
+
+        /* endpoint marker line (cleaner than a circle) */
+        .progress-bar-fill::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 4px;
+            bottom: 4px;
+            width: 2px;
+            background: rgba(255,255,255,0.70);
+            box-shadow: 0 0 10px rgba(255,255,255,0.35);
+            opacity: 0.9;
+            pointer-events: none;
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .progress-bar-fill { transition: none; }
+            .progress-bar-container::after { animation: none; }
             .progress-bar-fill::after { animation: none; }
         }
 
-        /* Centered percentage only */
+        /* Percentage text: NO background pill; monospace HUD text */
         .progress-bar-text {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
             font-size: 0.95rem;
-            font-weight: 900;
-            letter-spacing: 0.4px;
+            font-weight: 800;
+            letter-spacing: 0.6px;
             white-space: nowrap;
             user-select: none;
-            color: var(--dark-text-color);
-            padding: 2px 8px;
-            border-radius: 999px;
-            background: rgba(255,255,255,0.42);
-            text-shadow: none;
+
+            /* remove the old background capsule */
+            padding: 0;
+            border-radius: 0;
+            background: transparent;
+
+            color: color-mix(in oklab, var(--dark-text-color) 90%, #000 10%);
+            text-shadow:
+              0 1px 0 rgba(0,0,0,0.25),
+              0 0 12px color-mix(in oklab, var(--hud-accent), #fff 35%);
+
             transition: var(--theme-transition);
         }
+
         html.dark-mode .progress-bar-text,
         body.dark-mode .progress-bar-text {
-            color: var(--text-color);
-            background: rgba(0,0,0,0.22);
+            color: color-mix(in oklab, var(--text-color) 92%, #fff 8%);
+            text-shadow:
+              0 1px 0 rgba(0,0,0,0.55),
+              0 0 12px color-mix(in oklab, var(--hud-accent), #fff 28%);
         }
-
-        /* Per-unit colors (more intuitive mapping) */
-        .progress-day  .progress-bar-fill { background: linear-gradient(90deg, #2ecc71, #0a9396); }
-        .progress-week .progress-bar-fill { background: linear-gradient(90deg, #f39c12, #e67e22); }
-        .progress-year .progress-bar-fill { background: linear-gradient(90deg, #5e81ac, #9b59b6); }
-
 
         /* === PROGRESS BAR ENDING (last 5%) === */
         .progress-bar-fill.is-ending {
             background: #d9244c !important;
+            box-shadow:
+              inset 0 0 0 1px rgba(255,255,255,0.12),
+              0 0 18px rgba(217,36,76,0.38);
         }
-        .progress-bar-fill.is-ending::before { background: rgba(255,255,255,0.75); }
+        .progress-bar-container.is-ending {
+            border-color: rgba(217,36,76,0.55);
+            animation: endPulse 1.35s ease-in-out infinite;
+        }
         .progress-bar-text.is-ending {
             color: #ffffff;
-            text-shadow: none;
+            text-shadow:
+              0 1px 0 rgba(0,0,0,0.55),
+              0 0 14px rgba(217,36,76,0.55);
         }
-        /* Subtle pulse when ending (but respects reduced motion) */
-        .progress-bar-container.is-ending {
-            box-shadow:
-              inset 7px 7px 14px var(--neo-dark),
-              inset -7px -7px 14px var(--neo-light),
-              0 0 0 0 rgba(217,36,76,0.0);
-            animation: endPulse 1.6s ease-in-out infinite;
-        }
+
         @keyframes endPulse {
-            0%, 100% { box-shadow:
-              inset 7px 7px 14px var(--neo-dark),
-              inset -7px -7px 14px var(--neo-light),
-              0 0 0 0 rgba(217,36,76,0.0); }
-            55% { box-shadow:
-              inset 7px 7px 14px var(--neo-dark),
-              inset -7px -7px 14px var(--neo-light),
-              0 0 0 6px rgba(217,36,76,0.18); }
+            0%, 100% {
+              box-shadow:
+                inset 0 0 0 1px rgba(255,255,255,0.06),
+                inset 10px 10px 22px rgba(0,0,0,0.18),
+                inset -10px -10px 22px rgba(255,255,255,0.06);
+            }
+            55% {
+              box-shadow:
+                inset 0 0 0 1px rgba(255,255,255,0.06),
+                inset 10px 10px 22px rgba(0,0,0,0.18),
+                inset -10px -10px 22px rgba(255,255,255,0.06),
+                0 0 0 6px rgba(217,36,76,0.18);
+            }
         }
         @media (prefers-reduced-motion: reduce) {
             .progress-bar-container.is-ending { animation: none; }
