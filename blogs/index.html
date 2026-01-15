@@ -1,361 +1,638 @@
-<!DOCTYPE html>
-<html lang="zh-Hant"> <!-- Content language seems mixed; confirm zh-Hant is appropriate -->
-
+<!doctype html>
+<html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="彣字 - Blogroll and links"> <!-- Added a basic description -->
-    <meta name="robots" content="index, follow"> <!-- Standard robots meta -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NOW — 全是 NOW</title>
+  <style>
+    :root{
+      --bg: #0b0e13;
+      --panel: rgba(255,255,255,0.04);
+      --edge: rgba(255,255,255,0.12);
+      --ink: rgba(255,255,255,0.94);
+      --muted: rgba(255,255,255,0.58);
+      --soft: rgba(255,255,255,0.16);
+      --tick: rgba(255,255,255,0.24);
+      --tickMajor: rgba(255,255,255,0.34);
 
-    <title>彣字</title>
+      --accent: #ff3b30; /* 警示紅 */
+      --accentGlow: rgba(255,59,48,.55);
+      --shadow: 0 25px 90px rgba(0,0,0,.58);
+    }
 
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
 
-    <!-- Favicon / Icons (Add your actual files) -->
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    body{
+      margin:0;
+      display:grid;
+      place-items:center;
+      background:
+        radial-gradient(1100px 900px at 50% 35%, rgba(255,59,48,.10), transparent 55%),
+        radial-gradient(1000px 800px at 35% 65%, rgba(255,255,255,.06), transparent 60%),
+        linear-gradient(180deg, #07090d, var(--bg));
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+                   "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
+                   "Segoe UI Emoji";
+      overflow:hidden;
+    }
 
-    <!-- Noto Serif SC Font from CDN -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/noto-serif-sc/1.0.0/noto-serif-sc.min.css" rel="stylesheet">
+    /* 微噪點質感 */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(255,255,255,.03) 0px,
+          rgba(255,255,255,.03) 1px,
+          transparent 2px,
+          transparent 4px
+        );
+      opacity:.06;
+      pointer-events:none;
+      mix-blend-mode: overlay;
+      filter: blur(.2px);
+    }
 
-    <style>
-        /* === Font Loading === */
-        @font-face {
-            font-family: 'HuWenMingChaoTi';
-            /* IMPORTANT: Verify this path ('../fonts/') is correct relative to THIS HTML file's location. */
-            src: url('../fonts/HuWenMingChaoTi.woff2') format('woff2');
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-            /* Good for performance */
-        }
+    .wrap{
+      width:min(92vw, 860px);
+      display:grid;
+      gap:18px;
+      place-items:center;
+    }
 
+    .topbar{
+      width:100%;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      padding:0 6px;
+      user-select:none;
+    }
 
-        /* === End Font Loading === */
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      line-height:1.05;
+    }
+    .brand .kicker{
+      font-size:12px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+    .brand .title{
+      font-weight:850;
+      font-size:16px;
+      letter-spacing:.08em;
+    }
 
-        /* Global Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    .status{
+      text-align:right;
+    }
+    .status .time{
+      font-variant-numeric: tabular-nums;
+      font-size:14px;
+      letter-spacing:.10em;
+      color:var(--muted);
+    }
+    .status .badge{
+      margin-top:7px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--soft);
+      background: rgba(0,0,0,.18);
+      box-shadow: 0 10px 40px rgba(0,0,0,.25);
+      font-size:12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.76);
+    }
+    .dot{
+      width:8px;height:8px;border-radius:50%;
+      background: var(--accent);
+      box-shadow: 0 0 14px var(--accentGlow);
+      animation: pulseDot 1.1s infinite ease-in-out;
+    }
+    @keyframes pulseDot{
+      0%{ transform:scale(.85); opacity:.55; }
+      45%{ transform:scale(1.25); opacity:1; }
+      100%{ transform:scale(.85); opacity:.55; }
+    }
 
-        /* Body Styling */
-        body {
-            /* Added HuWenMingChaoTi to the font stack */
-            font-family: 'HuWenMingChaoTi', serif;
-            line-height: 1.6;
-            padding: 10px;
-            /* Adjusted default padding */
-            background: linear-gradient(135deg, #001b30 0%, #003153 100%);
-            color: #f0f8ff;
-            /* AliceBlue - good contrast */
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            /* Removed flex-direction: column; let the content flow naturally */
-        }
+    .clock{
+      position:relative;
+      width:min(82vmin, 520px);
+      aspect-ratio:1/1;
+      border-radius:999px;
+      background:
+        radial-gradient(circle at 50% 40%, rgba(255,255,255,.09), transparent 42%),
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,.03), transparent 62%),
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.08));
+      border:1px solid var(--edge);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      display:grid;
+      place-items:center;
+    }
 
-        /* Main Content Wrapper - Using <main> tag */
-        main {
-            display: flex;
-            justify-content: space-between;
-            width: 70%;
-            max-width: 700px;
-            gap: 20px;
-            margin: 20px auto;
-            /* Added some margin top/bottom */
-        }
+    /* 盤面柔光 */
+    .clock::before{
+      content:"";
+      position:absolute;
+      inset:18px;
+      border-radius:999px;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(255,59,48,.12), transparent 50%),
+        radial-gradient(circle at 70% 70%, rgba(255,255,255,.08), transparent 58%),
+        radial-gradient(circle at 30% 80%, rgba(255,255,255,.06), transparent 58%);
+      filter: blur(10px);
+      opacity:.65;
+      pointer-events:none;
+    }
 
-        /* Blog List Container - Using <section> tag */
-        .blog-list-container {
-            flex: 1 1 45%;
-            /* Allow shrinking/growing, base width 45% */
-            padding: 1rem;
-            /* Slightly increased padding */
-            text-align: center;
-            background: rgba(0, 49, 83, 0.6);
-            border-radius: 10px;
-            box-shadow: 0 6px 24px 0 rgba(0, 29, 51, 0.5);
-            backdrop-filter: blur(4px);
-            /* Note: can impact performance */
-            border: 1px solid rgba(0, 119, 200, 0.3);
-            animation: glow 3s infinite ease-in-out;
-            /* Added ease-in-out */
-            height: auto;
-            /* Let height adjust to content */
-            overflow-y: visible;
-        }
+    /* 刻度圈（你圖裡有小短線；想更純就可關） */
+    .ticks{
+      position:absolute;
+      inset:14px;
+      border-radius:999px;
+      pointer-events:none;
+      opacity:.85;
+    }
+    .tick{
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:2px;
+      height:12px;
+      background: var(--tick);
+      transform-origin: 50% calc(100% - 2px);
+      border-radius:999px;
+    }
+    .tick.major{
+      height:18px;
+      background: var(--tickMajor);
+    }
 
-        /* Stagger animation */
-        .blog-list-container:nth-child(1) {
-            animation-delay: 0s;
-        }
+    /* NOW 文字環：外圈 + 內圈（更像你圖那種密集感） */
+    .ring{
+      position:absolute;
+      inset:0;
+      border-radius:999px;
+      pointer-events:none;
+    }
+    .label{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform-origin: 0 0;
+      font-weight:800;
+      font-size:12px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      white-space:nowrap;
+      color: rgba(255,255,255,.90);
+      text-shadow: 0 1px 0 rgba(0,0,0,.48);
+      opacity:.92;
+    }
 
-        .blog-list-container:nth-child(2) {
-            animation-delay: 1.5s;
-            /* Keep stagger */
-        }
+    /* 讓部分 NOW 有“警示呼吸感”，但仍然全是 NOW */
+    .label.pulse{
+      animation: nowPulse 1.9s infinite ease-in-out;
+      color: rgba(255,255,255,.96);
+    }
+    @keyframes nowPulse{
+      0%   { opacity:.55; filter: drop-shadow(0 0 0 rgba(255,59,48,0)); }
+      35%  { opacity:1;   filter: drop-shadow(0 0 10px rgba(255,59,48,.55)); }
+      70%  { opacity:.82; filter: drop-shadow(0 0 18px rgba(255,59,48,.78)); }
+      100% { opacity:.55; filter: drop-shadow(0 0 0 rgba(255,59,48,0)); }
+    }
 
-        /* Blog Grid - Using <ul> tag */
-        .blog-list {
-            list-style: none;
-            /* Remove default list bullets */
-            padding: 0;
-            /* Remove default list padding */
-            display: grid;
-            grid-template-columns: 1fr;
-            /* Single column */
-            gap: 10px;
-            /* Increased gap slightly */
-        }
+    /* 中心 NOW */
+    .center{
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:center;
+      pointer-events:none;
+    }
+    .center .now{
+      font-weight:950;
+      letter-spacing:.14em;
+      font-size: clamp(42px, 7.6vmin, 66px);
+      transform: translateY(6%);
+      color: rgba(255,255,255,.95);
+      text-shadow:
+        0 0 18px rgba(255,59,48,.10),
+        0 20px 70px rgba(0,0,0,.65);
+    }
 
-        /* Blog Item - Using <li> tag */
-        .blog-item {
-            padding: 8px;
-            /* Increased padding */
-            background: rgba(0, 67, 113, 0.4);
-            border-radius: 5px;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    /* 中心小軸心 */
+    .hub{
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:14px;
+      height:14px;
+      border-radius:999px;
+      transform: translate(-50%,-50%);
+      background: rgba(255,255,255,.75);
+      box-shadow: 0 10px 30px rgba(0,0,0,.55);
+      z-index:10;
+      pointer-events:none;
+    }
+    .hub::after{
+      content:"";
+      position:absolute;
+      inset:3px;
+      border-radius:999px;
+      background: rgba(0,0,0,.35);
+    }
 
-        .blog-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(72, 202, 255, 0.3);
-            background: rgba(0, 83, 140, 0.5);
-        }
+    /* 指針 */
+    .hands{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:9;
+    }
 
-        /* Blog Link Styling */
-        .blog-link {
-            cursor: help;
-            /* Keeps the help cursor for the title tooltip */
-            text-decoration: none;
-            color: #b8e4ff;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            /* Keep for underline effect */
-            margin-bottom: 4px;
-            /* Increased margin */
-            display: inline-block;
-            font-size: 0.9rem;
-            /* Slightly larger font */
-            font-weight: 500;
-            letter-spacing: 0.3px;
-            word-break: break-all;
-            /* Prevent long links overflowing */
-        }
+    .hand{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform-origin: 0 50%;
+      transform: translate(-2px,-50%) rotate(0deg);
+      border-radius:999px;
+      filter: drop-shadow(0 16px 26px rgba(0,0,0,.55));
+    }
 
-        /* Underline effect */
-        .blog-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background-color: #5ddbff;
-            transform: scaleX(0);
-            transform-origin: right;
-            transition: transform 0.3s ease;
-        }
+    .hand.hour{
+      width: 28%;
+      height: 7px;
+      background: rgba(255,255,255,.62);
+    }
+    .hand.minute{
+      width: 38%;
+      height: 5px;
+      background: rgba(255,255,255,.78);
+    }
+    .hand.second{
+      width: 46%;
+      height: 2px;
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 0 16px rgba(255,59,48,.35);
+    }
 
-        .blog-link:hover::after {
-            transform: scaleX(1);
-            transform-origin: left;
-        }
+    /* 秒針尾巴（更像機械感） */
+    .hand.second::before{
+      content:"";
+      position:absolute;
+      left:-18px;
+      top:50%;
+      width:18px;
+      height:2px;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,.50);
+      border-radius:999px;
+      opacity:.55;
+    }
 
-        .blog-link:hover {
-            color: #5ddbff;
-            text-shadow: 0 0 8px rgba(93, 219, 255, 0.4);
-        }
+    /* “NOW 警示字幕” */
+    .warning{
+      width:100%;
+      max-width: 860px;
+      display:flex;
+      justify-content:center;
+      padding:0 10px;
+      user-select:none;
+    }
+    .warning .line{
+      width:min(92vw, 700px);
+      text-align:center;
+      padding:10px 14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.25);
+      box-shadow: 0 20px 60px rgba(0,0,0,.35);
+      color: rgba(255,255,255,.78);
+      letter-spacing:.06em;
+      line-height:1.35;
+      font-size: 13px;
+    }
+    .warning strong{
+      color: rgba(255,255,255,.92);
+    }
+    .warning em{
+      font-style:normal;
+      color: rgba(255,59,48,.95);
+      text-shadow: 0 0 10px rgba(255,59,48,.18);
+      font-weight:800;
+      letter-spacing:.08em;
+    }
 
-        /* Blog Name Styling */
-        .blog-name {
-            color: #ffce94;
-            /* Light orange/gold */
-            font-weight: bold;
-            display: block;
-            font-size: 0.8rem;
-            /* Slightly larger */
-            letter-spacing: 0.5px;
-            margin-top: 2px;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-            word-break: break-word;
-        }
+    /* 小按鈕 */
+    .controls{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:center;
+      flex-wrap:wrap;
+      user-select:none;
+    }
+    button{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      padding:10px 14px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.85);
+      border:1px solid rgba(255,255,255,.12);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-weight:750;
+      font-size:12px;
+      box-shadow: 0 16px 50px rgba(0,0,0,.30);
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    button:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.085);
+      border-color: rgba(255,255,255,.16);
+    }
+    button:active{
+      transform: translateY(0px);
+    }
+    .danger{
+      background: rgba(255,59,48,.10);
+      border-color: rgba(255,59,48,.25);
+    }
 
-        /* Glow Animation */
-        @keyframes glow {
+    /* 小提示 */
+    .foot{
+      color: rgba(255,255,255,.40);
+      font-size:12px;
+      letter-spacing:.08em;
+      text-align:center;
+      user-select:none;
+    }
 
-            0%,
-            100% {
-                box-shadow: 0 0 5px rgba(72, 202, 255, 0.6);
-            }
-
-            50% {
-                box-shadow: 0 0 18px rgba(72, 202, 255, 0.9);
-            }
-
-            /* Increased glow intensity */
-        }
-
-        /* === Responsive Design === */
-        @media (max-width: 1024px) {
-            main {
-                width: 85%;
-                /* Wider on medium-large screens */
-            }
-        }
-
-        @media (max-width: 768px) {
-            main {
-                flex-direction: column;
-                /* Stack columns */
-                width: 70%;
-                /* Adjust width for tablets */
-                align-items: center;
-                /* Center stacked columns */
-            }
-
-            .blog-list-container {
-                width: 100%;
-                /* Full width when stacked */
-                margin-bottom: 20px;
-                /* Space between stacked items */
-                flex-basis: auto;
-                /* Reset flex basis */
-            }
-
-            /* Remove stagger delay when stacked */
-            .blog-list-container:nth-child(2) {
-                animation-delay: 0s;
-            }
-        }
-
-        @media (max-width: 576px) {
-            main {
-                width: 90%;
-                /* Wider on small screens */
-            }
-
-            body {
-                padding: 5px;
-            }
-
-            .blog-list-container {
-                padding: 0.8rem;
-            }
-
-            .blog-link,
-            .blog-name {
-                font-size: 0.85rem;
-                /* Adjust font size for readability */
-            }
-        }
-
-        @media (max-width: 480px) {
-            main {
-                width: 95%;
-                /* Almost full width on very small screens */
-            }
-        }
-    </style>
+    @media (prefers-reduced-motion: reduce){
+      .dot, .label.pulse{ animation:none !important; }
+    }
+  </style>
 </head>
 
 <body>
-    <!-- Use main semantic tag -->
-    <main>
-        <!-- Use section semantic tag -->
-        <section class="blog-list-container">
-            <!-- Use ul semantic tag for list -->
-            <ul class="blog-list" id="blogList1">
-                <!-- First half of blog items will be inserted here by JS -->
-            </ul>
-        </section>
+  <div class="wrap">
 
-        <section class="blog-list-container">
-            <ul class="blog-list" id="blogList2">
-                <!-- Second half of blog items will be inserted here by JS -->
-            </ul>
-        </section>
-    </main>
+    <div class="topbar">
+      <div class="brand">
+        <div class="kicker">a warning clock</div>
+        <div class="title">ALL IS <span style="color:rgba(255,59,48,.95)">NOW</span></div>
+      </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Blog data (consider fetching from JSON/API for larger lists)
-            // Fetch blog data from JSON file
-            fetch('data.json')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(blogData => {
-                    // Cache DOM elements
-                    const blogList1 = document.getElementById('blogList1');
-                    const blogList2 = document.getElementById('blogList2');
+      <div class="status">
+        <div class="time" id="liveTime">--:--:--</div>
+        <div class="badge"><span class="dot"></span> NOW RUNNING</div>
+      </div>
+    </div>
 
-                    // Function to create blog list item (now creates <li>)
-                    function createBlogItem(blog) {
-                        const blogItem = document.createElement('li'); // Use <li>
-                        blogItem.className = 'blog-item'; // Assign class to <li>
+    <div class="clock" id="clock">
+      <div class="ticks" id="ticks"></div>
+      <div class="ring" id="ringOuter"></div>
+      <div class="ring" id="ringInner"></div>
 
-                        // Sanitize comment before putting it in title attribute (basic example)
-                        const safeComment = blog.comment ? blog.comment.replace(/"/g, '"') : '';
+      <div class="hands">
+        <div class="hand hour" id="hHand"></div>
+        <div class="hand minute" id="mHand"></div>
+        <div class="hand second" id="sHand"></div>
+      </div>
 
-                        // Extract first part of domain, handle cases like .com.cn potentially needed more robustly
-                        const displayLink = blog.link.split('.')[0];
+      <div class="hub"></div>
 
-                        blogItem.innerHTML = `
-                            <a href="https://${blog.link}" class="blog-link" target="_blank" rel="noopener noreferrer" title="${safeComment || 'Visit link'}">${displayLink}</a>
-                            <span class="blog-name">${blog.name}</span>
-                        `;
-                        // Added https:// prefix and rel="noopener noreferrer" for security
+      <div class="center">
+        <div class="now">NOW</div>
+      </div>
+    </div>
 
-                        return blogItem;
-                    }
+    <div class="warning">
+      <div class="line" id="warningLine">
+        你以為還有「等一下」。
+        但世界只提供一種時間：<em>NOW</em>。<br/>
+        不是提醒你焦慮，而是提醒你：<strong>你正在錯過你自己。</strong>
+      </div>
+    </div>
 
-                    // Check if list elements exist before proceeding
-                    if (blogList1 && blogList2) {
-                        // Split the data into two halves
-                        const halfwayPoint = Math.ceil(blogData.length / 2);
-                        const firstHalf = blogData.slice(0, halfwayPoint);
-                        const secondHalf = blogData.slice(halfwayPoint);
+    <div class="controls">
+      <button id="btnCalm">CALM MODE</button>
+      <button class="danger" id="btnAlarm">ALARM MODE</button>
+      <button id="btnQuote">CHANGE MESSAGE</button>
+      <button id="btnFreeze">FREEZE HANDS</button>
+    </div>
 
-                        // Populate the first list
-                        firstHalf.forEach(blog => {
-                            blogList1.appendChild(createBlogItem(blog));
-                        });
+    <div class="foot">
+      Tip: 這個鐘不是報時，它在逼你承認：你唯一能做事的時間只有 NOW。
+    </div>
 
-                        // Populate the second list
-                        secondHalf.forEach(blog => {
-                            blogList2.appendChild(createBlogItem(blog));
-                        });
-                    } else {
-                        console.error("Blog list container elements not found!");
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching blog data:', error);
-                    // Optional: Display an error message to the user on the page
-                    const blogList1 = document.getElementById('blogList1');
-                    if (blogList1) {
-                        blogList1.innerHTML = '<li class="blog-item" style="color: #ffce94;">Failed to load blog list.</li>';
-                    }
-                });
+  </div>
 
-            // Logic moved inside fetch callback
+  <script>
+    // ====== 基本設定 ======
+    const ringOuter = document.getElementById('ringOuter');
+    const ringInner = document.getElementById('ringInner');
+    const ticksEl   = document.getElementById('ticks');
 
-            // The adjustLayout function is removed as CSS handles responsiveness.
+    const hHand = document.getElementById('hHand');
+    const mHand = document.getElementById('mHand');
+    const sHand = document.getElementById('sHand');
+    const liveTime = document.getElementById('liveTime');
 
-        }); // End DOMContentLoaded
-    </script>
+    const warningLine = document.getElementById('warningLine');
+    const btnCalm = document.getElementById('btnCalm');
+    const btnAlarm = document.getElementById('btnAlarm');
+    const btnQuote = document.getElementById('btnQuote');
+    const btnFreeze = document.getElementById('btnFreeze');
+
+    let frozen = false;
+    let alarmMode = false;
+
+    // ====== 可替換的 “NOW 警示” 文案 ======
+    const messages = [
+      '你以為還有「等一下」。但世界只提供一種時間：<em>NOW</em>。<br/>不是提醒你焦慮，而是提醒你：<strong>你正在錯過你自己。</strong>',
+      '未來不是某個地方，它只是你不敢面對的此刻。<br/><strong>把你的人生還給 <em>NOW</em>。</strong>',
+      '你最昂貴的東西不是天賦，不是資源，是下一秒。<br/>下一秒屬於 <em>NOW</em>。',
+      '拖延其實是一種信仰：相信你還有很多時間。<br/>但時間的真名只有：<em>NOW</em>。',
+      '<strong>不是「今天」不是「明天」</strong>——是 <em>NOW</em>。<br/>你現在就可以開始，並且只有現在。',
+    ];
+
+    function pickMessage(){
+      const i = Math.floor(Math.random() * messages.length);
+      warningLine.innerHTML = messages[i];
+    }
+
+    // ====== 生成刻度 ======
+    // 60刻度，12個主刻度
+    function buildTicks(){
+      ticksEl.innerHTML = '';
+      for(let i=0;i<60;i++){
+        const t = document.createElement('div');
+        t.className = 'tick' + ((i%5===0)?' major':'');
+        const deg = i * 6; // 360/60
+        t.style.transform = `translate(-1px,-50%) rotate(${deg}deg)`;
+        ticksEl.appendChild(t);
+      }
+    }
+
+    // ====== 生成 NOW 環 ======
+    // 外圈密一點，內圈再密一點，模仿你圖那種“像刻痕一樣的 NOW”
+    function buildNowRing(targetEl, radiusPercent, count, fontSize, jitterDeg = 0){
+      targetEl.innerHTML = '';
+      const center = { x: 0, y: 0 };
+
+      for(let i=0;i<count;i++){
+        const label = document.createElement('div');
+        label.className = 'label';
+
+        // 讓一部分文字變“警示呼吸”，但仍然全部是 NOW
+        // 比例：大概每 7~9 個一個 pulse
+        if (i % 8 === 0) label.classList.add('pulse');
+
+        label.textContent = 'NOW';
+
+        // 角度：均分360度 + 可選抖動
+        const baseDeg = (i * 360 / count) + jitterDeg;
+
+        // 位置：沿著半徑分佈
+        // 先把文字放到中心點，再用 transform 推到半徑位置並旋轉對齊
+        const r = radiusPercent;
+        label.style.fontSize = fontSize + 'px';
+
+        // 這個 transform 設計重點：
+        // 1) translate(-50%,-50%) 把起點對準中心
+        // 2) rotate(baseDeg) 讓它沿圓周轉到對應角度
+        // 3) translate(r, 0) 推到半徑位置
+        // 4) rotate(90deg) 讓文字方向更像貼著圓周（和你圖一致）
+        label.style.transform = `
+          translate(-50%,-50%)
+          rotate(${baseDeg}deg)
+          translate(${r}px, 0)
+          rotate(90deg)
+        `;
+
+        targetEl.appendChild(label);
+      }
+    }
+
+    // ====== 指針更新（真實時間） ======
+    function updateHands(){
+      if (frozen) return;
+
+      const d = new Date();
+      const h = d.getHours();
+      const m = d.getMinutes();
+      const s = d.getSeconds();
+      const ms = d.getMilliseconds();
+
+      // 讓秒針順滑（ms）
+      const sec = s + ms/1000;
+      const min = m + sec/60;
+      const hour = (h%12) + min/60;
+
+      const sDeg = sec * 6;         // 360/60
+      const mDeg = min * 6;
+      const hDeg = hour * 30;       // 360/12
+
+      hHand.style.transform = `translate(-2px,-50%) rotate(${hDeg}deg)`;
+      mHand.style.transform = `translate(-2px,-50%) rotate(${mDeg}deg)`;
+      sHand.style.transform = `translate(-2px,-50%) rotate(${sDeg}deg)`;
+
+      // 上方顯示時間
+      const pad = (n)=> String(n).padStart(2,'0');
+      liveTime.textContent = `${pad(h)}:${pad(m)}:${pad(s)}`;
+    }
+
+    // ====== 模式切換（CALM / ALARM） ======
+    function setCalm(){
+      alarmMode = false;
+      document.documentElement.style.setProperty('--accent', '#ff3b30');
+      // calm：降低 pulse 強度（用 opacity 模擬）
+      ringOuter.querySelectorAll('.label.pulse').forEach(el => el.style.animationDuration = '2.4s');
+      ringInner.querySelectorAll('.label.pulse').forEach(el => el.style.animationDuration = '2.4s');
+      warningLine.style.borderColor = 'rgba(255,255,255,.12)';
+    }
+
+    function setAlarm(){
+      alarmMode = true;
+      // alarm：提高呼吸頻率 + 警示紅更明顯
+      ringOuter.querySelectorAll('.label.pulse').forEach(el => el.style.animationDuration = '1.2s');
+      ringInner.querySelectorAll('.label.pulse').forEach(el => el.style.animationDuration = '1.2s');
+      warningLine.style.borderColor = 'rgba(255,59,48,.30)';
+    }
+
+    function toggleFreeze(){
+      frozen = !frozen;
+      btnFreeze.textContent = frozen ? 'UNFREEZE' : 'FREEZE HANDS';
+      // 冻结时：给字幕加一句冷冷的提醒
+      if(frozen){
+        warningLine.innerHTML = '你可以把指針按住。<br/>但你按不住的是：<em>NOW</em>。';
+      }else{
+        pickMessage();
+      }
+    }
+
+    // ====== 初始化 ======
+    buildTicks();
+
+    // 讓環看起來更像你圖：外圈字大一些、內圈略小且更密
+    // radiusPercent 用像素更好控，所以等 layout 後算一次
+    function layoutRings(){
+      const clock = document.getElementById('clock');
+      const size = clock.getBoundingClientRect().width;
+      // 把半徑寫成像素：外圈靠近邊，內圈稍微往內
+      const outerR = (size/2) - 34;
+      const innerR = (size/2) - 58;
+
+      // 全是 NOW：外圈較稀、內圈較密（模仿“壓迫感”）
+      buildNowRing(ringOuter, outerR, 44, 12, -4);  // 44個NOW
+      buildNowRing(ringInner, innerR, 60, 11,  2);  // 60個NOW（更密）
+    }
+
+    layoutRings();
+    window.addEventListener('resize', layoutRings);
+
+    pickMessage();
+    setCalm();
+
+    // ====== 互動 ======
+    btnCalm.addEventListener('click', ()=>{
+      setCalm();
+      warningLine.innerHTML = '冷靜不是拖延的藉口。<br/>冷靜，是把力量交還給 <em>NOW</em>。';
+    });
+
+    btnAlarm.addEventListener('click', ()=>{
+      setAlarm();
+      warningLine.innerHTML = '這不是提醒，這是警報。<br/><strong>你正在把人生換成“等一下”。</strong> 把它奪回來：<em>NOW</em>。';
+    });
+
+    btnQuote.addEventListener('click', pickMessage);
+    btnFreeze.addEventListener('click', toggleFreeze);
+
+    // ====== 動畫循環 ======
+    function loop(){
+      updateHands();
+      requestAnimationFrame(loop);
+    }
+    loop();
+  </script>
 </body>
-
 </html>
