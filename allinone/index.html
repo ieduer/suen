@@ -218,14 +218,28 @@
         /* === GLOBAL & LAYOUT === */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; height: 100%; }
+
         body {
             font-family: 'HuWenMingChaoTi', 'Noto Sans TC', 'NotoSansCJKsc', 'Helvetica Neue', Arial, sans-serif;
             background: var(--background-gradient);
             color: var(--text-color);
+
+            /* ✅ 用动态视口高度，避免移动端地址栏导致顶/底被吃掉 */
             height: 100vh;
+            height: 100svh;
+            height: 100dvh;
             min-height: 100vh;
-            overflow-y: hidden;
-            padding: 16px;
+            min-height: 100svh;
+            min-height: 100dvh;
+
+            /* ✅ 安全区适配（iOS 刘海/底部手势条） */
+            padding-top: calc(16px + env(safe-area-inset-top));
+            padding-right: calc(16px + env(safe-area-inset-right));
+            padding-bottom: calc(16px + env(safe-area-inset-bottom));
+            padding-left: calc(16px + env(safe-area-inset-left));
+
+            overflow: hidden;
+
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -247,14 +261,21 @@
         .skip-link:focus { left: 12px; outline: none; }
 
         .container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
+            /* ✅ 用 Grid 固定三栏：不会因为宽度临界而“自动换行截断” */
             width: 100%;
             max-width: 1400px;
-            flex: 1 0 auto;
+
+            flex: 1 1 auto;
+            min-height: 0;
+            height: 100%;
+
+            display: grid;
+            grid-template-columns:
+                minmax(240px, 1fr)
+                minmax(360px, 520px)
+                minmax(240px, 1fr);
             gap: 16px;
-            height: calc(100vh - 32px);
+            align-items: stretch;
         }
 
         /* === HEIGHT-BASED FIT === */
@@ -687,16 +708,40 @@
 
         /* === RESPONSIVE DESIGN === */
         @media (max-width: 1000px) {
-            body { padding: 15px; height: auto; min-height: 100vh; overflow-y: auto; }
-            .container { flex-direction: column; padding: 0; height: auto; gap: 12px; }
+            body {
+                padding-top: calc(15px + env(safe-area-inset-top));
+                padding-right: calc(15px + env(safe-area-inset-right));
+                padding-bottom: calc(15px + env(safe-area-inset-bottom));
+                padding-left: calc(15px + env(safe-area-inset-left));
+
+                height: auto;
+                min-height: 100vh;
+                min-height: 100svh;
+                min-height: 100dvh;
+
+                overflow-y: auto;
+            }
+            .container { grid-template-columns: 1fr; height: auto; gap: 12px; }
             .column { width: 100%; margin-bottom: 20px; max-width: none; height: auto; overflow: visible; }
             .column:last-child { margin-bottom: 0; }
             .side-scroll { overflow: visible; padding-right: 0; }
             .center-scroll { overflow: visible; padding-right: 0; }
         }
         @media (max-width: 480px) {
-            body { padding: 10px; height: auto; min-height: 100vh; overflow-y: auto; }
-            .container { flex-direction: column; height: auto; gap: 10px; }
+            body {
+                padding-top: calc(10px + env(safe-area-inset-top));
+                padding-right: calc(10px + env(safe-area-inset-right));
+                padding-bottom: calc(10px + env(safe-area-inset-bottom));
+                padding-left: calc(10px + env(safe-area-inset-left));
+
+                height: auto;
+                min-height: 100vh;
+                min-height: 100svh;
+                min-height: 100dvh;
+
+                overflow-y: auto;
+            }
+            .container { grid-template-columns: 1fr; height: auto; gap: 10px; }
             .column { padding: 12px; margin-bottom: 12px; height: auto; overflow: visible; }
             .link-button { padding: 14px 12px; font-size: 1rem; border-radius: 12px; }
             .theme-toggle-logo-button { margin-bottom: 10px; }
