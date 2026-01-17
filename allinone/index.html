@@ -45,7 +45,6 @@
         const theme = (saved === 'dark' || saved === 'light') ? saved : sys;
 
         document.documentElement.classList.toggle('dark-mode', theme === 'dark');
-        // Let UA pick correct form controls/scrollbars
         document.documentElement.style.colorScheme = (theme === 'dark') ? 'dark' : 'light';
     })();
     </script>
@@ -82,11 +81,10 @@
             --logo-focus-shadow-light: rgba(148, 210, 189, 0.5);
 
             /* Surface system for coordination */
-            --surface-main-light: var(--neo-bg); /* center column surface */
+            --surface-main-light: var(--neo-bg);
             --surface-left-light: color-mix(in oklab, var(--neo-bg) 90%, #0a9396 10%);
             --surface-right-light: color-mix(in oklab, var(--neo-bg) 90%, #e9d8a6 10%);
 
-            /* defaults (light) */
             --surface-main: var(--surface-main-light);
             --surface-left: var(--surface-left-light);
             --surface-right: var(--surface-right-light);
@@ -110,7 +108,6 @@
             --progress-bar-text-shadow-dark: 1px 1px 2px rgba(0, 0, 0, 0.8);
             --logo-focus-shadow-dark: rgba(94, 129, 172, 0.6);
 
-            /* Default to Light Mode variables */
             --primary-gradient: var(--primary-gradient-light);
             --secondary-gradient: var(--secondary-gradient-light);
             --background-gradient: var(--background-gradient-light);
@@ -132,7 +129,6 @@
             --theme-transition: background 0.3s ease, color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* Apply Dark Mode Variables (support html.dark-mode OR body.dark-mode) */
         html.dark-mode body,
         body.dark-mode {
             --primary-gradient: var(--primary-gradient-dark);
@@ -159,12 +155,10 @@
 
         /* ===== Neumorphism (新拟物) styles ===== */
         :root {
-          /* base for light mode */
-          --neo-bg: #e9edf3;                         /* surface color */
-          --neo-light: rgba(255,255,255,0.95);       /* highlight */
-          --neo-dark:  rgba(163,177,198,0.60);       /* shadow */
+          --neo-bg: #e9edf3;
+          --neo-light: rgba(255,255,255,0.95);
+          --neo-dark:  rgba(163,177,198,0.60);
         }
-        /* dark mode overrides */
         html.dark-mode body,
         body.dark-mode {
           --neo-bg: #1e222a;
@@ -172,10 +166,8 @@
           --neo-dark:  rgba(0,0,0,0.60);
         }
 
-        /* scope container: ensure parent surface equals child surface for proper emboss effect */
         .neo-scope { background: var(--neo-bg) !important; }
 
-        /* raised surface */
         .neo {
           background: var(--neo-bg);
           border-radius: 16px;
@@ -184,22 +176,18 @@
             -12px -12px 24px var(--neo-light);
           transition: box-shadow .2s ease, transform .15s ease, background .2s ease;
         }
-        /* subtle directional gradient to add realism */
         .neo-gradient {
           background: linear-gradient(145deg,
             color-mix(in oklab, var(--neo-bg) 85%, white 15%),
             color-mix(in oklab, var(--neo-bg) 85%, black 15%));
         }
-        /* pressed/concave */
         .neo-inset {
           box-shadow:
             inset 8px 8px 16px var(--neo-dark),
             inset -8px -8px 16px var(--neo-light);
         }
-        /* round chip/button */
         .neo-round { border-radius: 50%; padding: 10px; }
 
-        /* interactive states */
         .neo:hover {
           box-shadow:
             6px 6px 12px var(--neo-dark),
@@ -213,7 +201,6 @@
           transform: translateY(0);
         }
 
-        /* tracks (progress, sliders) use concave look */
         .neo-track {
           background: var(--neo-bg);
           border-radius: 999px;
@@ -222,10 +209,8 @@
             inset -7px -7px 14px var(--neo-light);
         }
 
-        /* optional thin border for accessibility on low-contrast displays */
         .neo-border { border: 1px solid color-mix(in oklab, var(--neo-bg), #000 12%); }
 
-        /* component-specific overrides so neo wins over previously defined backgrounds */
         .link-button.neo { background: var(--primary-gradient); color: var(--button-text-color); box-shadow: 0 2px 5px rgba(0,0,0, 0.1); }
         .countdown-item.neo { background: var(--neo-bg); }
         .footer.neo { background: var(--neo-bg); color: var(--dark-text-color); }
@@ -239,15 +224,14 @@
             color: var(--text-color);
             height: 100vh;
             min-height: 100vh;
-            overflow-y: hidden; /* avoid page scroll by default */
-            padding: 16px;      /* slightly tighter to fit all */
+            overflow-y: hidden;
+            padding: 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
             transition: var(--theme-transition);
         }
 
-        /* A11y: Skip link */
         .skip-link {
             position: absolute;
             left: -9999px;
@@ -270,7 +254,7 @@
             max-width: 1400px;
             flex: 1 0 auto;
             gap: 16px;
-            height: calc(100vh - 32px); /* body padding top+bottom (16*2) */
+            height: calc(100vh - 32px);
         }
 
         /* === HEIGHT-BASED FIT === */
@@ -308,11 +292,11 @@
             .progress-bar-container { height: 22px; }
         }
 
-        /* brand accent color for SUEN */
         .brand-accent { color: #d9244c !important; }
         .footer a .brand-accent { color: #d9244c !important; }
         .footer a:hover .brand-accent, .footer a:focus .brand-accent { color: #d9244c !important; text-decoration: underline; }
 
+        /* ✅ 核心修复：三列永远锁在各自底框里，内容多了只在列内部滚动 */
         .column {
             flex: 1;
             padding: 16px;
@@ -323,13 +307,37 @@
             transition: var(--theme-transition);
             min-width: 0;
             height: 100%;
+
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 0;
         }
+
         .left-column { background: var(--surface-left); --panel-surface: var(--surface-left); }
         .right-column { background: var(--surface-right); --panel-surface: var(--surface-right); }
 
-        /* Fill side columns vertically */
-        .left-column, .right-column { display: flex; flex-direction: column; justify-content: space-between; }
-        .left-column .link-button, .right-column .link-button { margin-bottom: 0; }
+        /* ✅ 左右栏：滚动区，永不溢出底框 */
+        .left-column, .right-column {
+            justify-content: flex-start;
+        }
+
+        .side-scroll {
+            flex: 1;
+            min-height: 0;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-right: 4px;
+        }
+        .side-scroll .link-button { margin-bottom: 0; }
+
+        /* scrollbar 细一点，别抢戏 */
+        .side-scroll { scrollbar-width: thin; scrollbar-color: rgba(120,120,120,0.35) transparent; }
+        .side-scroll::-webkit-scrollbar { width: 8px; }
+        .side-scroll::-webkit-scrollbar-thumb { background: rgba(120,120,120,0.35); border-radius: 10px; }
+        .side-scroll::-webkit-scrollbar-track { background: transparent; }
 
         /* === MIDDLE COLUMN === */
         .countdown-container {
@@ -338,8 +346,26 @@
             gap: 12px;
             background: var(--surface-main);
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start;
+            overflow: hidden;
+            min-height: 0;
         }
+
+        /* ✅ 中栏滚动区：倒计时内容滚动，footer 固定在底框内 */
+        .center-scroll {
+            flex: 1;
+            min-height: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow: auto;
+            padding-right: 4px;
+        }
+        .center-scroll { scrollbar-width: thin; scrollbar-color: rgba(120,120,120,0.35) transparent; }
+        .center-scroll::-webkit-scrollbar { width: 8px; }
+        .center-scroll::-webkit-scrollbar-thumb { background: rgba(120,120,120,0.35); border-radius: 10px; }
+        .center-scroll::-webkit-scrollbar-track { background: transparent; }
 
         /* === LOGO THEME TOGGLE === */
         .theme-toggle-logo-button {
@@ -353,6 +379,7 @@
             -webkit-tap-highlight-color: transparent;
             border-radius: 8px;
             transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            flex: 0 0 auto;
         }
         .logo-img { display: block; width: 72px; height: auto; border-radius: 8px; }
         .theme-toggle-logo-button:hover .logo-img { opacity: 0.85; transform: scale(1.05); }
@@ -390,15 +417,13 @@
         #current-time-clock { font-size: 1.6rem; font-weight: 900; margin-bottom: 8px !important; }
         #current-date-gregorian { font-size: 1rem; opacity: 0.9; }
 
-        /* === PROGRESS BARS (GEEK/HUD: no text pill, no “backfill bubble”, clearer read) === */
+        /* === PROGRESS BARS (GEEK/HUD) === */
         .progress-item .countdown-display { display: none; }
 
-        /* Per-unit accent (keeps your semantic colors, but in a HUD style) */
         .progress-day  { --hud-accent: #00d084; }
         .progress-week { --hud-accent: #ffb020; }
         .progress-year { --hud-accent: #9a7dff; }
 
-        /* Track: darker “HUD panel” with grid + scanline (subtle) */
         .progress-bar-container {
             width: 92%;
             height: 28px;
@@ -407,7 +432,6 @@
             overflow: hidden;
             border-radius: 999px;
 
-            /* HUD track surface */
             background:
               linear-gradient(180deg,
                 color-mix(in oklab, var(--neo-bg) 78%, #000 22%),
@@ -422,7 +446,6 @@
             transition: var(--theme-transition);
         }
 
-        /* Grid ticks (tech look, but not noisy) */
         .progress-bar-container::before {
             content: '';
             position: absolute;
@@ -439,7 +462,6 @@
             mix-blend-mode: overlay;
         }
 
-        /* Scanline sweep (very subtle, reads “geek”) */
         .progress-bar-container::after {
             content: '';
             position: absolute;
@@ -460,14 +482,11 @@
             100% { transform: translateX(85%); }
         }
 
-        /* Fill: solid + stripes + endpoint line (NO bubble cap) */
         .progress-bar-fill {
             height: 100%;
             width: 0%;
             position: relative;
             overflow: hidden;
-
-            /* avoid “rounded bubble backfill” */
             border-radius: 999px 6px 6px 999px;
 
             background: linear-gradient(90deg,
@@ -481,7 +500,6 @@
             transition: width 0.5s ease-out, var(--theme-transition);
         }
 
-        /* stripes overlay */
         .progress-bar-fill::after {
             content: '';
             position: absolute;
@@ -504,7 +522,6 @@
             100% { transform: translateX(18px); }
         }
 
-        /* endpoint marker line (cleaner than a circle) */
         .progress-bar-fill::before {
             content: '';
             position: absolute;
@@ -524,7 +541,6 @@
             .progress-bar-fill::after { animation: none; }
         }
 
-        /* Percentage text: NO background pill; monospace HUD text */
         .progress-bar-text {
             position: absolute;
             top: 50%;
@@ -536,8 +552,6 @@
             letter-spacing: 0.6px;
             white-space: nowrap;
             user-select: none;
-
-            /* remove the old background capsule */
             padding: 0;
             border-radius: 0;
             background: transparent;
@@ -558,7 +572,6 @@
               0 0 12px color-mix(in oklab, var(--hud-accent), #fff 28%);
         }
 
-        /* === PROGRESS BAR ENDING (last 5%) === */
         .progress-bar-fill.is-ending {
             background: #d9244c !important;
             box-shadow:
@@ -606,7 +619,6 @@
             font-weight: 800;
             transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
             display: block;
-            margin-bottom: 8px;
             border: none;
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0, 0.1);
@@ -619,7 +631,6 @@
         }
         .link-button:focus-visible { outline: 2px solid var(--footer-link-hover); outline-offset: 2px; }
 
-        /* === SIDE LINK variant: toned surfaces to harmonize with center === */
         .side-link {
             background: color-mix(in oklab, var(--panel-surface) 92%, white 8%);
             color: var(--dark-text-color);
@@ -635,7 +646,6 @@
         html.dark-mode .side-link,
         body.dark-mode .side-link { color: var(--text-color); border-color: color-mix(in oklab, var(--panel-surface), #fff 12%); }
 
-        /* === SIDE LINK Shoulder Highlight === */
         .left-column .side-link,
         .right-column .side-link {
             background:
@@ -657,7 +667,7 @@
             border-color: color-mix(in oklab, var(--panel-surface), #fff 10%);
         }
 
-        /* === FOOTER (STYLED AS A COUNTDOWN-ITEM) === */
+        /* === FOOTER === */
         .footer {
             background-color: var(--countdown-item-bg);
             border-radius: 15px;
@@ -667,6 +677,7 @@
             font-size: 0.85rem;
             color: var(--text-color);
             transition: var(--theme-transition);
+            flex: 0 0 auto;
         }
         .footer p { margin: 0; }
         #footer-copyright,
@@ -678,22 +689,18 @@
         @media (max-width: 1000px) {
             body { padding: 15px; height: auto; min-height: 100vh; overflow-y: auto; }
             .container { flex-direction: column; padding: 0; height: auto; gap: 12px; }
-            .column { width: 100%; margin-bottom: 20px; max-width: none; height: auto; }
+            .column { width: 100%; margin-bottom: 20px; max-width: none; height: auto; overflow: visible; }
             .column:last-child { margin-bottom: 0; }
-            .left-column, .right-column { justify-content: flex-start; }
-            .left-column .link-button, .right-column .link-button { margin-bottom: 8px; }
-            .countdown-container { gap: 10px; }
+            .side-scroll { overflow: visible; padding-right: 0; }
+            .center-scroll { overflow: visible; padding-right: 0; }
         }
         @media (max-width: 480px) {
             body { padding: 10px; height: auto; min-height: 100vh; overflow-y: auto; }
             .container { flex-direction: column; height: auto; gap: 10px; }
-            .column { padding: 12px; margin-bottom: 12px; height: auto; }
-            .left-column, .right-column { justify-content: flex-start; }
-            .left-column .link-button, .right-column .link-button { margin-bottom: 10px; }
+            .column { padding: 12px; margin-bottom: 12px; height: auto; overflow: visible; }
             .link-button { padding: 14px 12px; font-size: 1rem; border-radius: 12px; }
             .theme-toggle-logo-button { margin-bottom: 10px; }
             .logo-img { width: 56px; }
-            .countdown-container { gap: 8px; }
             .countdown-item { padding: 10px; }
             .countdown-title { font-size: 1rem; }
             .countdown-display { font-size: 1.3rem; }
@@ -709,80 +716,82 @@
 <body>
     <a class="skip-link" href="#main">跳到主內容</a>
 
-    <!-- Container for main content -->
     <div class="container" id="main">
 
         <!-- Left Column (Links) -->
         <nav class="column left-column neo-scope" aria-label="左側導航">
-            <a href="https://gk.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI高考">AI 高考</a>
-            <a href="https://mx.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI默寫">AI 默寫</a>
-            <a href="https://mf.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問高考詩文">高考默寫</a>
-            <a href="https://kz.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI論語">AI 論語</a>
-            <a href="https://hlm.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI紅樓夢">AI 紅樓夢</a>
-            <a href="https://kw.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI課文">AI 課文</a>
-            <a href="https://750.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI選校">AI 選校</a>
-            <a href="https://jc.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI教材">AI 教材</a>
-            <a href="https://www.12.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="教材PDF">教材 PDF</a>
-            <a href="https://forum.rdfzer.com" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="彣彰">彣彰</a>
-            <a href="https://class.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="高中語文">高中語文</a>
-            <a href="https://h.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="家長">家長</a>
-            <a href="https://seiue.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="50塊">50 塊</a>
-            <a href="https://xz.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="YT-DLP">下載</a>
-            <a href="https://wx.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="FWechat">搬遷</a>
-            <a href="https://todo.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="To-Do">To-Do</a>
-            <a href="https://bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="SUEN">BLOG</a>
+            <div class="side-scroll" aria-label="左側鏈接列表">
+                <a href="https://gk.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI高考">AI 高考</a>
+                <a href="https://mx.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI默寫">AI 默寫</a>
+                <a href="https://mf.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="訪問高考詩文">高考默寫</a>
+                <a href="https://kz.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI論語">AI 論語</a>
+                <a href="https://hlm.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI紅樓夢">AI 紅樓夢</a>
+                <a href="https://kw.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI課文">AI 課文</a>
+                <a href="https://750.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI選校">AI 選校</a>
+                <a href="https://jc.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="AI教材">AI 教材</a>
+                <a href="https://www.12.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="教材PDF">教材 PDF</a>
+                <a href="https://forum.rdfzer.com" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="彣彰">彣彰</a>
+                <a href="https://class.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="高中語文">高中語文</a>
+                <a href="https://h.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="家長">家長</a>
+                <a href="https://seiue.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="50塊">50 塊</a>
+                <a href="https://xz.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="YT-DLP">下載</a>
+                <a href="https://wx.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="FWechat">搬遷</a>
+                <a href="https://todo.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="To-Do">To-Do</a>
+                <a href="https://bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="SUEN">BLOG</a>
+            </div>
         </nav>
 
         <!-- Middle Countdown Column -->
         <main class="column countdown-container neo-scope" aria-label="時間與倒計時">
-             <!-- Theme Toggle Button -->
             <button id="theme-toggle-logo-button" class="theme-toggle-logo-button neo neo-round" aria-label="切換暗黑模式" type="button">
                 <img src="https://img.bdfz.net/20250503003.webp" alt="Logo - 點擊切換主題" class="logo-img" loading="lazy">
             </button>
 
-            <!-- Countdown Items -->
-            <section id="current-time" class="countdown-item neo neo-gradient" aria-label="當前時間">
-                <div class="countdown-display">
-                    <span id="current-time-clock">--:--:--</span>
-                    <span id="current-date-gregorian">----年--月--日 ---</span>
-                </div>
-            </section>
+            <!-- ✅ 滚动内容区（倒计时/进度条都在这里滚动） -->
+            <div class="center-scroll" aria-label="時間面板內容">
+                <section id="current-time" class="countdown-item neo neo-gradient" aria-label="當前時間">
+                    <div class="countdown-display">
+                        <span id="current-time-clock">--:--:--</span>
+                        <span id="current-date-gregorian">----年--月--日 ---</span>
+                    </div>
+                </section>
 
-            <section id="gaokao-countdown" class="countdown-item neo neo-gradient" aria-label="2026高考倒計時">
-                <h2 class="countdown-title">2026高考倒計時</h2>
-                <div class="countdown-display" aria-live="polite">計算中...</div>
-            </section>
+                <section id="gaokao-countdown" class="countdown-item neo neo-gradient" aria-label="2026高考倒計時">
+                    <h2 class="countdown-title">2026高考倒計時</h2>
+                    <div class="countdown-display" aria-live="polite">計算中...</div>
+                </section>
 
-            <section id="day-progress" class="countdown-item progress-item neo neo-gradient progress-day" aria-label="今日進度">
-                <h2 class="countdown-title" id="day-progress-title">今日已逝</h2>
-                <div class="progress-bar-container neo-track" role="progressbar" aria-label="今日已逝進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                    <div class="progress-bar-fill" id="day-progress-fill"></div>
-                    <span class="progress-bar-text" id="day-progress-text">0.00%</span>
-                </div>
-            </section>
+                <section id="day-progress" class="countdown-item progress-item neo neo-gradient progress-day" aria-label="今日進度">
+                    <h2 class="countdown-title" id="day-progress-title">今日已逝</h2>
+                    <div class="progress-bar-container neo-track" role="progressbar" aria-label="今日已逝進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                        <div class="progress-bar-fill" id="day-progress-fill"></div>
+                        <span class="progress-bar-text" id="day-progress-text">0.00%</span>
+                    </div>
+                </section>
 
-            <section id="week-progress" class="countdown-item progress-item neo neo-gradient progress-week" aria-label="本週進度">
-                <h2 class="countdown-title" id="week-progress-title">本週已逝</h2>
-                <div class="progress-bar-container neo-track" role="progressbar" aria-label="本週已逝進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                    <div class="progress-bar-fill" id="week-progress-fill"></div>
-                    <span class="progress-bar-text" id="week-progress-text">0.00%</span>
-                </div>
-            </section>
+                <section id="week-progress" class="countdown-item progress-item neo neo-gradient progress-week" aria-label="本週進度">
+                    <h2 class="countdown-title" id="week-progress-title">本週已逝</h2>
+                    <div class="progress-bar-container neo-track" role="progressbar" aria-label="本週已逝進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                        <div class="progress-bar-fill" id="week-progress-fill"></div>
+                        <span class="progress-bar-text" id="week-progress-text">0.00%</span>
+                    </div>
+                </section>
 
-            <section id="year-progress" class="countdown-item progress-item neo neo-gradient progress-year" aria-label="年度進度">
-                <h2 class="countdown-title" id="year-progress-title">年度已逝</h2>
-                <div class="progress-bar-container neo-track" role="progressbar" aria-label="年度已逝進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                    <div class="progress-bar-fill" id="year-progress-fill"></div>
-                    <span class="progress-bar-text" id="year-progress-text">0.00%</span>
-                </div>
-            </section>
+                <section id="year-progress" class="countdown-item progress-item neo neo-gradient progress-year" aria-label="年度進度">
+                    <h2 class="countdown-title" id="year-progress-title">年度已逝</h2>
+                    <div class="progress-bar-container neo-track" role="progressbar" aria-label="年度已逝進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                        <div class="progress-bar-fill" id="year-progress-fill"></div>
+                        <span class="progress-bar-text" id="year-progress-text">0.00%</span>
+                    </div>
+                </section>
 
-            <section id="human-timer" class="countdown-item neo neo-gradient" aria-label="生民以來">
-                <h2 class="countdown-title">生民以來</h2>
-                <div class="countdown-display" id="humanTime" aria-live="polite">計算中...</div>
-            </section>
+                <section id="human-timer" class="countdown-item neo neo-gradient" aria-label="生民以來">
+                    <h2 class="countdown-title">生民以來</h2>
+                    <div class="countdown-display" id="humanTime" aria-live="polite">計算中...</div>
+                </section>
+            </div>
 
-            <!-- Footer Section (Restyled with IP info) -->
+            <!-- ✅ Footer 固定在中栏底部（永远不溢出底框） -->
             <footer class="footer neo neo-gradient" id="site-footer" aria-live="polite">
                 <p id="footer-copyright">© 2026 <a href="https://signal.me/#eu/iHIf8I5xEy7Rf14je_bFWgCInCewjlbiTH_FcxHq-CATrKyfihdBwIUD-QBlDS0G" target="_blank" rel="noopener noreferrer"><span class="brand-accent">SUEN</span></a></p>
                 <p id="footer-ip-city"></p>
@@ -792,23 +801,25 @@
 
         <!-- Right Column (Links) -->
         <nav class="column right-column neo-scope" aria-label="右側導航">
-            <a href="https://tree.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="樹洞">樹洞</a>
-            <a href="https://chat.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="Anon Hourly Chat">Anon Hourly Chat</a>
-            <a href="https://openai.com/news/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="OpenAI">OpenAI</a>
-            <a href="https://aistudio.google.com/prompts/new_chat" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="Gemini">Gemini</a>
-            <a href="https://archive.org/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="Internet Archive">Internet Archive</a>
-            <a href="https://notebooklm.google.com/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="NotebookLM">NotebookLM</a>
-            <a href="https://github.com/ieduer" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub-Suen">GitHub</a>
-            <a href="https://x.com/ieduer" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="X">X</a>
-            <a href="https://user.growp.net/user/gateway" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="校內門戶">門戶</a>
-            <a href="https://chalk-c3.seiue.com/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="希悦">希悦</a>
-            <a href="https://www.office.com/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="M365">M365</a>
-            <a href="https://www.bjeea.cn/html/gkgz/index.html" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="北京教育考試院">北京教育考試院</a>
-            <a href="http://www.moe.gov.cn/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="教育部">教育部</a>
-            <a href="https://basic.smartedu.cn/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="中小學智慧教育">中小學智慧教育</a>
-            <a href="https://ctext.org/zh" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="中國哲學書電子化計劃">中國哲學書電子化計劃</a>
-            <a href="https://www.duxiu.com/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="讀秀">讀秀</a>
-            <a href="https://www.yuque.com/r/organizations/bdfz/join?token=8jDK7qvJ741Gnw2p&source=org#" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="語雀">語雀</a>
+            <div class="side-scroll" aria-label="右側鏈接列表">
+                <a href="https://tree.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="樹洞">樹洞</a>
+                <a href="https://chat.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="Anon Hourly Chat">Anon Hourly Chat</a>
+                <a href="https://openai.com/news/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="OpenAI">OpenAI</a>
+                <a href="https://aistudio.google.com/prompts/new_chat" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="Gemini">Gemini</a>
+                <a href="https://archive.org/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="Internet Archive">Internet Archive</a>
+                <a href="https://notebooklm.google.com/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="NotebookLM">NotebookLM</a>
+                <a href="https://github.com/ieduer" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub-Suen">GitHub</a>
+                <a href="https://x.com/ieduer" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="X">X</a>
+                <a href="https://user.growp.net/user/gateway" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="校內門戶">門戶</a>
+                <a href="https://chalk-c3.seiue.com/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="希悦">希悦</a>
+                <a href="https://www.office.com/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="M365">M365</a>
+                <a href="https://www.bjeea.cn/html/gkgz/index.html" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="北京教育考試院">北京教育考試院</a>
+                <a href="http://www.moe.gov.cn/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="教育部">教育部</a>
+                <a href="https://basic.smartedu.cn/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="中小學智慧教育">中小學智慧教育</a>
+                <a href="https://ctext.org/zh" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="中國哲學書電子化計劃">中國哲學書電子化計劃</a>
+                <a href="https://www.duxiu.com/" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="讀秀">讀秀</a>
+                <a href="https://www.yuque.com/r/organizations/bdfz/join?token=8jDK7qvJ741Gnw2p&source=org#" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="語雀">語雀</a>
+            </div>
         </nav>
     </div>
 
@@ -848,7 +859,6 @@
         const CACHE_KEY = 'visitorInfoCacheV1';
         const CACHE_TTL_MS = 12 * 60 * 60 * 1000; // 12h
 
-        // 1) Try cache first
         try {
             const cachedRaw = sessionStorage.getItem(CACHE_KEY);
             if (cachedRaw) {
@@ -864,7 +874,6 @@
             }
         } catch (_) {}
 
-        // 2) Providers: try in order with timeout; first success wins
         const PROVIDERS = [
             {
                 name: 'ipwhois',
@@ -928,11 +937,9 @@
         }
     }
 
-    // Load footer info after first paint
     requestAnimationFrame(() => { loadVisitorInfo(); });
 
     document.addEventListener("DOMContentLoaded", function() {
-        // Cache DOM elements
         const gaokaoDisplay = document.querySelector('#gaokao-countdown .countdown-display');
         const humanTimeDisplay = document.getElementById('humanTime');
         const clockDisplay = document.getElementById('current-time-clock');
@@ -952,7 +959,6 @@
         const themeToggleButton = document.getElementById('theme-toggle-logo-button');
         const rootEl = document.documentElement;
 
-        // Constants
         const MS_IN_SECOND = 1000;
         const MS_IN_MINUTE = 60 * MS_IN_SECOND;
         const MS_IN_HOUR = 60 * MS_IN_MINUTE;
@@ -964,13 +970,11 @@
         const GAOKAO_TARGET_TIME = new Date('2026-06-07T09:00:00').getTime();
         const HUMAN_ORIGIN_APPROX_MS = Date.now() - (300000 * MS_IN_YEAR_APPROX);
 
-        // Use visitor's local computer time (no fixed timezone)
         const TIME_OPTIONS = { hour12: false };
         const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
 
         const THEME_STORAGE_KEY = 'themePreference';
 
-        // Theme Functions
         function applyThemeVisuals(theme) {
             const isDark = theme === 'dark';
             rootEl.classList.toggle('dark-mode', isDark);
@@ -991,7 +995,6 @@
             try { localStorage.setItem(THEME_STORAGE_KEY, newTheme); } catch (e) { console.error("Could not save theme preference:", e); }
         }
 
-        // Timer Updates
         function updateClockAndDate(now) {
             if (clockDisplay) clockDisplay.textContent = now.toLocaleTimeString('zh-CN', TIME_OPTIONS);
             if (gregorianDateDisplay) gregorianDateDisplay.textContent = now.toLocaleDateString('zh-CN', DATE_OPTIONS);
@@ -1062,7 +1065,7 @@
                 startMs = mondayStart.getTime();
                 endMs = nextMonday.getTime();
 
-                const weekEnd = new Date(endMs - MS_IN_DAY); // Sunday (local)
+                const weekEnd = new Date(endMs - MS_IN_DAY);
                 titleText = `本週已逝 · ${formatMD(mondayStart)}–${formatMD(weekEnd)}`;
             } else if (unit === 'year') {
                 const year = now.getFullYear();
@@ -1088,7 +1091,6 @@
             const container = fillEl.closest('.progress-bar-container');
             if (container) container.setAttribute('aria-valuenow', progressFormatted);
 
-            // Last 5% => red
             setEndingVisual(fillEl, textEl, progress >= 95);
         }
 
@@ -1105,7 +1107,6 @@
             updateProgressBar(now, yearProgressFill, yearProgressText, 'year', yearProgressTitle);
         }
 
-        // Initial Setup & Start
         let initialTheme;
         try {
             const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
@@ -1122,7 +1123,6 @@
 
         if (themeToggleButton) themeToggleButton.addEventListener('click', toggleTheme);
 
-        // CPU-friendly ticking: pause when tab is hidden
         let timerId = null;
         function startTick() {
             if (timerId) return;
