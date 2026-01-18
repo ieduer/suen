@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Sub2QR MAX</title>
+  <title>Sub2QR</title>
   <style>
     :root{
       --bg0:#0b1220;
@@ -41,13 +41,35 @@
     .brand span{opacity:.6;font-size:12px;margin-left:6px}
 
     .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
+    .quick{
+      flex:1;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width: 280px;
+    }
+    .quickInput{
+      flex:1;
+      min-height: 44px;
+      max-height: 120px;
+      resize: vertical;
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      color: rgba(255,255,255,.92);
+      outline:none;
+      font-size:12px;
+      line-height:1.35;
+      font-family: var(--mono);
+      box-shadow: 0 12px 30px rgba(0,0,0,.20);
+    }
     .btn{appearance:none;border:1px solid var(--bd);background: rgba(255,255,255,.05);color:var(--txt);padding:10px 12px;border-radius: 12px;cursor:pointer;transition: .15s ease;box-shadow: 0 12px 30px rgba(0,0,0,.25);font-size:13px;}
     .btn:hover{transform:translateY(-1px); background: rgba(255,255,255,.08)}
     .btn:active{transform:translateY(0)}
     .btn.small{padding:7px 10px;font-size:12px;border-radius:11px}
 
-    .grid{display:grid;grid-template-columns: 1fr 1.2fr;gap:16px;}
-    @media (max-width: 1100px){.grid{grid-template-columns:1fr}}
+    .grid{display:grid;grid-template-columns: 1fr;gap:16px;}
 
     .card{border:1px solid var(--bd);background: var(--card);border-radius: var(--r);box-shadow: var(--shadow);overflow:hidden;}
     .card .hd{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;background: rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.06);}
@@ -162,26 +184,21 @@
     <div class="topbar">
       <div class="brand">
         <div class="dot"></div>
-        <b>Sub2QR MAX</b>
-        <span class="muted">front-end only · fetch + detect + export</span>
+        <b>Sub2QR</b>
       </div>
-      <div class="actions">
+
+      <div class="quick">
         <button class="btn" id="btnPaste">Paste</button>
+        <textarea class="quickInput" id="quickInput" spellcheck="false" placeholder="Paste URL / sing-box JSON / multi-line links / Base64"></textarea>
+      </div>
+
+      <div class="actions">
         <button class="btn" id="btnClear">Clear</button>
         <button class="btn" id="btnDemo">Demo</button>
       </div>
     </div>
 
     <div class="grid">
-      <!-- INPUT -->
-      <div class="card">
-        <div class="hd">
-          <div class="ttl">Input</div>
-          <div class="pill" id="pillIn"><i></i><span id="inState">Idle</span></div>
-        </div>
-        <textarea id="input" spellcheck="false" placeholder="Paste URL / sing-box JSON / multi-line share links / Base64"></textarea>
-      </div>
-
       <!-- OUTPUT -->
       <div class="card">
         <div class="hd">
@@ -257,7 +274,7 @@
     </div>
   </div>
 
-  <!-- QR lib (CDNJS primary; JS will fallback if blocked) -->
+  <!-- QR lib (CDN primary; JS will also support qrcodejs constructor-style fallback) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js" referrerpolicy="no-referrer"></script>
 
   <script>
@@ -287,16 +304,26 @@
     }
 
     async function ensureQRCodeLib(){
-      if (typeof window.QRCode !== 'undefined' && window.QRCode && (window.QRCode.toDataURL || window.QRCode.toCanvas)) return true;
+      // Support both:
+      // 1) soldair/qrcode: window.QRCode.toDataURL / toCanvas
+      // 2) davidshimjs/qrcodejs: window.QRCode is a constructor with CorrectLevel
+      if (typeof window.QRCode !== 'undefined' && window.QRCode){
+        if (window.QRCode.toDataURL || window.QRCode.toCanvas) return true;
+        if (typeof window.QRCode === 'function' && window.QRCode.CorrectLevel) return true;
+      }
       const candidates = [
         'https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js',
-        'https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js'
+        'https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'
       ];
       for (const url of candidates){
         try{
           await loadScriptOnce(url);
           await sleep(20);
-          if (typeof window.QRCode !== 'undefined' && window.QRCode && (window.QRCode.toDataURL || window.QRCode.toCanvas)) return true;
+          if (typeof window.QRCode !== 'undefined' && window.QRCode){
+            if (window.QRCode.toDataURL || window.QRCode.toCanvas) return true;
+            if (typeof window.QRCode === 'function' && window.QRCode.CorrectLevel) return true;
+          }
         }catch(e){
           // try next
         }
@@ -307,21 +334,52 @@
     async function qrDataUrl(payload){
       const ok = await ensureQRCodeLib();
       if (!ok) throw new Error('QRCode library not available');
-      if (window.QRCode.toDataURL){
-        return await window.QRCode.toDataURL(payload, {
+
+      // A) soldair/qrcode style
+      if (window.QRCode && (window.QRCode.toDataURL || window.QRCode.toCanvas)){
+        if (window.QRCode.toDataURL){
+          return await window.QRCode.toDataURL(payload, {
+            errorCorrectionLevel: 'Q',
+            margin: 1,
+            width: 320
+          });
+        }
+        const canvas = document.createElement('canvas');
+        await window.QRCode.toCanvas(canvas, payload, {
           errorCorrectionLevel: 'Q',
           margin: 1,
           width: 320
         });
+        return canvas.toDataURL('image/png');
       }
-      // fallback: canvas -> dataurl
-      const canvas = document.createElement('canvas');
-      await window.QRCode.toCanvas(canvas, payload, {
-        errorCorrectionLevel: 'Q',
-        margin: 1,
-        width: 320
-      });
-      return canvas.toDataURL('image/png');
+
+      // B) qrcodejs constructor style
+      if (typeof window.QRCode === 'function' && window.QRCode.CorrectLevel){
+        const tmp = document.createElement('div');
+        tmp.style.position = 'fixed';
+        tmp.style.left = '-99999px';
+        tmp.style.top = '0';
+        document.body.appendChild(tmp);
+        try{
+          // qrcodejs mutates DOM
+          new window.QRCode(tmp, {
+            text: payload,
+            width: 320,
+            height: 320,
+            correctLevel: window.QRCode.CorrectLevel.Q
+          });
+          await sleep(10);
+          const canvas = tmp.querySelector('canvas');
+          if (canvas && canvas.toDataURL) return canvas.toDataURL('image/png');
+          const img = tmp.querySelector('img');
+          if (img && img.src) return img.src;
+          throw new Error('QR render failed');
+        }finally{
+          tmp.remove();
+        }
+      }
+
+      throw new Error('QRCode library not available');
     }
 
     // ===== parsing helpers =====
@@ -1019,7 +1077,7 @@
     // ===== parse & bootstrap =====
     let parseTimer = null;
     async function parseAndUpdate(){
-      const raw = $('#input').value;
+      const raw = $('#quickInput').value;
       if (!raw.trim()){
         appState.sourceLabel = 'Idle';
         appState.subUrls = [];
@@ -1044,7 +1102,7 @@
       await renderAll();
     }
 
-    $('#input').addEventListener('input', ()=>{
+    $('#quickInput').addEventListener('input', ()=>{
       if (parseTimer) clearTimeout(parseTimer);
       parseTimer = setTimeout(()=> parseAndUpdate(), 80);
     });
@@ -1056,7 +1114,7 @@
     $('#btnPaste').onclick = async ()=>{
       try{
         const t = await navigator.clipboard.readText();
-        $('#input').value = t || '';
+        $('#quickInput').value = t || '';
         parseAndUpdate();
       }catch(e){
         alert('Clipboard read blocked by browser permissions. Please paste manually.');
@@ -1064,12 +1122,12 @@
     };
 
     $('#btnClear').onclick = ()=>{
-      $('#input').value = '';
+      $('#quickInput').value = '';
       parseAndUpdate();
     };
 
     $('#btnDemo').onclick = ()=>{
-      $('#input').value = `https://example.com/sub.yaml\n\nvless://<UUID>@example.com:443?encryption=none&security=tls#demo\nvmess://BASE64...`;
+      $('#quickInput').value = `https://example.com/sub.yaml\n\nvless://<UUID>@example.com:443?encryption=none&security=tls#demo\nvmess://BASE64...`;
       parseAndUpdate();
     };
 
