@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -236,12 +236,12 @@
       <div class="brand">
         <div class="dot"></div>
         <b>Sub2QR MAX</b>
-        <span class="muted">auto parse · all outputs · all QR</span>
+        <span class="muted">auto-detect · all formats · QR-ready</span>
       </div>
       <div class="actions">
-        <button class="btn" id="btnPaste">粘贴</button>
-        <button class="btn" id="btnClear">清空</button>
-        <button class="btn" id="btnDemo">示例</button>
+        <button class="btn" id="btnPaste">Paste</button>
+        <button class="btn" id="btnClear">Clear</button>
+        <button class="btn" id="btnDemo">Demo</button>
       </div>
     </div>
 
@@ -249,30 +249,30 @@
       <!-- INPUT -->
       <div class="card">
         <div class="hd">
-          <div class="ttl">输入</div>
-          <div class="pill" id="pillIn"><i></i><span id="inState">等待输入</span></div>
+          <div class="ttl">Input</div>
+          <div class="pill" id="pillIn"><i></i><span id="inState">Idle</span></div>
         </div>
-        <textarea id="input" spellcheck="false" placeholder="粘贴：订阅链接 / sing-box JSON / 多行节点 / Base64"></textarea>
+        <textarea id="input" spellcheck="false" placeholder="Paste a URL / sing-box JSON / multi-line share links / Base64"></textarea>
         <div class="subinfo" id="inInfo">
-          你贴什么我都识别：如果是链接，会自动拉取；如果是 JSON，会直接解析；如果是多行节点，会逐条拆分并输出二维码。
+          Paste anything. URLs will be fetched, JSON will be parsed, and share links will be split into per-node QR codes.
         </div>
       </div>
 
       <!-- OUTPUT -->
       <div class="card">
         <div class="hd">
-          <div class="ttl">输出</div>
-          <div class="pill" id="pillOut"><i></i><span id="outState">未解析</span></div>
+          <div class="ttl">Output</div>
+          <div class="pill" id="pillOut"><i></i><span id="outState">Not parsed</span></div>
         </div>
 
         <div class="out" id="outRoot">
           <!-- Subscription Links -->
           <div class="seg">
             <div class="seg-hd">
-              <b>订阅 / 导入链接</b>
+              <b>Subscription / Import links</b>
               <div class="mini">
-                <button class="btn" data-copy="#subLinks">复制</button>
-                <button class="btn" id="btnDownloadClash">下载 Clash Meta YAML</button>
+                <button class="btn" data-copy="#subLinks">Copy</button>
+                <button class="btn" id="btnDownloadClash">Download Clash Meta YAML</button>
               </div>
             </div>
             <pre id="subLinks" class="mono"></pre>
@@ -281,9 +281,9 @@
           <!-- Node Links -->
           <div class="seg">
             <div class="seg-hd">
-              <b>节点链接（逐条）</b>
+              <b>Node links (per-item)</b>
               <div class="mini">
-                <button class="btn" data-copy="#nodeLinks">复制</button>
+                <button class="btn" data-copy="#nodeLinks">Copy</button>
               </div>
             </div>
             <pre id="nodeLinks" class="mono"></pre>
@@ -292,16 +292,16 @@
           <!-- QR Section -->
           <div class="seg">
             <div class="seg-hd">
-              <b>二维码</b>
+              <b>QR codes</b>
               <div class="mini">
-                <span class="tag">Shadowrocket ✅</span>
-                <span class="tag">Clash Meta ✅</span>
+                <span class="tag">Shadowrocket OK</span>
+                <span class="tag">Clash Meta OK</span>
               </div>
             </div>
             <div style="padding:12px;">
               <div class="qrgrid" id="qrGrid"></div>
               <div class="qrhint" style="margin-top:10px;">
-                说明：Shadowrocket 扫码最稳的是 “单节点 QR” 或 “sub:// 订阅 QR”。如果二维码内容太长，优先用订阅类二维码。
+                Tip: Shadowrocket works best with per-node QR codes or sub:// subscription QR. If payload is long, use subscription QR.
               </div>
             </div>
           </div>
@@ -309,9 +309,9 @@
           <!-- Clash YAML Preview -->
           <div class="seg">
             <div class="seg-hd">
-              <b>Clash Meta YAML（预览）</b>
+              <b>Clash Meta YAML (preview)</b>
               <div class="mini">
-                <button class="btn" data-copy="#clashYaml">复制</button>
+                <button class="btn" data-copy="#clashYaml">Copy</button>
               </div>
             </div>
             <pre id="clashYaml" class="mono"></pre>
@@ -459,7 +459,7 @@ rules:
       const top = document.createElement("div");
       top.className = "qttl";
       top.innerHTML = `<div>${title}<div class="muted" style="font-size:11px;opacity:.75">${subtitle||""}</div></div>
-                       <button class="btn" style="padding:7px 9px;font-size:12px" data-copy-raw="1">复制</button>`;
+                       <button class="btn" style="padding:7px 9px;font-size:12px" data-copy-raw="1">Copy</button>`;
       box.appendChild(top);
 
       const canvas = document.createElement("canvas");
@@ -482,7 +482,7 @@ rules:
       }catch(e){
         canvas.remove();
         const pre = document.createElement("pre");
-        pre.textContent = "QR 生成失败：" + (e?.message || e);
+        pre.textContent = "QR generation failed: " + (e?.message || e);
         pre.style.color = "rgba(255,255,255,.7)";
         box.appendChild(pre);
       }
@@ -490,8 +490,8 @@ rules:
       // copy
       top.querySelector("button").addEventListener("click", async ()=>{
         await navigator.clipboard.writeText(payload);
-        top.querySelector("button").textContent = "已复制";
-        setTimeout(()=> top.querySelector("button").textContent="复制", 900);
+        top.querySelector("button").textContent = "Copied";
+        setTimeout(()=> top.querySelector("button").textContent="Copy", 900);
       });
     }
 
@@ -503,7 +503,7 @@ rules:
           const text = el ? el.textContent : "";
           await navigator.clipboard.writeText(text);
           const old = btn.textContent;
-          btn.textContent = "已复制";
+          btn.textContent = "Copied";
           setTimeout(()=>btn.textContent=old, 900);
         };
       });
@@ -539,13 +539,13 @@ rules:
       lastNodeUris = [];
 
       if (!input){
-        setPill($("#pillIn"), $("#inState"), "", "等待输入");
-        setPill($("#pillOut"), $("#outState"), "", "未解析");
+        setPill($("#pillIn"), $("#inState"), "", "Idle");
+        setPill($("#pillOut"), $("#outState"), "", "Not parsed");
         return;
       }
 
-      setPill($("#pillIn"), $("#inState"), "warn", "识别中…");
-      setPill($("#pillOut"), $("#outState"), "warn", "解析中…");
+      setPill($("#pillIn"), $("#inState"), "warn", "Detecting…");
+      setPill($("#pillOut"), $("#outState"), "warn", "Parsing…");
 
       let sourceText = input;
       let fetchedFrom = "";
@@ -556,7 +556,7 @@ rules:
           fetchedFrom = input;
           const f = await fetchText(input);
           if (!f.ok){
-            setPill($("#pillOut"), $("#outState"), "bad", `拉取失败 HTTP ${f.status}`);
+            setPill($("#pillOut"), $("#outState"), "bad", `Fetch failed (HTTP ${f.status})`);
             // still output "as-is" for user to use
             sourceText = input;
           }else{
@@ -642,7 +642,7 @@ rules:
         // Render nodes
         $("#nodeLinks").textContent = nodeUris.length
           ? nodeUris.join("\n")
-          : `（未检测到可识别的节点 URI。你可以粘贴 ss:// / vmess:// / vless:// / trojan:// / hysteria2:// 等。）`;
+          : `(No node URI detected. Paste ss:// vmess:// vless:// trojan:// hysteria2:// etc.)`;
 
         // Render Clash YAML
         const clashYaml = buildClashMetaYaml(subUrl);
@@ -654,14 +654,14 @@ rules:
 
         // Subscription QRs (best for many nodes)
         if (subUrl){
-          qrTasks.push(addQr("订阅 URL QR", "通用订阅入口", subUrl));
-          qrTasks.push(addQr("Shadowrocket 订阅 QR", "sub://BASE64(url)", makeShadowrocketSubQrFromUrl(subUrl)));
-          qrTasks.push(addQr("Clash 一键导入 QR", "clash://install-config?url=", makeClashInstallUrl(subUrl)));
+          qrTasks.push(addQr("Subscription URL QR", "Universal subscription", subUrl));
+          qrTasks.push(addQr("Shadowrocket Subscription QR", "sub://BASE64(url)", makeShadowrocketSubQrFromUrl(subUrl)));
+          qrTasks.push(addQr("Clash One-Click QR", "clash://install-config?url=", makeClashInstallUrl(subUrl)));
         }
 
         // Multi-links QR
         if (nodeUris.length){
-          qrTasks.push(addQr("多节点合并 QR", "sub://BASE64(multi-line)", makeSubQrFromMultiLinks(nodeUris.join("\n"))));
+          qrTasks.push(addQr("Multi-node QR", "sub://BASE64(multi-line)", makeSubQrFromMultiLinks(nodeUris.join("\n"))));
         }
 
         // Per-node QRs (Shadowrocket safest)
@@ -670,23 +670,23 @@ rules:
         const list = nodeUris.slice(0, maxNodeQR);
         for (let i=0;i<list.length;i++){
           const u = list[i];
-          const label = `节点 #${i+1}`;
-          qrTasks.push(addQr(label, "单节点（Shadowrocket ✅）", u));
+          const label = `Node #${i+1}`;
+          qrTasks.push(addQr(label, "Per-node (Shadowrocket OK)", u));
         }
         if (nodeUris.length > maxNodeQR){
-          await addQr("提示", `仅展示前 ${maxNodeQR} 个节点二维码`, "（二维码过多会卡 UI，建议用订阅类二维码）");
+          await addQr("Note", `Showing first ${maxNodeQR} node QR codes`, "(Too many QRs may slow the UI. Use subscription QR instead.)");
         }
 
         await Promise.allSettled(qrTasks);
 
         // State pills
-        setPill($("#pillIn"), $("#inState"), "ok", jsonObj ? "JSON 已解析" : (fetchedFrom ? "已拉取并解析" : "已解析"));
-        setPill($("#pillOut"), $("#outState"), "ok", `输出完成：订阅 ${subUrl? "1" : "0"} | 节点 ${nodeUris.length}`);
+        setPill($("#pillIn"), $("#inState"), "ok", jsonObj ? "JSON parsed" : (fetchedFrom ? "Fetched + parsed" : "Parsed"));
+        setPill($("#pillOut"), $("#outState"), "ok", `Done: sub ${subUrl? "1" : "0"} | nodes ${nodeUris.length}`);
 
       }catch(e){
         console.error(e);
-        setPill($("#pillOut"), $("#outState"), "bad", "解析失败");
-        $("#subLinks").textContent = "解析失败：\n" + (e?.message || e);
+        setPill($("#pillOut"), $("#outState"), "bad", "Parse failed");
+        $("#subLinks").textContent = "Parse failed:\n" + (e?.message || e);
       }
     }
 
@@ -704,7 +704,7 @@ rules:
         $("#input").value = t || "";
         parseAndRender($("#input").value);
       }catch(e){
-        alert("无法读取剪贴板（浏览器权限限制）。你直接粘贴即可。");
+        alert("Clipboard read blocked by browser permissions. Please paste manually.");
       }
     };
 
@@ -716,8 +716,8 @@ rules:
     $("#btnDemo").onclick = ()=>{
       $("#input").value =
 `https://example.com/sub.yaml
-ss://example
-vmess://example`;
+ss://BASE64...
+vmess://BASE64...`;
       parseAndRender($("#input").value);
     };
 
