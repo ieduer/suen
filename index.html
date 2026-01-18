@@ -1,0 +1,1641 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="referrer" content="no-referrer" />
+  <title>Sub2QR Pro MAX · sing-box JSON → 节点拆分 → QR + Clash Meta YAML</title>
+
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- QRCode.js (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+  <style>
+    :root{
+      --bg1: rgba(10,10,15,1);
+      --bg2: rgba(16,18,30,1);
+      --card: rgba(255,255,255,0.06);
+      --card2: rgba(255,255,255,0.10);
+      --line: rgba(255,255,255,0.14);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.62);
+      --ok: rgba(80, 200, 120, 1);
+      --warn: rgba(255, 180, 80, 1);
+      --bad: rgba(255, 90, 90, 1);
+    }
+
+    body{
+      background:
+        radial-gradient(1200px 600px at 20% 10%, rgba(120, 85, 255, .25), transparent 60%),
+        radial-gradient(900px 500px at 85% 20%, rgba(0, 200, 255, .18), transparent 60%),
+        radial-gradient(900px 600px at 30% 90%, rgba(255, 60, 160, .16), transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .glass{
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 45px rgba(0,0,0,.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .glass2{
+      background: var(--card2);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .soft{
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(0,0,0,0.22);
+    }
+
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    .btn{
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.06);
+      transition: transform .08s ease, background .2s ease, border .2s ease;
+    }
+    .btn:hover{ background: rgba(255,255,255,0.10); }
+    .btn:active{ transform: translateY(1px); }
+
+    .badge{
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .hint{ color: var(--muted); }
+
+    .qrBox{
+      width: 280px;
+      height: 280px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius: 20px;
+      overflow:hidden;
+    }
+
+    .qrMini{
+      width: 148px;
+      height: 148px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius: 18px;
+      overflow:hidden;
+    }
+
+    .thin-scrollbar::-webkit-scrollbar{
+      width: 10px;
+      height: 10px;
+    }
+    .thin-scrollbar::-webkit-scrollbar-thumb{
+      background: rgba(255,255,255,.14);
+      border-radius: 999px;
+      border: 2px solid rgba(0,0,0,.25);
+    }
+    .thin-scrollbar::-webkit-scrollbar-track{
+      background: rgba(0,0,0,.18);
+      border-radius: 999px;
+    }
+
+    @media (max-width: 640px){
+      .qrBox{
+        width: 240px;
+        height: 240px;
+        border-radius: 18px;
+      }
+      .qrMini{
+        width: 132px;
+        height: 132px;
+        border-radius: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="max-w-7xl mx-auto px-4 py-10">
+    <header class="mb-8">
+      <div class="flex flex-col gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl glass2 flex items-center justify-center">
+            <span class="text-xl">🧬</span>
+          </div>
+          <div>
+            <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">
+              Sub2QR Pro MAX · sing-box JSON → 节点拆分 → QR + Clash Meta YAML
+            </h1>
+            <p class="hint text-sm mt-1">
+              纯前端 · 不上传 · 专业订阅平台级生成：逐条扫码 + 全量 Clash Meta 配置输出
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          <span class="badge text-xs px-3 py-1 rounded-full">✅ Shadowrocket 扫码</span>
+          <span class="badge text-xs px-3 py-1 rounded-full">✅ Stash 扫码</span>
+          <span class="badge text-xs px-3 py-1 rounded-full">✅ Clash Meta YAML</span>
+          <span class="badge text-xs px-3 py-1 rounded-full">✅ URLTest / Select 分组</span>
+          <span class="badge text-xs px-3 py-1 rounded-full">🛡️ 纯本地生成</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Left -->
+      <section class="glass rounded-3xl p-5 sm:p-6">
+        <div class="flex items-center justify-between gap-3 mb-4">
+          <h2 class="text-lg font-semibold">输入</h2>
+          <div class="text-xs hint">纯前端：不会上传到任何服务器</div>
+        </div>
+
+        <div class="grid gap-3">
+          <label class="text-sm hint">粘贴订阅链接 / 分享链接 / sing-box JSON</label>
+          <textarea id="input"
+            class="w-full min-h-[240px] soft rounded-2xl p-4 outline-none mono text-sm leading-relaxed"
+            placeholder="支持：
+1) 订阅 URL：https://example.com/sub
+2) 分享链接：vless://... vmess://... ss://...
+3) sing-box JSON：{ ... }"></textarea>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="soft rounded-2xl p-3">
+              <div class="flex items-center justify-between">
+                <div class="text-sm font-medium">单个大 QR 模式</div>
+                <span id="modeBadge" class="badge text-xs px-2 py-1 rounded-full">AUTO</span>
+              </div>
+
+              <div class="mt-3 flex flex-col gap-2 text-sm">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="qrMode" value="auto" checked>
+                  <span>Auto（自动判断）</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="qrMode" value="raw">
+                  <span>RAW（原文直接做 QR）</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="qrMode" value="suburl">
+                  <span>SUB URL（只做订阅 URL）</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="qrMode" value="scheme">
+                  <span>APP Scheme（一键导入）</span>
+                </label>
+              </div>
+
+              <div class="hint text-xs mt-3 leading-relaxed">
+                只影响右侧“单个大二维码”。<br/>
+                sing-box JSON 的“逐条节点 QR + Clash YAML”不受此处影响。
+              </div>
+            </div>
+
+            <div class="soft rounded-2xl p-3">
+              <div class="flex items-center justify-between">
+                <div class="text-sm font-medium">一键导入 Scheme</div>
+                <span class="badge text-xs px-2 py-1 rounded-full">订阅更稳</span>
+              </div>
+
+              <div class="mt-3 flex flex-col gap-2">
+                <label class="text-sm hint">目标 App</label>
+                <select id="appSelect" class="soft rounded-xl px-3 py-2 outline-none text-sm">
+                  <option value="shadowrocket">Shadowrocket</option>
+                  <option value="stash">Stash</option>
+                  <option value="clash">Clash（订阅导入）</option>
+                  <option value="quantumultx">Quantumult X</option>
+                  <option value="generic">Generic（只用 URL/文本）</option>
+                </select>
+
+                <div class="flex items-center gap-2">
+                  <input id="encodeSwitch" type="checkbox" checked class="scale-110">
+                  <label for="encodeSwitch" class="text-sm cursor-pointer">URL Encode（建议开）</label>
+                </div>
+
+                <div class="hint text-xs leading-relaxed">
+                  ⚠️ 说明：一键导入对“远程订阅 URL”最可靠。<br/>
+                  本页还能对“本地生成 YAML”做 data:URL 一键导入尝试（部分客户端支持）。
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="soft rounded-2xl p-3">
+            <div class="flex items-center justify-between">
+              <div class="text-sm font-medium">Clash Meta 输出设置（专业订阅平台级）</div>
+              <span class="badge text-xs px-2 py-1 rounded-full">Meta</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+              <div>
+                <label class="text-xs hint">配置名（profile）</label>
+                <input id="cmProfileName" class="w-full soft rounded-xl px-3 py-2 outline-none text-sm"
+                  value="Sub2QR_Meta" />
+              </div>
+              <div>
+                <label class="text-xs hint">URLTest 测速 URL</label>
+                <input id="cmTestURL" class="w-full soft rounded-xl px-3 py-2 outline-none text-sm"
+                  value="https://www.gstatic.com/generate_204" />
+              </div>
+
+              <div>
+                <label class="text-xs hint">测速间隔（秒）</label>
+                <input id="cmInterval" type="number" class="w-full soft rounded-xl px-3 py-2 outline-none text-sm"
+                  value="300" min="10" />
+              </div>
+              <div>
+                <label class="text-xs hint">容差（ms）</label>
+                <input id="cmTolerance" type="number" class="w-full soft rounded-xl px-3 py-2 outline-none text-sm"
+                  value="50" min="1" />
+              </div>
+            </div>
+
+            <div class="flex flex-wrap gap-3 mt-3 text-sm">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input id="cmEnableProviders" type="checkbox" checked>
+                <span>启用 rule-providers（CN 直连 / 其余走代理）</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input id="cmEnableDNS" type="checkbox" checked>
+                <span>启用 DNS（fake-ip + fallback）</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input id="cmEnableTun" type="checkbox" checked>
+                <span>启用 TUN（适合 Clash Meta 内核）</span>
+              </label>
+            </div>
+
+            <div class="hint text-xs mt-2 leading-relaxed">
+              ✅ 默认规则策略：CN 直连，非 CN 走 select（你可在 Clash 里切 auto/url-test）。<br/>
+              ✅ 这套 YAML 结构是“专业订阅平台模板”——可长期维护、可扩展、强兼容。
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-2 pt-1">
+            <button id="btnGenerate" class="btn rounded-2xl px-4 py-2 text-sm">生成单个 QR</button>
+            <button id="btnSplitNodes" class="btn rounded-2xl px-4 py-2 text-sm">拆分 sing-box 节点 → 逐条 QR</button>
+            <button id="btnGenClashMeta" class="btn rounded-2xl px-4 py-2 text-sm">生成 Clash Meta YAML</button>
+
+            <button id="btnClear" class="btn rounded-2xl px-4 py-2 text-sm">清空</button>
+            <button id="btnMinify" class="btn rounded-2xl px-4 py-2 text-sm">JSON Minify</button>
+            <button id="btnPretty" class="btn rounded-2xl px-4 py-2 text-sm">JSON Pretty</button>
+          </div>
+
+          <div id="status" class="text-sm hint pt-2"></div>
+        </div>
+      </section>
+
+      <!-- Right -->
+      <section class="glass rounded-3xl p-5 sm:p-6">
+        <div class="flex items-center justify-between gap-3 mb-4">
+          <h2 class="text-lg font-semibold">输出</h2>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="badge text-xs px-3 py-1 rounded-full">单个 QR</span>
+            <span class="badge text-xs px-3 py-1 rounded-full">逐条节点 QR</span>
+            <span class="badge text-xs px-3 py-1 rounded-full">Clash Meta YAML</span>
+          </div>
+        </div>
+
+        <div class="grid gap-4">
+          <!-- Single QR -->
+          <div class="soft rounded-3xl p-4 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
+            <div>
+              <div class="text-sm hint">单个大二维码（订阅/文本/导入 Scheme）</div>
+              <div class="text-xs hint mt-1">JSON 太大时二维码会很密，推荐用“拆节点面板”。</div>
+            </div>
+
+            <div class="qrBox glass2">
+              <div id="qrcode"></div>
+            </div>
+          </div>
+
+          <!-- Single Copy -->
+          <div class="soft rounded-3xl p-4">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+              <div>
+                <div class="text-sm font-medium">可复制导入内容（单个模式）</div>
+                <div class="text-xs hint" id="outHint">会根据模式输出（URL / Scheme / 原文）</div>
+              </div>
+
+              <div class="flex flex-wrap gap-2">
+                <button id="btnCopy" class="btn rounded-2xl px-4 py-2 text-sm">复制</button>
+                <button id="btnDownload" class="btn rounded-2xl px-4 py-2 text-sm">下载 .txt</button>
+              </div>
+            </div>
+
+            <textarea id="output"
+              class="w-full mt-3 min-h-[120px] soft rounded-2xl p-4 outline-none mono text-sm leading-relaxed"
+              placeholder="这里会显示可直接复制的内容" readonly></textarea>
+          </div>
+
+          <!-- Nodes Panel -->
+          <div class="soft rounded-3xl p-4">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+              <div>
+                <div class="text-sm font-medium">节点拆分面板（sing-box JSON → 逐条 QR）</div>
+                <div class="text-xs hint" id="nodesHint">粘贴 sing-box JSON 后点“拆分”。</div>
+              </div>
+
+              <div class="flex flex-wrap gap-2">
+                <button id="btnCopyAllNodes" class="btn rounded-2xl px-4 py-2 text-sm">复制全部节点链接</button>
+                <button id="btnDownloadAllNodes" class="btn rounded-2xl px-4 py-2 text-sm">下载全部节点 txt</button>
+                <button id="btnClearNodes" class="btn rounded-2xl px-4 py-2 text-sm">清空节点面板</button>
+              </div>
+            </div>
+
+            <div id="nodesSummary" class="mt-3 text-xs hint"></div>
+
+            <div id="nodesContainer"
+              class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[420px] overflow-auto thin-scrollbar pr-1">
+            </div>
+
+            <div class="mt-3 text-xs hint leading-relaxed">
+              ✅ 逐条扫码适用于 Shadowrocket / Stash 等。<br/>
+              ✅ Clash 用户建议用下方“Clash Meta YAML 输出面板”直接导入。
+            </div>
+          </div>
+
+          <!-- Clash Meta YAML -->
+          <div class="soft rounded-3xl p-4">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+              <div>
+                <div class="text-sm font-medium">Clash Meta YAML（专业订阅平台级）</div>
+                <div class="text-xs hint" id="cmHint">点“生成 Clash Meta YAML”即可输出。</div>
+              </div>
+
+              <div class="flex flex-wrap gap-2">
+                <button id="btnCopyCM" class="btn rounded-2xl px-4 py-2 text-sm">复制 YAML</button>
+                <button id="btnDownloadCM" class="btn rounded-2xl px-4 py-2 text-sm">下载 config.yaml</button>
+                <button id="btnOneClickCM" class="btn rounded-2xl px-4 py-2 text-sm">一键导入（尝试）</button>
+              </div>
+            </div>
+
+            <textarea id="cmOutput"
+              class="w-full mt-3 min-h-[240px] soft rounded-2xl p-4 outline-none mono text-xs leading-relaxed"
+              placeholder="这里会输出 Clash Meta YAML" readonly></textarea>
+
+            <div class="mt-3 text-xs hint leading-relaxed">
+              ⚠️ “一键导入”对本地生成 YAML：使用 data:URL + clash://install-config 尝试（部分客户端支持）。<br/>
+              ✅ 100% 稳：下载 config.yaml → 在 Clash 客户端手动导入。<br/>
+              ✅ 真·全球最好：下一步我给你加 CF Worker，把 YAML 变成可订阅 URL（必杀技）。
+            </div>
+          </div>
+
+          <!-- Quick buttons -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <button id="btnUseSubURL" class="btn rounded-2xl px-4 py-3 text-sm">
+              只取订阅 URL<br/><span class="text-xs hint">提取第一段 http(s)</span>
+            </button>
+            <button id="btnUseRaw" class="btn rounded-2xl px-4 py-3 text-sm">
+              使用 RAW<br/><span class="text-xs hint">整段原文做 QR</span>
+            </button>
+            <button id="btnUseScheme" class="btn rounded-2xl px-4 py-3 text-sm">
+              生成 Scheme<br/><span class="text-xs hint">订阅更友好</span>
+            </button>
+          </div>
+
+          <footer class="pt-1">
+            <div class="text-xs hint">
+              Sub2QR Pro MAX · GitHub + Cloudflare Pages 纯前端部署 · 专业订阅平台级模板
+            </div>
+          </footer>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // ============================================================
+    // helpers
+    // ============================================================
+    const $ = (id) => document.getElementById(id);
+
+    const statusEl = $("status");
+    const inputEl = $("input");
+    const outputEl = $("output");
+    const qrWrap = $("qrcode");
+    const modeBadge = $("modeBadge");
+    const appSelect = $("appSelect");
+    const encodeSwitch = $("encodeSwitch");
+    const outHint = $("outHint");
+
+    const nodesHint = $("nodesHint");
+    const nodesSummary = $("nodesSummary");
+    const nodesContainer = $("nodesContainer");
+
+    const cmOutput = $("cmOutput");
+    const cmHint = $("cmHint");
+
+    const cmProfileName = $("cmProfileName");
+    const cmTestURL = $("cmTestURL");
+    const cmInterval = $("cmInterval");
+    const cmTolerance = $("cmTolerance");
+    const cmEnableProviders = $("cmEnableProviders");
+    const cmEnableDNS = $("cmEnableDNS");
+    const cmEnableTun = $("cmEnableTun");
+
+    // lastNodes: [{ type, tag, server, port, share, summary, outbound }]
+    let lastNodes = [];
+
+    function nowTS(){
+      const d = new Date();
+      const pad = (n)=> String(n).padStart(2,"0");
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
+    }
+
+    function setStatus(msg, kind="info"){
+      const map = {
+        info: "text-[rgba(255,255,255,0.62)]",
+        ok: "text-[rgba(80,200,120,1)]",
+        warn: "text-[rgba(255,180,80,1)]",
+        bad: "text-[rgba(255,90,90,1)]"
+      };
+      statusEl.className = `text-sm pt-2 ${map[kind] || map.info}`;
+      statusEl.textContent = msg;
+    }
+
+    function safeTrim(s){
+      return (s || "").replace(/\r\n/g,"\n").trim();
+    }
+
+    function isLikelyJSON(s){
+      const t = safeTrim(s);
+      if(!t) return false;
+      if(!(t.startsWith("{") && t.endsWith("}"))) return false;
+      try { JSON.parse(t); return true; } catch(e){ return false; }
+    }
+
+    function extractFirstHttpURL(s){
+      const t = safeTrim(s);
+      if(!t) return "";
+      const m = t.match(/https?:\/\/[^\s"'<>()]+/i);
+      return m ? m[0] : "";
+    }
+
+    function detectShareType(s){
+      const t = safeTrim(s);
+      if(!t) return "empty";
+      if(isLikelyJSON(t)) return "json";
+      if(/^https?:\/\//i.test(t)) return "url";
+      if(/^(vmess|vless|trojan|ss|ssr|hysteria2|tuic):\/\//i.test(t)) return "share";
+      if(/https?:\/\/[^\s]+/i.test(t)) return "mixed";
+      return "text";
+    }
+
+    function urlEncodeIfNeeded(url){
+      if(!encodeSwitch.checked) return url;
+      try { return encodeURIComponent(url); } catch(e){ return url; }
+    }
+
+    function buildImportScheme(app, subUrl){
+      const u = safeTrim(subUrl);
+      if(!u) return "";
+      const encoded = urlEncodeIfNeeded(u);
+      const tag = urlEncodeIfNeeded("Sub2QR");
+
+      if(app === "clash"){
+        return `clash://install-config?url=${encoded}&name=${tag}`;
+      }
+      if(app === "stash"){
+        return `stash://install-config?url=${encoded}`;
+      }
+      if(app === "shadowrocket"){
+        return `shadowrocket://add/sub?url=${encoded}`;
+      }
+      if(app === "quantumultx"){
+        return `quantumult-x://add-resource?remote-resource=${encoded}&tag=${tag}&resource-type=server`;
+      }
+      return u;
+    }
+
+    // ============================================================
+    // Single QR
+    // ============================================================
+    function clearQR(){ qrWrap.innerHTML = ""; }
+
+    function makeQR(text){
+      clearQR();
+      const t = safeTrim(text);
+      if(!t){
+        setStatus("没有可生成的内容。", "warn");
+        return;
+      }
+      new QRCode(qrWrap, { text: t, width: 260, height: 260, correctLevel: QRCode.CorrectLevel.M });
+    }
+
+    function getSelectedMode(){
+      const radios = document.querySelectorAll('input[name="qrMode"]');
+      for(const r of radios) if(r.checked) return r.value;
+      return "auto";
+    }
+
+    function setSelectedMode(mode){
+      const radios = document.querySelectorAll('input[name="qrMode"]');
+      for(const r of radios) r.checked = (r.value === mode);
+      refreshModeBadge();
+    }
+
+    function refreshModeBadge(){
+      const mode = getSelectedMode();
+      modeBadge.textContent = mode.toUpperCase();
+    }
+
+    function buildOutputByMode(mode, inputText){
+      const raw = safeTrim(inputText);
+      const kind = detectShareType(raw);
+      if(!raw) return { qrText: "", outText: "", info: "empty" };
+
+      const subUrl = extractFirstHttpURL(raw);
+
+      if(mode === "raw"){
+        outHint.textContent = "RAW：原文内容（扫码/复制）";
+        return { qrText: raw, outText: raw, info: `raw:${kind}` };
+      }
+
+      if(mode === "suburl"){
+        if(!subUrl){
+          outHint.textContent = "SUB URL：未找到 http(s) 链接";
+          return { qrText: raw, outText: raw, info: "suburl:notfound" };
+        }
+        outHint.textContent = "SUB URL：订阅链接";
+        return { qrText: subUrl, outText: subUrl, info: "suburl:ok" };
+      }
+
+      if(mode === "scheme"){
+        if(!subUrl){
+          outHint.textContent = "Scheme：未找到订阅 URL";
+          return { qrText: raw, outText: raw, info: "scheme:notfound" };
+        }
+        const scheme = buildImportScheme(appSelect.value, subUrl);
+        outHint.textContent = `Scheme：${appSelect.options[appSelect.selectedIndex].text} 一键导入`;
+        return { qrText: scheme, outText: scheme, info: "scheme:ok" };
+      }
+
+      // auto
+      if(kind === "url"){
+        const scheme = buildImportScheme(appSelect.value, raw);
+        outHint.textContent = `Auto：URL → Scheme`;
+        return { qrText: scheme, outText: scheme, info: "auto:url->scheme" };
+      }
+      if(kind === "mixed"){
+        if(subUrl){
+          const scheme = buildImportScheme(appSelect.value, subUrl);
+          outHint.textContent = `Auto：混合文本 → 提取 URL → Scheme`;
+          return { qrText: scheme, outText: scheme, info: "auto:mixed->scheme" };
+        }
+        outHint.textContent = "Auto：混合文本但无 URL → RAW";
+        return { qrText: raw, outText: raw, info: "auto:mixed->raw" };
+      }
+      if(kind === "share"){
+        outHint.textContent = "Auto：分享链接 → RAW";
+        return { qrText: raw, outText: raw, info: "auto:share->raw" };
+      }
+      if(kind === "json"){
+        outHint.textContent = "Auto：JSON → RAW（更推荐拆节点/Clash YAML）";
+        return { qrText: raw, outText: raw, info: "auto:json->raw" };
+      }
+
+      outHint.textContent = "Auto：未知 → RAW";
+      return { qrText: raw, outText: raw, info: "auto:fallback->raw" };
+    }
+
+    function generateSingle(){
+      refreshModeBadge();
+      const raw = safeTrim(inputEl.value);
+      if(!raw){
+        outputEl.value = "";
+        clearQR();
+        setStatus("请先输入内容。", "warn");
+        return;
+      }
+      const mode = getSelectedMode();
+      const res = buildOutputByMode(mode, raw);
+      outputEl.value = res.outText || "";
+      makeQR(res.qrText);
+
+      if(detectShareType(raw) === "json"){
+        setStatus("已生成单个 QR：检测到 JSON，建议用“拆分节点”或“生成 Clash Meta YAML”。", "warn");
+        return;
+      }
+      if(res.info.includes("notfound")){
+        setStatus("未找到订阅 URL。可切 RAW 直接生成。", "warn");
+        return;
+      }
+      setStatus("已生成 ✅", "ok");
+    }
+
+    async function copySingle(){
+      const text = safeTrim(outputEl.value);
+      if(!text){ setStatus("没有可复制内容。", "warn"); return; }
+      try{
+        await navigator.clipboard.writeText(text);
+        setStatus("已复制 ✅", "ok");
+      }catch(e){
+        outputEl.select();
+        document.execCommand("copy");
+        setStatus("已复制 ✅（fallback）", "ok");
+      }
+    }
+
+    function downloadSingleTxt(){
+      const text = safeTrim(outputEl.value);
+      if(!text){ setStatus("没有可下载内容。", "warn"); return; }
+      const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `sub2qr_single_${nowTS()}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      setStatus("已下载 ✅", "ok");
+    }
+
+    function jsonMinify(){
+      const raw = safeTrim(inputEl.value);
+      if(!raw){ setStatus("请先贴 JSON。", "warn"); return; }
+      if(!isLikelyJSON(raw)){ setStatus("这不是合法 JSON。", "bad"); return; }
+      try{
+        const obj = JSON.parse(raw);
+        inputEl.value = JSON.stringify(obj);
+        setStatus("JSON Minify ✅", "ok");
+      }catch(e){
+        setStatus("解析失败。", "bad");
+      }
+    }
+
+    function jsonPretty(){
+      const raw = safeTrim(inputEl.value);
+      if(!raw){ setStatus("请先贴 JSON。", "warn"); return; }
+      if(!isLikelyJSON(raw)){ setStatus("这不是合法 JSON。", "bad"); return; }
+      try{
+        const obj = JSON.parse(raw);
+        inputEl.value = JSON.stringify(obj, null, 2);
+        setStatus("JSON Pretty ✅", "ok");
+      }catch(e){
+        setStatus("解析失败。", "bad");
+      }
+    }
+
+    // ============================================================
+    // sing-box JSON → share URI builders (for QR / copy)
+    // ============================================================
+    function b64encodeUtf8(str){
+      try{ return btoa(unescape(encodeURIComponent(str))); }catch(e){ return btoa(str); }
+    }
+    function toInt(v){
+      const n = Number(v);
+      return Number.isFinite(n) ? n : 0;
+    }
+    function normalizeHostHeader(headers){
+      if(!headers) return "";
+      const h = headers.Host || headers.host || headers["Host"] || headers["host"];
+      if(Array.isArray(h)) return h[0] || "";
+      if(typeof h === "string") return h;
+      return "";
+    }
+
+    function buildVlessUri(o){
+      const uuid = o.uuid || "";
+      const host = o.server || "";
+      const port = toInt(o.server_port);
+      if(!uuid || !host || !port) return "";
+
+      const params = new URLSearchParams();
+      params.set("encryption", "none");
+
+      if(o.flow) params.set("flow", String(o.flow));
+
+      const t = o.transport || null;
+      if(t && t.type === "ws"){
+        params.set("type", "ws");
+        if(t.path) params.set("path", String(t.path));
+        const h = normalizeHostHeader(t.headers);
+        if(h) params.set("host", h);
+      }else{
+        params.set("type", "tcp");
+      }
+
+      const tls = o.tls || null;
+      if(tls && tls.enabled){
+        const reality = tls.reality || null;
+        if(reality && reality.enabled){
+          params.set("security", "reality");
+          if(tls.server_name) params.set("sni", String(tls.server_name));
+          if(tls.utls && tls.utls.enabled && tls.utls.fingerprint) params.set("fp", String(tls.utls.fingerprint));
+          if(reality.public_key) params.set("pbk", String(reality.public_key));
+          if(reality.short_id) params.set("sid", String(reality.short_id));
+        }else{
+          params.set("security", "tls");
+          if(tls.server_name) params.set("sni", String(tls.server_name));
+          if(tls.utls && tls.utls.enabled && tls.utls.fingerprint) params.set("fp", String(tls.utls.fingerprint));
+        }
+      }
+
+      const remark = o.tag ? `#${encodeURIComponent(o.tag)}` : "";
+      return `vless://${encodeURIComponent(uuid)}@${host}:${port}?${params.toString()}${remark}`;
+    }
+
+    function buildVmessUri(o){
+      const uuid = o.uuid || "";
+      const host = o.server || "";
+      const port = toInt(o.server_port);
+      if(!uuid || !host || !port) return "";
+
+      const tls = o.tls || null;
+      const t = o.transport || null;
+
+      const vm = {
+        v: "2",
+        ps: o.tag || "vmess",
+        add: host,
+        port: String(port),
+        id: uuid,
+        aid: "0",
+        scy: o.security || "auto",
+        net: (t && t.type) ? String(t.type) : "tcp",
+        type: "none",
+        host: "",
+        path: "",
+        tls: (tls && tls.enabled) ? "tls" : ""
+      };
+
+      if(t && t.type === "ws"){
+        vm.net = "ws";
+        vm.path = t.path ? String(t.path) : "/";
+        vm.host = normalizeHostHeader(t.headers) || (tls && tls.server_name ? String(tls.server_name) : "");
+      }
+
+      if(tls && tls.enabled && tls.server_name){
+        vm.sni = String(tls.server_name);
+      }
+
+      return `vmess://${b64encodeUtf8(JSON.stringify(vm))}`;
+    }
+
+    function buildHysteria2Uri(o){
+      const host = o.server || "";
+      const port = toInt(o.server_port);
+      const pwd = o.password || "";
+      if(!host || !port || !pwd) return "";
+
+      const params = new URLSearchParams();
+      const tls = o.tls || null;
+      if(tls && tls.enabled){
+        if(tls.server_name) params.set("sni", String(tls.server_name));
+        if(Array.isArray(tls.alpn) && tls.alpn.length) params.set("alpn", tls.alpn.join(","));
+        if(typeof tls.insecure === "boolean") params.set("insecure", tls.insecure ? "1" : "0");
+      }
+
+      const remark = o.tag ? `#${encodeURIComponent(o.tag)}` : "";
+      return `hysteria2://${encodeURIComponent(pwd)}@${host}:${port}/?${params.toString()}${remark}`;
+    }
+
+    function buildTuicUri(o){
+      const host = o.server || "";
+      const port = toInt(o.server_port);
+      const uuid = o.uuid || "";
+      const pwd = o.password || "";
+      if(!host || !port || !uuid || !pwd) return "";
+
+      const params = new URLSearchParams();
+      if(o.congestion_control) params.set("congestion_control", String(o.congestion_control));
+      if(o.udp_relay_mode) params.set("udp_relay_mode", String(o.udp_relay_mode));
+      if(typeof o.udp_over_stream === "boolean") params.set("udp_over_stream", o.udp_over_stream ? "1" : "0");
+      if(typeof o.zero_rtt_handshake === "boolean") params.set("zero_rtt_handshake", o.zero_rtt_handshake ? "1" : "0");
+      if(o.heartbeat) params.set("heartbeat", String(o.heartbeat));
+
+      const tls = o.tls || null;
+      if(tls && tls.enabled){
+        if(tls.server_name) params.set("sni", String(tls.server_name));
+        if(Array.isArray(tls.alpn) && tls.alpn.length) params.set("alpn", tls.alpn.join(","));
+        if(typeof tls.insecure === "boolean") params.set("insecure", tls.insecure ? "1" : "0");
+      }
+
+      const remark = o.tag ? `#${encodeURIComponent(o.tag)}` : "";
+      return `tuic://${encodeURIComponent(uuid)}:${encodeURIComponent(pwd)}@${host}:${port}?${params.toString()}${remark}`;
+    }
+
+    function buildTrojanUri(o){
+      const host = o.server || "";
+      const port = toInt(o.server_port);
+      const pwd = o.password || "";
+      if(!host || !port || !pwd) return "";
+
+      const params = new URLSearchParams();
+      const tls = o.tls || null;
+      if(tls && tls.enabled){
+        if(tls.server_name) params.set("sni", String(tls.server_name));
+        if(typeof tls.insecure === "boolean") params.set("allowInsecure", tls.insecure ? "1" : "0");
+      }
+      const t = o.transport || null;
+      if(t && t.type === "ws"){
+        params.set("type", "ws");
+        if(t.path) params.set("path", String(t.path));
+        const h = normalizeHostHeader(t.headers);
+        if(h) params.set("host", h);
+      }
+
+      const remark = o.tag ? `#${encodeURIComponent(o.tag)}` : "";
+      return `trojan://${encodeURIComponent(pwd)}@${host}:${port}?${params.toString()}${remark}`;
+    }
+
+    function buildShadowsocksUri(o){
+      const host = o.server || "";
+      const port = toInt(o.server_port);
+      const method = (o.method || o.cipher || "");
+      const pwd = (o.password || "");
+      if(!host || !port || !method || !pwd) return "";
+
+      const userinfo = `${method}:${pwd}`;
+      const b64 = b64encodeUtf8(userinfo);
+      const remark = o.tag ? `#${encodeURIComponent(o.tag)}` : "";
+      return `ss://${b64}@${host}:${port}${remark}`;
+    }
+
+    function outboundToShareUri(o){
+      if(!o || typeof o !== "object") return "";
+      const type = String(o.type || "").toLowerCase();
+      if(type === "vless") return buildVlessUri(o);
+      if(type === "vmess") return buildVmessUri(o);
+      if(type === "hysteria2") return buildHysteria2Uri(o);
+      if(type === "tuic") return buildTuicUri(o);
+      if(type === "trojan") return buildTrojanUri(o);
+      if(type === "shadowsocks" || type === "ss") return buildShadowsocksUri(o);
+      return "";
+    }
+
+    function isUsefulOutbound(o){
+      if(!o || typeof o !== "object") return false;
+      const type = String(o.type || "").toLowerCase();
+      if(["selector","urltest","direct","block","dns","socks","http"].includes(type)) return false;
+      return ["vless","vmess","hysteria2","tuic","trojan","shadowsocks","ss"].includes(type);
+    }
+
+    function summarizeOutbound(o){
+      const type = String(o.type || "");
+      const tag = o.tag || "(no tag)";
+      const host = o.server || "";
+      const port = o.server_port || "";
+      return `${tag} · ${type} · ${host}:${port}`;
+    }
+
+    // ============================================================
+    // Nodes Panel
+    // ============================================================
+    function clearNodesPanel(){
+      lastNodes = [];
+      nodesContainer.innerHTML = "";
+      nodesSummary.textContent = "";
+      nodesHint.textContent = "粘贴 sing-box JSON 后点“拆分”。";
+    }
+
+    function renderNodes(nodes){
+      nodesContainer.innerHTML = "";
+      if(!Array.isArray(nodes) || nodes.length === 0){
+        nodesSummary.textContent = "";
+        nodesHint.textContent = "没有拆出可用节点（检查 JSON 的 outbounds）。";
+        return;
+      }
+
+      nodesHint.textContent = "已拆分：每个节点都有 QR + 可复制分享链接。";
+      nodesSummary.textContent = `共拆出 ${nodes.length} 个节点。建议：Shadowrocket 逐条扫码导入；Clash 用 YAML 面板。`;
+
+      for(const node of nodes){
+        const card = document.createElement("div");
+        card.className = "soft rounded-3xl p-4 flex gap-4 items-start";
+
+        const left = document.createElement("div");
+        left.className = "qrMini glass2 shrink-0 flex items-center justify-center";
+        const qrDiv = document.createElement("div");
+        qrDiv.style.width = "120px";
+        qrDiv.style.height = "120px";
+        left.appendChild(qrDiv);
+
+        new QRCode(qrDiv, {
+          text: node.share || node.summary,
+          width: 120,
+          height: 120,
+          correctLevel: QRCode.CorrectLevel.M
+        });
+
+        const right = document.createElement("div");
+        right.className = "flex-1 min-w-0";
+
+        const title = document.createElement("div");
+        title.className = "text-sm font-semibold truncate";
+        title.textContent = node.tag || node.summary || "node";
+
+        const meta = document.createElement("div");
+        meta.className = "text-xs hint mt-1 break-all";
+        meta.textContent = `${node.type.toUpperCase()} · ${node.server}:${node.port}`;
+
+        const textarea = document.createElement("textarea");
+        textarea.className = "w-full mt-3 soft rounded-2xl p-3 outline-none mono text-xs leading-relaxed";
+        textarea.rows = 3;
+        textarea.readOnly = true;
+        textarea.value = node.share || "";
+
+        const actions = document.createElement("div");
+        actions.className = "mt-3 flex flex-wrap gap-2";
+
+        const btnCopy = document.createElement("button");
+        btnCopy.className = "btn rounded-2xl px-3 py-2 text-xs";
+        btnCopy.textContent = "复制链接";
+        btnCopy.addEventListener("click", async ()=>{
+          try{
+            await navigator.clipboard.writeText(node.share || "");
+            setStatus(`已复制：${node.tag || node.type}`, "ok");
+          }catch(e){
+            textarea.select();
+            document.execCommand("copy");
+            setStatus(`已复制（fallback）：${node.tag || node.type}`, "ok");
+          }
+        });
+
+        const btnDownloadQR = document.createElement("button");
+        btnDownloadQR.className = "btn rounded-2xl px-3 py-2 text-xs";
+        btnDownloadQR.textContent = "下载 QR(PNG)";
+        btnDownloadQR.addEventListener("click", ()=>{
+          const img = qrDiv.querySelector("img");
+          const canvas = qrDiv.querySelector("canvas");
+          let dataUrl = "";
+          if(img && img.src) dataUrl = img.src;
+          if(!dataUrl && canvas){
+            try{ dataUrl = canvas.toDataURL("image/png"); }catch(e){}
+          }
+          if(!dataUrl){
+            setStatus("下载失败：未找到 QR 图像。", "bad");
+            return;
+          }
+          const a = document.createElement("a");
+          const safeName = (node.tag || `${node.type}_${node.server}_${node.port}`).replace(/[^\w\-\.]+/g, "_");
+          a.href = dataUrl;
+          a.download = `${safeName}.png`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setStatus(`已下载 QR：${node.tag || node.type}`, "ok");
+        });
+
+        const btnOpen = document.createElement("button");
+        btnOpen.className = "btn rounded-2xl px-3 py-2 text-xs";
+        btnOpen.textContent = "复制到单个模式";
+        btnOpen.addEventListener("click", ()=>{
+          outputEl.value = node.share || "";
+          makeQR(node.share || "");
+          setStatus("已复制到单个 QR 面板 ✅", "ok");
+        });
+
+        actions.appendChild(btnCopy);
+        actions.appendChild(btnDownloadQR);
+        actions.appendChild(btnOpen);
+
+        right.appendChild(title);
+        right.appendChild(meta);
+        right.appendChild(textarea);
+        right.appendChild(actions);
+
+        card.appendChild(left);
+        card.appendChild(right);
+        nodesContainer.appendChild(card);
+      }
+    }
+
+    function splitSingBoxNodes(){
+      const raw = safeTrim(inputEl.value);
+      if(!raw){
+        setStatus("请先粘贴 sing-box JSON。", "warn");
+        return;
+      }
+      if(!isLikelyJSON(raw)){
+        setStatus("这不是合法 JSON。", "bad");
+        return;
+      }
+
+      let cfg = null;
+      try{ cfg = JSON.parse(raw); }
+      catch(e){ setStatus("JSON 解析失败。", "bad"); return; }
+
+      const outbounds = Array.isArray(cfg.outbounds) ? cfg.outbounds : [];
+      if(outbounds.length === 0){
+        setStatus("JSON 中未找到 outbounds。", "warn");
+        renderNodes([]);
+        return;
+      }
+
+      const nodes = [];
+      for(const o of outbounds){
+        if(!isUsefulOutbound(o)) continue;
+        const share = outboundToShareUri(o);
+        if(!share) continue;
+        nodes.push({
+          type: String(o.type || ""),
+          tag: String(o.tag || ""),
+          server: String(o.server || ""),
+          port: String(o.server_port || ""),
+          share,
+          summary: summarizeOutbound(o),
+          outbound: o
+        });
+      }
+
+      lastNodes = nodes;
+
+      if(nodes.length === 0){
+        setStatus("拆分完成，但没有生成可用分享链接。", "warn");
+        renderNodes([]);
+        return;
+      }
+
+      setStatus(`拆分成功 ✅ 共 ${nodes.length} 个节点已生成逐条 QR。`, "ok");
+      renderNodes(nodes);
+    }
+
+    async function copyAllNodes(){
+      if(!Array.isArray(lastNodes) || lastNodes.length === 0){
+        setStatus("节点面板为空：请先拆分。", "warn");
+        return;
+      }
+      const text = lastNodes.map(n => n.share).filter(Boolean).join("\n");
+      try{
+        await navigator.clipboard.writeText(text);
+        setStatus("已复制全部节点链接 ✅", "ok");
+      }catch(e){
+        setStatus("复制失败（浏览器限制）。", "bad");
+      }
+    }
+
+    function downloadAllNodesTxt(){
+      if(!Array.isArray(lastNodes) || lastNodes.length === 0){
+        setStatus("节点面板为空：请先拆分。", "warn");
+        return;
+      }
+      const text = lastNodes.map(n => n.share).filter(Boolean).join("\n");
+      const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `sub2qr_nodes_${nowTS()}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      setStatus("已下载全部节点 txt ✅", "ok");
+    }
+
+    // ============================================================
+    // Clash Meta YAML Generator (platform-grade)
+    // ============================================================
+    function yamlQuote(s){
+      // safe quote for YAML strings
+      const t = String(s ?? "");
+      // if simple tokens, no need quote; but we quote anyway for safety
+      const escaped = t.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+      return `"${escaped}"`;
+    }
+
+    function indent(n){ return " ".repeat(n); }
+
+    function yamlKV(key, val, i=0){
+      if(val === undefined || val === null) return "";
+      if(typeof val === "boolean") return `${indent(i)}${key}: ${val ? "true" : "false"}\n`;
+      if(typeof val === "number") return `${indent(i)}${key}: ${val}\n`;
+      return `${indent(i)}${key}: ${yamlQuote(val)}\n`;
+    }
+
+    function yamlArr(key, arr, i=0){
+      if(!Array.isArray(arr) || arr.length === 0) return "";
+      let out = `${indent(i)}${key}:\n`;
+      for(const v of arr){
+        out += `${indent(i+2)}- ${typeof v === "string" ? yamlQuote(v) : v}\n`;
+      }
+      return out;
+    }
+
+    function outboundToClashProxy(o){
+      // Map sing-box outbound to Clash Meta proxy object (best effort)
+      const type = String(o.type || "").toLowerCase();
+      const name = o.tag || `${type}-${o.server}:${o.server_port}`;
+
+      const base = {
+        name,
+        type: type, // clash-meta supports: vless, vmess, hysteria2, tuic, trojan, ss
+        server: o.server || "",
+        port: toInt(o.server_port),
+        udp: true
+      };
+
+      // transport / ws
+      const t = o.transport || null;
+      const ws = (t && t.type === "ws") ? t : null;
+
+      const tls = o.tls || null;
+      const tlsEnabled = !!(tls && tls.enabled);
+      const sni = tls && tls.server_name ? String(tls.server_name) : "";
+
+      if(type === "vless"){
+        base.uuid = o.uuid || "";
+        base.flow = o.flow || "";
+        base.tls = tlsEnabled;
+
+        if(sni) base.servername = sni;
+
+        // reality
+        if(tlsEnabled && tls.reality && tls.reality.enabled){
+          base["reality-opts"] = {
+            "public-key": tls.reality.public_key || "",
+            "short-id": tls.reality.short_id || ""
+          };
+        }
+
+        // utls fingerprint (Clash Meta supports client-fingerprint)
+        if(tlsEnabled && tls.utls && tls.utls.enabled && tls.utls.fingerprint){
+          base["client-fingerprint"] = String(tls.utls.fingerprint);
+        }
+
+        // ws opts
+        if(ws){
+          base.network = "ws";
+          base["ws-opts"] = {
+            path: ws.path || "/",
+            headers: {}
+          };
+          const h = normalizeHostHeader(ws.headers);
+          if(h) base["ws-opts"].headers.Host = h;
+        }
+
+        // encryption none
+        base.encryption = "none";
+        return base;
+      }
+
+      if(type === "vmess"){
+        base.uuid = o.uuid || "";
+        base.alterId = 0;
+        base.cipher = o.security || "auto";
+        base.tls = tlsEnabled;
+
+        if(sni) base.servername = sni;
+
+        if(tlsEnabled && tls.utls && tls.utls.enabled && tls.utls.fingerprint){
+          base["client-fingerprint"] = String(tls.utls.fingerprint);
+        }
+
+        if(ws){
+          base.network = "ws";
+          base["ws-opts"] = { path: ws.path || "/", headers: {} };
+          const h = normalizeHostHeader(ws.headers);
+          if(h) base["ws-opts"].headers.Host = h;
+        }
+        return base;
+      }
+
+      if(type === "hysteria2"){
+        base.password = o.password || "";
+        base.tls = tlsEnabled;
+        if(sni) base.sni = sni;
+
+        // alpn
+        if(tls && Array.isArray(tls.alpn) && tls.alpn.length){
+          base.alpn = tls.alpn.map(String);
+        }
+        // skip verify
+        if(tls && typeof tls.insecure === "boolean"){
+          base["skip-cert-verify"] = !!tls.insecure;
+        }
+        return base;
+      }
+
+      if(type === "tuic"){
+        base.uuid = o.uuid || "";
+        base.password = o.password || "";
+        base.tls = tlsEnabled;
+
+        if(sni) base.sni = sni;
+        if(tls && Array.isArray(tls.alpn) && tls.alpn.length){
+          base.alpn = tls.alpn.map(String);
+        }
+        if(tls && typeof tls.insecure === "boolean"){
+          base["skip-cert-verify"] = !!tls.insecure;
+        }
+
+        // tuic opts
+        if(o.congestion_control) base["congestion-controller"] = String(o.congestion_control);
+        if(o.udp_relay_mode) base["udp-relay-mode"] = String(o.udp_relay_mode);
+        if(typeof o.udp_over_stream === "boolean") base["udp-over-stream"] = !!o.udp_over_stream;
+        if(typeof o.zero_rtt_handshake === "boolean") base["zero-rtt-handshake"] = !!o.zero_rtt_handshake;
+        if(o.heartbeat) base["heartbeat-interval"] = String(o.heartbeat);
+
+        return base;
+      }
+
+      if(type === "trojan"){
+        base.password = o.password || "";
+        base.tls = tlsEnabled;
+        if(sni) base.sni = sni;
+
+        if(tls && typeof tls.insecure === "boolean"){
+          base["skip-cert-verify"] = !!tls.insecure;
+        }
+
+        if(ws){
+          base.network = "ws";
+          base["ws-opts"] = { path: ws.path || "/", headers: {} };
+          const h = normalizeHostHeader(ws.headers);
+          if(h) base["ws-opts"].headers.Host = h;
+        }
+        return base;
+      }
+
+      if(type === "shadowsocks" || type === "ss"){
+        base.type = "ss";
+        base.cipher = o.method || o.cipher || "";
+        base.password = o.password || "";
+        return base;
+      }
+
+      // unknown
+      return null;
+    }
+
+    function clashProxyToYAML(p, i=0){
+      // manual YAML emitter for proxy object
+      // keep stable ordering for readability
+      let out = `${indent(i)}- name: ${yamlQuote(p.name)}\n`;
+      out += `${indent(i+2)}type: ${yamlQuote(p.type)}\n`;
+      out += `${indent(i+2)}server: ${yamlQuote(p.server)}\n`;
+      out += `${indent(i+2)}port: ${p.port}\n`;
+
+      if(p.uuid) out += `${indent(i+2)}uuid: ${yamlQuote(p.uuid)}\n`;
+      if(p.password) out += `${indent(i+2)}password: ${yamlQuote(p.password)}\n`;
+      if(p.cipher) out += `${indent(i+2)}cipher: ${yamlQuote(p.cipher)}\n`;
+      if(p.alterId !== undefined && p.type === "vmess") out += `${indent(i+2)}alterId: ${p.alterId}\n`;
+
+      if(p.encryption) out += `${indent(i+2)}encryption: ${yamlQuote(p.encryption)}\n`;
+      if(p.flow) out += `${indent(i+2)}flow: ${yamlQuote(p.flow)}\n`;
+
+      if(typeof p.udp === "boolean") out += `${indent(i+2)}udp: ${p.udp ? "true" : "false"}\n`;
+
+      if(typeof p.tls === "boolean") out += `${indent(i+2)}tls: ${p.tls ? "true" : "false"}\n`;
+      if(p.servername) out += `${indent(i+2)}servername: ${yamlQuote(p.servername)}\n`;
+      if(p.sni) out += `${indent(i+2)}sni: ${yamlQuote(p.sni)}\n`;
+
+      if(p["skip-cert-verify"] !== undefined){
+        out += `${indent(i+2)}skip-cert-verify: ${p["skip-cert-verify"] ? "true" : "false"}\n`;
+      }
+      if(p["client-fingerprint"]){
+        out += `${indent(i+2)}client-fingerprint: ${yamlQuote(p["client-fingerprint"])}\n`;
+      }
+
+      if(Array.isArray(p.alpn) && p.alpn.length){
+        out += `${indent(i+2)}alpn:\n`;
+        for(const a of p.alpn) out += `${indent(i+4)}- ${yamlQuote(a)}\n`;
+      }
+
+      // network/ws
+      if(p.network){
+        out += `${indent(i+2)}network: ${yamlQuote(p.network)}\n`;
+      }
+      if(p["ws-opts"]){
+        out += `${indent(i+2)}ws-opts:\n`;
+        out += `${indent(i+4)}path: ${yamlQuote(p["ws-opts"].path || "/")}\n`;
+        const headers = p["ws-opts"].headers || {};
+        const keys = Object.keys(headers);
+        if(keys.length){
+          out += `${indent(i+4)}headers:\n`;
+          for(const k of keys){
+            out += `${indent(i+6)}${k}: ${yamlQuote(headers[k])}\n`;
+          }
+        }
+      }
+
+      // reality-opts
+      if(p["reality-opts"]){
+        out += `${indent(i+2)}reality-opts:\n`;
+        out += `${indent(i+4)}public-key: ${yamlQuote(p["reality-opts"]["public-key"] || "")}\n`;
+        out += `${indent(i+4)}short-id: ${yamlQuote(p["reality-opts"]["short-id"] || "")}\n`;
+      }
+
+      // tuic extra
+      if(p["congestion-controller"]) out += `${indent(i+2)}congestion-controller: ${yamlQuote(p["congestion-controller"])}\n`;
+      if(p["udp-relay-mode"]) out += `${indent(i+2)}udp-relay-mode: ${yamlQuote(p["udp-relay-mode"])}\n`;
+      if(p["udp-over-stream"] !== undefined) out += `${indent(i+2)}udp-over-stream: ${p["udp-over-stream"] ? "true" : "false"}\n`;
+      if(p["zero-rtt-handshake"] !== undefined) out += `${indent(i+2)}zero-rtt-handshake: ${p["zero-rtt-handshake"] ? "true" : "false"}\n`;
+      if(p["heartbeat-interval"]) out += `${indent(i+2)}heartbeat-interval: ${yamlQuote(p["heartbeat-interval"])}\n`;
+
+      return out;
+    }
+
+    function buildClashMetaYAML(){
+      if(!Array.isArray(lastNodes) || lastNodes.length === 0){
+        setStatus("请先拆分 sing-box 节点（右侧逐条 QR 面板要有节点）。", "warn");
+        return "";
+      }
+
+      // Convert nodes to clash proxies
+      const proxies = [];
+      for(const n of lastNodes){
+        const o = n.outbound;
+        const p = outboundToClashProxy(o);
+        if(p && p.server && p.port) proxies.push(p);
+      }
+
+      if(proxies.length === 0){
+        setStatus("未能生成 Clash proxies（节点字段不完整或协议不支持）。", "bad");
+        return "";
+      }
+
+      // Groups
+      const names = proxies.map(p => p.name);
+      const profile = safeTrim(cmProfileName.value) || "Sub2QR_Meta";
+      const testUrl = safeTrim(cmTestURL.value) || "https://www.gstatic.com/generate_204";
+      const interval = Math.max(10, Number(cmInterval.value || 300));
+      const tolerance = Math.max(1, Number(cmTolerance.value || 50));
+
+      const enableProviders = !!cmEnableProviders.checked;
+      const enableDNS = !!cmEnableDNS.checked;
+      const enableTun = !!cmEnableTun.checked;
+
+      // YAML begin
+      let y = "";
+      y += `# ${profile}\n`;
+      y += `# Generated by Sub2QR Pro MAX (pure frontend)\n`;
+      y += `# Time: ${new Date().toISOString()}\n`;
+      y += `\n`;
+
+      // Base ports (platform-grade defaults)
+      y += `mixed-port: 7890\n`;
+      y += `socks-port: 7891\n`;
+      y += `redir-port: 7892\n`;
+      y += `tproxy-port: 7893\n`;
+      y += `allow-lan: true\n`;
+      y += `bind-address: "*"\n`;
+      y += `mode: rule\n`;
+      y += `log-level: info\n`;
+      y += `ipv6: true\n`;
+      y += `unified-delay: true\n`;
+      y += `tcp-concurrent: true\n`;
+      y += `\n`;
+
+      // Tun (Meta feature)
+      if(enableTun){
+        y += `tun:\n`;
+        y += `  enable: true\n`;
+        y += `  stack: system\n`;
+        y += `  device: MetaTun\n`;
+        y += `  auto-route: true\n`;
+        y += `  auto-detect-interface: true\n`;
+        y += `  dns-hijack:\n`;
+        y += `    - any:53\n`;
+        y += `    - tcp://any:53\n`;
+        y += `\n`;
+      }
+
+      // DNS (platform-grade)
+      if(enableDNS){
+        y += `dns:\n`;
+        y += `  enable: true\n`;
+        y += `  ipv6: true\n`;
+        y += `  enhanced-mode: fake-ip\n`;
+        y += `  fake-ip-range: 198.18.0.1/16\n`;
+        y += `  use-hosts: true\n`;
+        y += `  nameserver:\n`;
+        y += `    - tls://8.8.8.8:853\n`;
+        y += `    - https://1.1.1.1/dns-query\n`;
+        y += `  fallback:\n`;
+        y += `    - https://dns.google/dns-query\n`;
+        y += `    - tls://1.0.0.1:853\n`;
+        y += `  fallback-filter:\n`;
+        y += `    geoip: true\n`;
+        y += `    geoip-code: CN\n`;
+        y += `    ipcidr:\n`;
+        y += `      - 240.0.0.0/4\n`;
+        y += `\n`;
+      }
+
+      // Proxies
+      y += `proxies:\n`;
+      for(const p of proxies){
+        y += clashProxyToYAML(p, 0);
+      }
+      y += `\n`;
+
+      // Proxy Groups
+      y += `proxy-groups:\n`;
+      y += `  - name: ${yamlQuote("select")}\n`;
+      y += `    type: select\n`;
+      y += `    proxies:\n`;
+      y += `      - ${yamlQuote("auto")}\n`;
+      y += `      - ${yamlQuote("DIRECT")}\n`;
+      for(const n of names){
+        y += `      - ${yamlQuote(n)}\n`;
+      }
+      y += `\n`;
+
+      y += `  - name: ${yamlQuote("auto")}\n`;
+      y += `    type: url-test\n`;
+      y += `    url: ${yamlQuote(testUrl)}\n`;
+      y += `    interval: ${interval}\n`;
+      y += `    tolerance: ${tolerance}\n`;
+      y += `    lazy: true\n`;
+      y += `    proxies:\n`;
+      for(const n of names){
+        y += `      - ${yamlQuote(n)}\n`;
+      }
+      y += `\n`;
+
+      // Rule Providers (MetaCubeX)
+      if(enableProviders){
+        y += `rule-providers:\n`;
+        y += `  geosite-cn:\n`;
+        y += `    type: http\n`;
+        y += `    behavior: domain\n`;
+        y += `    format: text\n`;
+        y += `    path: ./ruleset/geosite-cn.list\n`;
+        y += `    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geosite/cn.list"\n`;
+        y += `    interval: 86400\n`;
+        y += `\n`;
+        y += `  geosite-geolocation-!cn:\n`;
+        y += `    type: http\n`;
+        y += `    behavior: domain\n`;
+        y += `    format: text\n`;
+        y += `    path: ./ruleset/geosite-geolocation-!cn.list\n`;
+        y += `    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geosite/geolocation-!cn.list"\n`;
+        y += `    interval: 86400\n`;
+        y += `\n`;
+        y += `  geoip-cn:\n`;
+        y += `    type: http\n`;
+        y += `    behavior: ipcidr\n`;
+        y += `    format: text\n`;
+        y += `    path: ./ruleset/geoip-cn.list\n`;
+        y += `    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geoip/cn.list"\n`;
+        y += `    interval: 86400\n`;
+        y += `\n`;
+      }
+
+      // Rules (platform-grade: CN direct, others proxy)
+      y += `rules:\n`;
+
+      // Local/LAN always direct
+      y += `  - IP-CIDR,10.0.0.0/8,DIRECT\n`;
+      y += `  - IP-CIDR,172.16.0.0/12,DIRECT\n`;
+      y += `  - IP-CIDR,192.168.0.0/16,DIRECT\n`;
+      y += `  - IP-CIDR,127.0.0.0/8,DIRECT\n`;
+      y += `  - IP-CIDR,169.254.0.0/16,DIRECT\n`;
+      y += `  - DOMAIN,localhost,DIRECT\n`;
+      y += `\n`;
+
+      if(enableProviders){
+        y += `  - RULE-SET,geoip-cn,DIRECT\n`;
+        y += `  - RULE-SET,geosite-cn,DIRECT\n`;
+        y += `  - RULE-SET,geosite-geolocation-!cn,select\n`;
+      }else{
+        // fallback rules without providers
+        y += `  - GEOIP,CN,DIRECT\n`;
+      }
+
+      // final
+      y += `  - MATCH,select\n`;
+
+      return y;
+    }
+
+    function generateClashMetaYAML(){
+      const y = buildClashMetaYAML();
+      if(!y) return;
+      cmOutput.value = y;
+      cmHint.textContent = "已生成 Clash Meta YAML ✅ 可复制或下载导入。";
+      setStatus("Clash Meta YAML 已生成 ✅", "ok");
+    }
+
+    async function copyClashMetaYAML(){
+      const text = safeTrim(cmOutput.value);
+      if(!text){
+        setStatus("YAML 为空：请先生成。", "warn");
+        return;
+      }
+      try{
+        await navigator.clipboard.writeText(text);
+        setStatus("已复制 YAML ✅", "ok");
+      }catch(e){
+        cmOutput.select();
+        document.execCommand("copy");
+        setStatus("已复制 YAML ✅（fallback）", "ok");
+      }
+    }
+
+    function downloadClashMetaYAML(){
+      const text = safeTrim(cmOutput.value);
+      if(!text){
+        setStatus("YAML 为空：请先生成。", "warn");
+        return;
+      }
+      const blob = new Blob([text], { type: "application/x-yaml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `config_${nowTS()}.yaml`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      setStatus("已下载 config.yaml ✅", "ok");
+    }
+
+    function oneClickImportClashMeta(){
+      const text = safeTrim(cmOutput.value);
+      if(!text){
+        setStatus("YAML 为空：请先生成。", "warn");
+        return;
+      }
+
+      // Attempt: data URL + clash scheme
+      // Not all clients support it; if fail user can import downloaded file.
+      const b64 = b64encodeUtf8(text);
+      const dataUrl = `data:application/x-yaml;base64,${b64}`;
+      const name = urlEncodeIfNeeded(safeTrim(cmProfileName.value) || "Sub2QR_Meta");
+      const u = encodeSwitch.checked ? encodeURIComponent(dataUrl) : dataUrl;
+      const scheme = `clash://install-config?url=${u}&name=${name}`;
+
+      // also put into single output panel for visibility
+      outputEl.value = scheme;
+      makeQR(scheme);
+
+      try{
+        window.location.href = scheme;
+        setStatus("已发起 Clash 一键导入（尝试）✅ 若无反应，请下载 config.yaml 手动导入。", "warn");
+      }catch(e){
+        setStatus("一键导入触发失败，请下载 config.yaml 手动导入。", "bad");
+      }
+    }
+
+    // ============================================================
+    // events
+    // ============================================================
+    $("btnGenerate").addEventListener("click", generateSingle);
+    $("btnSplitNodes").addEventListener("click", splitSingBoxNodes);
+    $("btnGenClashMeta").addEventListener("click", generateClashMetaYAML);
+
+    $("btnClear").addEventListener("click", ()=>{
+      inputEl.value = "";
+      outputEl.value = "";
+      cmOutput.value = "";
+      cmHint.textContent = "点“生成 Clash Meta YAML”即可输出。";
+      clearQR();
+      clearNodesPanel();
+      setStatus("已清空。", "info");
+    });
+
+    $("btnCopy").addEventListener("click", copySingle);
+    $("btnDownload").addEventListener("click", downloadSingleTxt);
+
+    $("btnMinify").addEventListener("click", jsonMinify);
+    $("btnPretty").addEventListener("click", jsonPretty);
+
+    $("btnCopyAllNodes").addEventListener("click", copyAllNodes);
+    $("btnDownloadAllNodes").addEventListener("click", downloadAllNodesTxt);
+    $("btnClearNodes").addEventListener("click", ()=>{
+      clearNodesPanel();
+      setStatus("已清空节点面板。", "info");
+    });
+
+    $("btnCopyCM").addEventListener("click", copyClashMetaYAML);
+    $("btnDownloadCM").addEventListener("click", downloadClashMetaYAML);
+    $("btnOneClickCM").addEventListener("click", oneClickImportClashMeta);
+
+    $("btnUseSubURL").addEventListener("click", ()=>{ setSelectedMode("suburl"); generateSingle(); });
+    $("btnUseRaw").addEventListener("click", ()=>{ setSelectedMode("raw"); generateSingle(); });
+    $("btnUseScheme").addEventListener("click", ()=>{ setSelectedMode("scheme"); generateSingle(); });
+
+    document.querySelectorAll('input[name="qrMode"]').forEach(r=>{
+      r.addEventListener("change", refreshModeBadge);
+    });
+
+    appSelect.addEventListener("change", ()=>{
+      const mode = getSelectedMode();
+      if(mode === "scheme" || mode === "auto") generateSingle();
+    });
+    encodeSwitch.addEventListener("change", ()=>{
+      const mode = getSelectedMode();
+      if(mode === "scheme" || mode === "auto") generateSingle();
+    });
+
+    // init
+    refreshModeBadge();
+    clearNodesPanel();
+    setStatus("流程：贴 JSON → 拆节点 → 生成 Clash Meta YAML（复制/下载/尝试一键导入）。", "info");
+  </script>
+</body>
+</html>
