@@ -33,86 +33,144 @@
       color:var(--txt);
       overflow-x:hidden;
     }
-    .wrap{max-width: 1480px;margin: 20px auto;padding: 0 16px 28px;}
-    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
-    .brand{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--bd);border-radius:999px;background: rgba(255,255,255,.04);box-shadow: var(--shadow);user-select:none;}
-    .dot{width:10px;height:10px;border-radius:99px;background: linear-gradient(135deg, rgba(120,80,255,.9), rgba(0,220,255,.9));box-shadow: 0 0 18px rgba(0,220,255,.35);}
-    .brand b{letter-spacing:.5px}
-    .brand span{opacity:.6;font-size:12px;margin-left:6px}
 
-    .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;align-items:center;}
-    .quick{
-      flex:1;
-      display:flex;
-      align-items:stretch;
-      gap:10px;
-      min-width: 280px;
-      max-width: 980px;
+    .wrap{max-width: 1480px;margin: 18px auto;padding: 0 16px 28px;}
+
+    .dot{width:10px;height:10px;border-radius:99px;background: linear-gradient(135deg, rgba(120,80,255,.9), rgba(0,220,255,.9));box-shadow: 0 0 18px rgba(0,220,255,.35);}
+
+    .btn{
+      appearance:none;
+      border:1px solid var(--bd);
+      background: rgba(255,255,255,.05);
+      color:var(--txt);
+      padding:10px 12px;
+      border-radius: 14px;
+      cursor:pointer;
+      transition: .15s ease;
+      box-shadow: 0 12px 30px rgba(0,0,0,.25);
+      font-size:13px;
+      height:44px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      user-select:none;
     }
-    .quickInput{
+    .btn:hover{transform:translateY(-1px); background: rgba(255,255,255,.08)}
+    .btn:active{transform:translateY(0)}
+    .btn.small{padding:7px 10px;font-size:12px;border-radius:11px;height:34px}
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-size:12px;
+      padding:7px 10px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:999px;
+      color:var(--muted);
+      background: rgba(0,0,0,.12);
+      white-space:nowrap;
+      user-select:none;
+    }
+    .pill i{width:8px;height:8px;border-radius:99px;background: rgba(255,255,255,.25);display:inline-block;}
+    .pill.ok i{background: var(--ok)}
+    .pill.bad i{background: var(--bad)}
+    .pill.warn i{background: var(--warn)}
+    .pillBig{padding:9px 12px;font-size:12px;background: rgba(0,0,0,.10)}
+
+    .hero{
+      border:1px solid var(--bd);
+      background: rgba(255,255,255,.04);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      padding:16px 16px 14px;
+      margin-bottom: 16px;
+    }
+    .heroTop{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom: 10px;}
+    .heroBrand{display:flex;align-items:center;gap:12px;}
+    .heroTitle{font-weight:800;letter-spacing:.6px;font-size:16px;}
+    .heroSub{color: rgba(255,255,255,.55);font-size:12px;margin-top:2px;}
+
+    .beltRow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+    .belt{flex:1;display:flex;align-items:center;gap:10px;min-width: 320px;max-width: 1100px;}
+    .beltInput{
       flex:1;
       height: 44px;
-      min-height: 44px;
-      max-height: 44px;
-      resize: none;
-      padding:10px 12px;
       border-radius: 14px;
       border:1px solid rgba(255,255,255,.10);
       background: rgba(0,0,0,.18);
       color: rgba(255,255,255,.92);
       outline:none;
       font-size:12px;
-      line-height:1.35;
+      padding: 0 12px;
       font-family: var(--mono);
       box-shadow: 0 12px 30px rgba(0,0,0,.20);
+    }
+    .beltInput::placeholder{color: rgba(255,255,255,.42)}
+
+    .kpiRow{display:flex;gap:10px;flex-wrap:wrap;margin-top: 10px;}
+
+    .layout{display:grid;grid-template-columns: 280px 1fr;gap: 16px;align-items:start;}
+    @media (max-width: 1100px){.layout{grid-template-columns:1fr;}}
+
+    .side{position:sticky;top:14px;display:flex;flex-direction:column;gap:12px;}
+    @media (max-width: 1100px){.side{position:static;}}
+
+    .sideCard{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      border-radius: var(--r);
+      box-shadow: 0 18px 55px rgba(0,0,0,.18);
+      padding: 12px;
+    }
+    .sideTitle{
+      font-size:12px;
+      color: rgba(255,255,255,.70);
+      letter-spacing:.4px;
+      margin-bottom: 10px;
+      font-weight:700;
+    }
+    .sideTabs{display:flex;flex-direction:column;gap:8px;}
+    .sideBtns{display:flex;gap:8px;flex-wrap:wrap}
+    .mutedBox{background: rgba(0,0,0,.12)}
+
+    .main{display:flex;flex-direction:column;gap:16px;}
+
+    .card{
+      border:1px solid var(--bd);
+      background: var(--card);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
       overflow:hidden;
-      white-space: nowrap;
     }
-    .btn{appearance:none;border:1px solid var(--bd);background: rgba(255,255,255,.05);color:var(--txt);padding:10px 12px;border-radius: 14px;cursor:pointer;transition: .15s ease;box-shadow: 0 12px 30px rgba(0,0,0,.25);font-size:13px;height:44px;display:inline-flex;align-items:center;justify-content:center;}
-    .btn:hover{transform:translateY(-1px); background: rgba(255,255,255,.08)}
-    .btn:active{transform:translateY(0)}
-    .btn.small{padding:7px 10px;font-size:12px;border-radius:11px}
 
-    .grid{display:grid;grid-template-columns: 1fr;gap:16px;}
-
-    .card{border:1px solid var(--bd);background: var(--card);border-radius: var(--r);box-shadow: var(--shadow);overflow:hidden;}
-    .card .hd{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;background: rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.06);}
-    .card .hd .ttl{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.4px;}
-
-    .pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:7px 10px;border:1px solid rgba(255,255,255,.10);border-radius:999px;color:var(--muted);background: rgba(0,0,0,.12);}
-    .pill i{width:8px;height:8px;border-radius:99px;background: rgba(255,255,255,.25);display:inline-block;}
-    .pill.ok i{background: var(--ok)}
-    .pill.bad i{background: var(--bad)}
-    .pill.warn i{background: var(--warn)}
-
-    textarea{
-      width:100%;
-      height: 340px;
-      resize: vertical;
-      padding: 14px 14px;
-      box-sizing:border-box;
-      border:0;
-      outline:none;
-      font-size:13px;
-      line-height:1.45;
-      color:rgba(255,255,255,.92);
-      background: transparent;
-      font-family: var(--mono);
+    .hd{
+      padding:13px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      background: rgba(255,255,255,.04);
+      border-bottom:1px solid rgba(255,255,255,.06);
     }
+    .ttl{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.4px;}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;align-items:center;}
 
     .panel{padding:14px 16px 18px;display:flex;flex-direction:column;gap:12px;}
 
     .tabs{display:flex;gap:8px;flex-wrap:wrap}
     .tab{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:8px 10px;border-radius:999px;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:10px 12px;border-radius: 14px;
       border:1px solid rgba(255,255,255,.10);
       background: rgba(0,0,0,.12);
-      color: rgba(255,255,255,.70);
+      color: rgba(255,255,255,.75);
       cursor:pointer;
       font-size:12px;
       user-select:none;
       transition: .15s ease;
+      width: 100%;
+      box-sizing:border-box;
     }
     .tab:hover{transform: translateY(-1px); background: rgba(255,255,255,.06)}
     .tab.active{background: rgba(255,255,255,.10); color: rgba(255,255,255,.92)}
@@ -130,21 +188,20 @@
     .qrimg{width: 100%;max-width: 320px;border-radius: 14px;background: rgba(255,255,255,.92);padding: 10px;box-sizing:border-box;margin:auto;}
     .qrhint{font-size:11px;color: rgba(255,255,255,.50);line-height:1.25;font-family: var(--mono);max-height: 34px;overflow:hidden;text-overflow: ellipsis;}
 
-    .split{display:grid;grid-template-columns: 280px 1fr;gap:12px;}
-    @media (max-width: 1100px){.split{grid-template-columns:1fr}}
+    .splitWide{display:grid;grid-template-columns: 420px 1fr;gap: 16px;}
+    @media (max-width: 1100px){.splitWide{grid-template-columns:1fr;}}
 
     .nodes{
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(0,0,0,.14);
-      border-radius: var(--r2);
+      border:1px solid var(--bd);
+      background: var(--card);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
       overflow:hidden;
       display:flex;
       flex-direction:column;
       min-height: 260px;
     }
-    .nodesHd{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.06);background: rgba(255,255,255,.03);display:flex;align-items:center;justify-content:space-between;gap:10px;}
-    .nodesHd b{font-size:13px}
-    .nodesHd .right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
     .search{
       appearance:none;
       border:1px solid rgba(255,255,255,.10);
@@ -154,9 +211,12 @@
       border-radius: 999px;
       font-size:12px;
       outline:none;
-      width: 150px;
+      width: 160px;
+      height:34px;
+      font-family: var(--mono);
     }
-    .nlist{padding:10px;display:flex;flex-direction:column;gap:8px;max-height: 520px;overflow:auto;}
+
+    .nlist{padding:12px;display:flex;flex-direction:column;gap:8px;max-height: 520px;overflow:auto;}
     .nitem{
       border:1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.04);
@@ -173,106 +233,183 @@
     .nname{font-size:12px;color: rgba(255,255,255,.88);line-height:1.2;}
     .nmeta{font-size:11px;color: rgba(255,255,255,.50);font-family: var(--mono);white-space: nowrap;overflow:hidden;text-overflow: ellipsis;}
 
-    .rightPane{display:flex;flex-direction:column;gap:12px;}
-
-    .kpi{display:flex;gap:10px;flex-wrap:wrap}
-    .chip{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background: rgba(0,0,0,.12);font-size:12px;color: rgba(255,255,255,.70)}
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.12);
+      font-size:12px;
+      color: rgba(255,255,255,.70)
+    }
     .chip b{color: rgba(255,255,255,.92)}
-
     .muted{color:var(--muted)}
   </style>
 </head>
+
 <body>
   <div class="wrap">
-    <div class="topbar">
-      <div class="brand">
-        <div class="dot"></div>
-        <b>Sub2QR</b>
+
+    <!-- HERO / INPUT BELT -->
+    <div class="hero">
+      <div class="heroTop">
+        <div class="heroBrand">
+          <div class="dot"></div>
+          <div>
+            <div class="heroTitle">Sub2QR</div>
+            <div class="heroSub">Paste anything. Get QR + links + Clash Meta YAML.</div>
+          </div>
+        </div>
       </div>
 
-      <div class="quick">
-        <textarea class="quickInput" id="quickInput" spellcheck="false" placeholder="Paste URL / sing-box JSON / multi-line links / Base64"></textarea>
-        <button class="btn" id="btnPaste">Paste</button>
+      <div class="beltRow">
+        <div class="belt">
+          <input class="beltInput" id="quickInput" spellcheck="false" placeholder="Paste URL / sing-box JSON / multi-line links / Base64" />
+          <button class="btn" id="btnPaste">Paste</button>
+        </div>
+        <div class="pill pillBig" id="pillOut"><i></i><span id="outState">Not parsed</span></div>
       </div>
+
+      <div class="kpiRow" id="kpi"></div>
     </div>
 
-    <div class="grid">
-      <!-- OUTPUT -->
-      <div class="card">
-        <div class="hd">
-          <div class="ttl">Output</div>
-          <div class="pill" id="pillOut"><i></i><span id="outState">Not parsed</span></div>
+    <!-- MAIN LAYOUT -->
+    <div class="layout">
+      <aside class="side">
+        <div class="sideCard">
+          <div class="sideTitle">Software</div>
+          <div class="tabs sideTabs" id="tabs"></div>
         </div>
 
-        <div class="panel">
-          <div class="tabs" id="tabs"></div>
+        <div class="sideCard">
+          <div class="sideTitle">Quick actions</div>
+          <div class="sideBtns">
+            <button class="btn small" data-copy="#primaryLinks">Copy Primary</button>
+            <button class="btn small" data-copy="#exports">Copy Exports</button>
+            <button class="btn small" id="btnDownloadClash2">Download YAML</button>
+          </div>
+        </div>
 
-          <div class="kpi" id="kpi"></div>
+        <div class="sideCard mutedBox">
+          <div class="muted" style="font-size:12px;line-height:1.45">
+            Tip: single node → direct QR.<br/>
+            multiple nodes → subscription + split nodes.
+          </div>
+        </div>
+      </aside>
 
-          <div class="seg" id="segPrimary">
-            <div class="seg-hd">
-              <b>Primary QRs</b>
-              <div class="mini">
-                <button class="btn small" data-copy="#primaryLinks">Copy</button>
+      <main class="main">
+
+        <!-- PRIMARY -->
+        <section class="card">
+          <div class="hd">
+            <div class="ttl">Primary</div>
+            <div class="actions">
+              <button class="btn small" data-copy="#primaryLinks">Copy</button>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="seg">
+              <div class="seg-hd">
+                <b>Links</b>
+                <div class="mini">
+                  <button class="btn small" data-copy="#primaryLinks">Copy</button>
+                </div>
+              </div>
+              <pre id="primaryLinks"></pre>
+            </div>
+
+            <div class="seg">
+              <div class="seg-hd">
+                <b>QR</b>
+                <div class="mini"></div>
+              </div>
+              <div class="twoCols" id="primaryQr"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- NODES + SELECTED -->
+        <section class="splitWide">
+          <div class="nodes" id="nodesBox">
+            <div class="hd">
+              <div class="ttl">Nodes</div>
+              <div class="actions">
+                <input class="search" id="nodeSearch" placeholder="Search" />
+                <button class="btn small" data-copy="#nodeLinks">Copy</button>
               </div>
             </div>
-            <pre id="primaryLinks"></pre>
-            <div class="twoCols" id="primaryQr"></div>
+            <div class="nlist" id="nodeList"></div>
           </div>
 
-          <div class="split">
-            <div class="nodes" id="nodesBox">
-              <div class="nodesHd">
-                <b>Nodes</b>
-                <div class="right">
-                  <input class="search" id="nodeSearch" placeholder="Search" />
+          <div class="card">
+            <div class="hd">
+              <div class="ttl">Selected</div>
+              <div class="actions">
+                <button class="btn small" id="btnCopySelected">Copy</button>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="seg">
+                <div class="seg-hd">
+                  <b>QR</b>
+                  <div class="mini"></div>
+                </div>
+                <div class="twoCols" id="selectedQr"></div>
+              </div>
+              <div class="seg">
+                <div class="seg-hd">
+                  <b>Link</b>
+                  <div class="mini">
+                    <button class="btn small" data-copy="#selectedText">Copy</button>
+                  </div>
+                </div>
+                <pre id="selectedText"></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- EXPORTS -->
+        <section class="card">
+          <div class="hd">
+            <div class="ttl">Exports</div>
+            <div class="actions">
+              <button class="btn small" data-copy="#exports">Copy</button>
+              <button class="btn small" id="btnDownloadClash">Download Clash Meta YAML</button>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="seg">
+              <div class="seg-hd">
+                <b>Text</b>
+                <div class="mini">
+                  <button class="btn small" data-copy="#exports">Copy</button>
+                </div>
+              </div>
+              <pre id="exports"></pre>
+            </div>
+
+            <div class="seg">
+              <div class="seg-hd">
+                <b>All node links</b>
+                <div class="mini">
                   <button class="btn small" data-copy="#nodeLinks">Copy</button>
                 </div>
               </div>
-              <div class="nlist" id="nodeList"></div>
-            </div>
-
-            <div class="rightPane">
-              <div class="seg">
-                <div class="seg-hd">
-                  <b>Selected node</b>
-                  <div class="mini">
-                    <button class="btn small" id="btnCopySelected">Copy</button>
-                  </div>
-                </div>
-                <div class="twoCols" id="selectedQr"></div>
-                <pre id="selectedText"></pre>
-              </div>
-
-              <div class="seg">
-                <div class="seg-hd">
-                  <b>Exports</b>
-                  <div class="mini">
-                    <button class="btn small" data-copy="#exports">Copy</button>
-                    <button class="btn small" id="btnDownloadClash">Download Clash Meta YAML</button>
-                  </div>
-                </div>
-                <pre id="exports"></pre>
-              </div>
-
-              <div class="seg">
-                <div class="seg-hd">
-                  <b>All node links</b>
-                  <div class="mini">
-                    <button class="btn small" data-copy="#nodeLinks">Copy</button>
-                  </div>
-                </div>
-                <pre id="nodeLinks"></pre>
-              </div>
+              <pre id="nodeLinks"></pre>
             </div>
           </div>
+        </section>
 
-        </div>
-      </div>
+      </main>
     </div>
+
   </div>
 
-  <!-- QR lib (CDN primary; JS will also support qrcodejs constructor-style fallback) -->
+  <!-- QR lib (CDN primary; JS supports qrcodejs constructor-style fallback too) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js" referrerpolicy="no-referrer"></script>
 
   <script>
@@ -359,7 +496,6 @@
         tmp.style.top = '0';
         document.body.appendChild(tmp);
         try{
-          // qrcodejs mutates DOM
           new window.QRCode(tmp, {
             text: payload,
             width: 320,
@@ -564,7 +700,6 @@
 
     // ===== platform outputs =====
     function makeShadowrocketSub(subUrl){
-      // widely used in SR ecosystem: sub://BASE64(url)
       return 'sub://' + b64enc(subUrl.trim());
     }
 
@@ -573,7 +708,6 @@
     }
 
     function makeSRInstall(subUrl){
-      // common iOS scheme; safe to offer as an option
       return 'shadowrocket://add/sub?url=' + encodeURIComponent(subUrl.trim());
     }
 
@@ -664,7 +798,6 @@
         const m = u.match(/^([a-z0-9]+):\/\//i);
         const scheme = m ? m[1].toUpperCase() : 'NODE';
         let host = '';
-        // try parse host:port in common formats
         const at = u.indexOf('@');
         const hash = u.indexOf('#');
         const q = u.indexOf('?');
@@ -673,8 +806,6 @@
           const sub = u.slice(at+1, end);
           host = sub;
         }
-        // vless/vmess/trojan have @host:port
-        // ss/vmess base64 may not
         const name = (hash > -1) ? decodeURIComponent(u.slice(hash+1)) : '';
         const title = name ? name : (host ? host : scheme);
         return { title, scheme, meta: u.slice(0, 80) + (u.length > 80 ? '…' : '') };
@@ -808,7 +939,6 @@
       const input = normalizeInput(raw);
       if (!input) return { sourceLabel: 'Idle', subUrls: [], nodeUris: [], clashYaml: buildClashMetaYaml('') };
 
-      // detect multi-line and URLs
       const lines = safeSplitLines(input);
       const urlsInText = lines.filter(l => /^https?:\/\//i.test(l));
 
@@ -816,7 +946,6 @@
       let sourceLabel = 'Parsed';
       const subUrls = [];
 
-      // If input is a single URL
       if (isHttpUrl(input)){
         sourceLabel = 'Fetched';
         subUrls.push(input.trim());
@@ -833,7 +962,6 @@
           mergedText = input;
         }
       } else if (urlsInText.length >= 2){
-        // multi subscription URLs: keep them and try to fetch first 3 to extract nodes
         sourceLabel = 'Mixed URLs';
         for (const u of urlsInText.slice(0, 8)) subUrls.push(u);
         const fetched = [];
@@ -842,22 +970,18 @@
           try{
             const f = await fetchText(u);
             if (f.ok) fetched.push(f.text);
-          }catch(e){
-            // ignore
-          }
+          }catch(e){}
         }
         if (fetched.length){
           mergedText = fetched.join('\n\n') + '\n\n' + input;
         }
       }
 
-      // JSON parse
       let jsonObj = null;
       if (looksLikeJson(mergedText)){
         try{ jsonObj = JSON.parse(mergedText); } catch(e){ jsonObj = null; }
       }
 
-      // base64 decode if a single token
       if (!jsonObj && looksLikeBase64(mergedText)){
         try{
           const decoded = b64dec(mergedText.trim());
@@ -865,9 +989,7 @@
             mergedText = decoded;
             sourceLabel = 'Base64 decoded';
           }
-        }catch(e){
-          // ignore
-        }
+        }catch(e){}
       }
 
       let uris = [];
@@ -879,14 +1001,10 @@
         uris = extractUrisFromText(mergedText);
       }
 
-      // classify
       const httpUrls = uris.filter(u => /^https?:\/\//i.test(u));
       const nodeUris = uris.filter(u => /^(ss|ssr|vmess|vless|trojan|hysteria2|hy2|tuic):\/\//i.test(u));
 
-      // choose subscription URL candidates
-      // prefer fetched/subUrls first
       const allSub = uniq([ ...subUrls, ...httpUrls ]);
-
       const primarySubUrl = allSub[0] || '';
       const clashYaml = buildClashMetaYaml(primarySubUrl);
 
@@ -925,7 +1043,6 @@
             qrItems.push({ title: 'Subscription URL', subtitle: 'Import all (URL)', payload: primarySubUrl });
             qrItems.push({ title: 'sub://', subtitle: 'Shadowrocket subscription', payload: makeShadowrocketSub(primarySubUrl) });
           }
-          // Always provide aggregate
           lines.push('');
           lines.push('# Aggregate (multi-node)');
           lines.push(makeAggregateSubFromNodes(nodeUris));
@@ -1008,7 +1125,6 @@
         lines.push('');
       }
 
-      // always provide platform schemes
       if (primarySubUrl){
         lines.push('# Shadowrocket');
         lines.push(makeSRInstall(primarySubUrl));
@@ -1019,20 +1135,16 @@
         lines.push('');
       }
 
-      // aggregate
       if (nodeUris.length >= 2){
         lines.push('# Aggregate multi-node (sub://)');
         lines.push(makeAggregateSubFromNodes(nodeUris));
         lines.push('');
       }
 
-      // clash yaml preview marker
       lines.push('# Clash Meta YAML (download / copy from this page)');
       lines.push('(Use the Download button)');
 
-      // store for download
       appState.clashYaml = clashYaml;
-
       return lines;
     }
 
@@ -1040,33 +1152,36 @@
       renderTabs(appState.activeTab);
       renderKpi({ subUrls: appState.subUrls, nodeUris: appState.nodeUris, sourceLabel: appState.sourceLabel });
 
-      // primary area
       const p = buildPrimaryForTab(appState.activeTab, appState.subUrls, appState.nodeUris);
       renderPrimaryLinks(p.lines);
       await renderQrBoxes($('#primaryQr'), p.qrItems);
 
-      // node list + selected
       renderNodeLinksText(appState.nodeUris);
       renderNodeList(appState.nodeUris);
       await renderSelected(appState.nodeUris);
 
-      // exports
       const ex = buildExports(appState.activeTab, appState.subUrls, appState.nodeUris, appState.clashYaml);
-      renderExportsText(ex);
+      $('#exports').textContent = ex.join('\n');
 
-      // Only output pill exists in this UI
-      setPill($('#pillOut'), $('#outState'), appState.sourceLabel === 'Idle' ? '' : 'ok', `Ready · ${appState.subUrls.length} sub · ${appState.nodeUris.length} nodes`);
+      const stateText = appState.sourceLabel === 'Idle'
+        ? 'Not parsed'
+        : `Ready · ${appState.subUrls.length} sub · ${appState.nodeUris.length} nodes`;
 
-      // clash download
-      $('#btnDownloadClash').onclick = ()=>{
-        const y = appState.clashYaml || buildClashMetaYaml(appState.subUrls[0] || '');
-        downloadText('clash-meta.yaml', y);
+      setPill($('#pillOut'), $('#outState'), appState.sourceLabel === 'Idle' ? '' : 'ok', stateText);
+
+      const bindYamlBtn = (id)=>{
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.onclick = ()=>{
+          const y = appState.clashYaml || buildClashMetaYaml(appState.subUrls[0] || '');
+          downloadText('clash-meta.yaml', y);
+        };
       };
+      bindYamlBtn('btnDownloadClash');
+      bindYamlBtn('btnDownloadClash2');
 
-      // hide nodes box if none
       $('#nodesBox').style.display = appState.nodeUris.length ? 'flex' : 'none';
 
-      // keep selected index valid
       if (appState.selectedIndex < 0) appState.selectedIndex = 0;
       if (appState.selectedIndex >= appState.nodeUris.length) appState.selectedIndex = 0;
     }
@@ -1082,7 +1197,6 @@
         appState.clashYaml = buildClashMetaYaml('');
         appState.selectedIndex = 0;
         await renderAll();
-        setPill($('#pillOut'), $('#outState'), '', 'Not parsed');
         return;
       }
 
@@ -1094,7 +1208,6 @@
       appState.nodeUris = r.nodeUris;
       appState.clashYaml = r.clashYaml;
       appState.selectedIndex = 0;
-      if (appState.nodeUris.length === 1) appState.selectedIndex = 0;
 
       await renderAll();
     }
@@ -1104,7 +1217,13 @@
       parseTimer = setTimeout(()=> parseAndUpdate(), 60);
     });
 
-    // Immediate parse right after paste (no waiting)
+    $('#quickInput').addEventListener('keydown', (e)=>{
+      if (e.key === 'Enter'){
+        e.preventDefault();
+        parseAndUpdate();
+      }
+    });
+
     $('#quickInput').addEventListener('paste', ()=>{
       if (parseTimer) clearTimeout(parseTimer);
       setTimeout(()=> parseAndUpdate(), 0);
@@ -1125,10 +1244,8 @@
       }
     };
 
-    // copy buttons
     bindCopyButtons();
 
-    // init
     (async ()=>{
       renderTabs(appState.activeTab);
       await parseAndUpdate();
