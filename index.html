@@ -3,1351 +3,733 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Sub2QR Pro MAX</title>
-
+  <title>Sub2QR MAX</title>
   <style>
     :root{
-      --bg0:#05060a;
-      --bg1:rgba(255,255,255,.06);
-      --bg2:rgba(255,255,255,.10);
-      --bd:rgba(255,255,255,.14);
-      --tx:rgba(255,255,255,.92);
-      --tx2:rgba(255,255,255,.68);
-      --tx3:rgba(255,255,255,.48);
-      --good:#2fe27d;
-      --bad:#ff5c7a;
-      --warn:#ffd166;
-      --shadow:0 12px 40px rgba(0,0,0,.55);
+      --bg0:#0b1220;
+      --bg1:#0f1a2c;
+      --card:rgba(255,255,255,.06);
+      --card2:rgba(255,255,255,.08);
+      --bd:rgba(255,255,255,.10);
+      --txt:rgba(255,255,255,.90);
+      --muted:rgba(255,255,255,.55);
+      --ok:#35c56a;
+      --warn:#f7c948;
+      --bad:#ff5a6a;
+      --shadow: 0 18px 55px rgba(0,0,0,.38);
       --r:18px;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, PingFang SC, Noto Sans CJK SC, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
-    *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
-      font-family:var(--sans);
-      color:var(--tx);
+      font-family: ui-sans-serif, system-ui, -apple-system, "SF Pro Display", "PingFang SC","Microsoft Yahei", Arial, sans-serif;
       background:
-        radial-gradient(900px 600px at 10% 15%, rgba(115,67,255,.22), transparent 55%),
-        radial-gradient(1000px 700px at 90% 20%, rgba(46,245,255,.16), transparent 55%),
-        radial-gradient(900px 650px at 60% 95%, rgba(255,77,164,.14), transparent 55%),
-        linear-gradient(180deg, #05060a 0%, #05060a 40%, #05060a 100%);
-      min-height:100vh;
+        radial-gradient(1200px 800px at 15% 10%, rgba(120,80,255,.22), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(0,220,255,.15), transparent 55%),
+        radial-gradient(1100px 900px at 60% 90%, rgba(0,255,160,.10), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      color:var(--txt);
+      overflow-x:hidden;
     }
-
-    header{
-      max-width:1200px;
-      margin:20px auto 12px;
-      padding:0 16px;
+    .wrap{
+      max-width: 1400px;
+      margin: 22px auto;
+      padding: 0 16px 28px;
+    }
+    .topbar{
       display:flex;
       align-items:center;
+      justify-content:space-between;
       gap:12px;
+      margin-bottom:14px;
     }
     .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
+      display:flex;align-items:center;gap:10px;
+      padding:12px 14px;
+      border:1px solid var(--bd);
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+      box-shadow: var(--shadow);
       user-select:none;
     }
-    .logo{
-      width:38px;height:38px;border-radius:12px;
-      background: linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.04));
-      border:1px solid var(--bd);
-      box-shadow: var(--shadow);
+    .dot{
+      width:10px;height:10px;border-radius:99px;
+      background: linear-gradient(135deg, rgba(120,80,255,.9), rgba(0,220,255,.9));
+      box-shadow: 0 0 18px rgba(0,220,255,.35);
     }
-    .title{
-      line-height:1.05;
+    .brand b{letter-spacing:.5px}
+    .brand span{opacity:.6;font-size:12px;margin-left:6px}
+    .actions{
+      display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;
     }
-    .title b{font-size:16px;letter-spacing:.2px}
-    .title div{font-size:12px;color:var(--tx3);margin-top:2px}
-
-    .wrap{
-      max-width:1200px;
-      margin:0 auto;
-      padding:0 16px 20px;
+    .btn{
+      appearance:none;border:1px solid var(--bd);
+      background: rgba(255,255,255,.05);
+      color:var(--txt);
+      padding:10px 12px;
+      border-radius: 12px;
+      cursor:pointer;
+      transition: .15s ease;
+      box-shadow: 0 12px 30px rgba(0,0,0,.25);
+      font-size:13px;
+    }
+    .btn:hover{transform:translateY(-1px); background: rgba(255,255,255,.08)}
+    .btn:active{transform:translateY(0)}
+    .grid{
       display:grid;
-      grid-template-columns: 1.02fr .98fr;
-      gap:14px;
+      grid-template-columns: 1fr 1fr;
+      gap:16px;
     }
     @media (max-width: 980px){
-      .wrap{grid-template-columns: 1fr;}
+      .grid{grid-template-columns:1fr}
     }
 
     .card{
       border:1px solid var(--bd);
-      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      background: var(--card);
       border-radius: var(--r);
       box-shadow: var(--shadow);
       overflow:hidden;
     }
-    .cardHead{
-      padding:12px 14px;
-      border-bottom:1px solid rgba(255,255,255,.08);
+    .card .hd{
+      padding:14px 16px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:10px;
+      gap:12px;
+      background: rgba(255,255,255,.04);
+      border-bottom:1px solid rgba(255,255,255,.06);
     }
-    .cardHead .h{
-      font-size:13px;
-      color:var(--tx2);
-      letter-spacing:.3px;
+    .card .hd .ttl{
+      display:flex;align-items:center;gap:10px;
+      font-weight:700;
+      letter-spacing:.4px;
     }
-    .actions{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-    .btn{
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.05);
-      color:var(--tx);
-      padding:7px 10px;
-      border-radius: 12px;
+    .pill{
+      display:inline-flex;align-items:center;gap:6px;
       font-size:12px;
-      cursor:pointer;
-      transition:.16s ease;
+      padding:7px 10px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:999px;
+      color:var(--muted);
+      background: rgba(0,0,0,.12);
     }
-    .btn:hover{background: rgba(255,255,255,.10)}
-    .btn:active{transform: translateY(1px)}
-    .btn.primary{
-      background: rgba(46,245,255,.14);
-      border-color: rgba(46,245,255,.26);
+    .pill i{
+      width:8px;height:8px;border-radius:99px;
+      background: rgba(255,255,255,.25);
+      display:inline-block;
     }
-    .btn.bad{
-      background: rgba(255,92,122,.14);
-      border-color: rgba(255,92,122,.26);
-    }
-
-    .content{
-      padding:12px 14px 14px;
-    }
+    .pill.ok i{background: var(--ok)}
+    .pill.bad i{background: var(--bad)}
+    .pill.warn i{background: var(--warn)}
 
     textarea{
       width:100%;
-      min-height:160px;
-      resize:vertical;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.22);
-      color:var(--tx);
-      padding:12px;
-      font-family: var(--mono);
-      font-size:12.5px;
-      line-height:1.42;
+      height: 340px;
+      resize: vertical;
+      padding: 14px 14px;
+      box-sizing:border-box;
+      border:0;
       outline:none;
-    }
-    textarea:focus{
-      border-color: rgba(46,245,255,.40);
-      box-shadow: 0 0 0 3px rgba(46,245,255,.12);
-    }
-
-    .hintRow{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-top:10px;
-    }
-    .status{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      font-size:12px;
-      color: var(--tx3);
-    }
-    .dot{
-      width:10px;height:10px;border-radius:50%;
-      background: rgba(255,255,255,.16);
-      box-shadow: 0 0 0 2px rgba(255,255,255,.06) inset;
-    }
-    .dot.good{background: var(--good)}
-    .dot.bad{background: var(--bad)}
-    .dot.warn{background: var(--warn)}
-    .small{
-      font-size:12px;
-      color: var(--tx3);
-    }
-
-    .split{
-      height:1px;
-      background: rgba(255,255,255,.08);
-      margin:12px 0;
-    }
-
-    .outBox{
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-    }
-
-    .nodes{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:12px;
-    }
-
-    .node{
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.18);
-      border-radius: 16px;
-      padding:12px;
-      display:grid;
-      grid-template-columns: 120px 1fr;
-      gap:12px;
-      align-items:start;
-    }
-    @media (max-width: 480px){
-      .node{grid-template-columns: 1fr;}
-    }
-
-    .qr{
-      width:120px;height:120px;
-      border-radius: 14px;
-      background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-    }
-    .qr canvas,.qr img{width:112px;height:112px}
-    .nodeMeta{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      min-width:0;
-    }
-    .nodeTop{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .nodeName{
       font-size:13px;
-      color:var(--tx);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      max-width: 100%;
+      line-height:1.45;
+      color:rgba(255,255,255,.92);
+      background: transparent;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     }
+    .subinfo{
+      padding: 0 16px 14px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .out{
+      padding: 14px 16px 18px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .seg{
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.14);
+      border-radius: 14px;
+      overflow:hidden;
+    }
+    .seg .seg-hd{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 10px 12px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      background: rgba(255,255,255,.03);
+    }
+    .seg .seg-hd b{font-size:13px}
+    .seg .seg-hd .mini{
+      display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;
+    }
+    .seg pre{
+      margin:0;
+      padding: 12px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      font-size:12px;
+      line-height:1.35;
+      color: rgba(255,255,255,.88);
+    }
+
+    .qrgrid{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:12px;
+    }
+    @media (max-width: 540px){
+      .qrgrid{grid-template-columns:1fr}
+    }
+    .qrbox{
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.14);
+      border-radius: 14px;
+      padding: 10px;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .qrbox .qttl{
+      display:flex;align-items:center;justify-content:space-between;gap:8px;
+      font-size:12px;color:var(--muted)
+    }
+    .qrbox canvas, .qrbox img{
+      width: 100%;
+      max-width: 260px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.92);
+      padding: 8px;
+      box-sizing:border-box;
+      margin:auto;
+    }
+    .qrhint{
+      font-size:11px;
+      color: rgba(255,255,255,.50);
+      line-height:1.25;
+    }
+
     .tag{
       font-size:11px;
-      color:var(--tx3);
-      padding:2px 8px;
-      border:1px solid rgba(255,255,255,.12);
-      border-radius: 999px;
-      background: rgba(255,255,255,.04);
-      flex:0 0 auto;
-    }
-    .monoLine{
-      font-family: var(--mono);
-      font-size:12px;
-      color: rgba(255,255,255,.72);
-      background: rgba(0,0,0,.20);
       border:1px solid rgba(255,255,255,.10);
-      padding:8px 10px;
-      border-radius: 12px;
-      overflow:hidden;
-      white-space:nowrap;
-      text-overflow:ellipsis;
+      padding:4px 8px;
+      border-radius:999px;
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.70);
     }
-    .nodeBtns{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
+    .row{
+      display:flex;align-items:center;gap:8px;flex-wrap:wrap;
     }
-
-    .outTextarea{
-      min-height:140px;
-    }
-
-    .muted{
-      color:var(--tx3);
-      font-size:12px;
-    }
-
-    .empty{
-      padding:28px 14px;
-      text-align:center;
-      color:var(--tx3);
-      font-size:13px;
-    }
-
-    .toast{
-      position: fixed;
-      left: 50%;
-      bottom: 18px;
-      transform: translateX(-50%);
-      padding: 10px 14px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.60);
-      border-radius: 14px;
-      box-shadow: var(--shadow);
-      color: var(--tx);
-      font-size: 12.5px;
-      opacity: 0;
-      pointer-events:none;
-      transition:.18s ease;
-    }
-    .toast.show{opacity:1; transform: translateX(-50%) translateY(-2px);}
+    .muted{color:var(--muted)}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
   </style>
 </head>
-
 <body>
-  <header>
-    <div class="brand">
-      <div class="logo"></div>
-      <div class="title">
-        <b>Sub2QR Pro MAX</b>
-        <div>粘贴即识别 · 自动拆分 · 必出二维码</div>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="dot"></div>
+        <b>Sub2QR MAX</b>
+        <span class="muted">auto parse · all outputs · all QR</span>
+      </div>
+      <div class="actions">
+        <button class="btn" id="btnPaste">粘贴</button>
+        <button class="btn" id="btnClear">清空</button>
+        <button class="btn" id="btnDemo">示例</button>
       </div>
     </div>
-  </header>
 
-  <div class="wrap">
-    <!-- LEFT: INPUT -->
-    <section class="card">
-      <div class="cardHead">
-        <div class="h">输入</div>
-        <div class="actions">
-          <button class="btn" id="btnPaste">粘贴</button>
-          <button class="btn bad" id="btnClear">清空</button>
-          <button class="btn primary" id="btnForceParse">强制识别</button>
+    <div class="grid">
+      <!-- INPUT -->
+      <div class="card">
+        <div class="hd">
+          <div class="ttl">输入</div>
+          <div class="pill" id="pillIn"><i></i><span id="inState">等待输入</span></div>
+        </div>
+        <textarea id="input" spellcheck="false" placeholder="粘贴：订阅链接 / sing-box JSON / 多行节点 / Base64"></textarea>
+        <div class="subinfo" id="inInfo">
+          你贴什么我都识别：如果是链接，会自动拉取；如果是 JSON，会直接解析；如果是多行节点，会逐条拆分并输出二维码。
         </div>
       </div>
 
-      <div class="content">
-        <textarea id="input" spellcheck="false" placeholder="订阅 URL / sing-box JSON / Base64订阅 / 多行分享链接"></textarea>
-
-        <div class="hintRow">
-          <div class="status">
-            <div id="dot" class="dot"></div>
-            <div id="statusText">等待输入…</div>
-          </div>
-          <div class="small" id="detectedType">—</div>
+      <!-- OUTPUT -->
+      <div class="card">
+        <div class="hd">
+          <div class="ttl">输出</div>
+          <div class="pill" id="pillOut"><i></i><span id="outState">未解析</span></div>
         </div>
 
-        <div class="split"></div>
+        <div class="out" id="outRoot">
+          <!-- Subscription Links -->
+          <div class="seg">
+            <div class="seg-hd">
+              <b>订阅 / 导入链接</b>
+              <div class="mini">
+                <button class="btn" data-copy="#subLinks">复制</button>
+                <button class="btn" id="btnDownloadClash">下载 Clash Meta YAML</button>
+              </div>
+            </div>
+            <pre id="subLinks" class="mono"></pre>
+          </div>
 
-        <div class="outBox">
-          <div>
-            <div class="muted" style="margin-bottom:8px;">导出（自动汇总全部可能：分享链接 + Base64订阅 + sing-box outbound JSON）</div>
-            <textarea id="exportText" class="outTextarea" spellcheck="false" placeholder="识别成功后自动生成"></textarea>
-            <div class="hintRow" style="margin-top:10px;">
-              <div class="muted">复制后可直接喂给其它转换器/客户端</div>
-              <div class="actions">
-                <button class="btn" id="btnCopyExport">复制</button>
-                <button class="btn" id="btnDownloadExport">下载 .txt</button>
+          <!-- Node Links -->
+          <div class="seg">
+            <div class="seg-hd">
+              <b>节点链接（逐条）</b>
+              <div class="mini">
+                <button class="btn" data-copy="#nodeLinks">复制</button>
+              </div>
+            </div>
+            <pre id="nodeLinks" class="mono"></pre>
+          </div>
+
+          <!-- QR Section -->
+          <div class="seg">
+            <div class="seg-hd">
+              <b>二维码</b>
+              <div class="mini">
+                <span class="tag">Shadowrocket ✅</span>
+                <span class="tag">Clash Meta ✅</span>
+              </div>
+            </div>
+            <div style="padding:12px;">
+              <div class="qrgrid" id="qrGrid"></div>
+              <div class="qrhint" style="margin-top:10px;">
+                说明：Shadowrocket 扫码最稳的是 “单节点 QR” 或 “sub:// 订阅 QR”。如果二维码内容太长，优先用订阅类二维码。
               </div>
             </div>
           </div>
 
-          <div>
-            <div class="muted" style="margin-bottom:8px;">识别到的原始内容（调试）</div>
-            <textarea id="rawText" class="outTextarea" spellcheck="false" placeholder="URL 拉取结果 / Base64 解码结果 / JSON 规范化结果"></textarea>
-            <div class="hintRow" style="margin-top:10px;">
-              <div class="muted">不想看可忽略</div>
-              <div class="actions">
-                <button class="btn" id="btnCopyRaw">复制</button>
+          <!-- Clash YAML Preview -->
+          <div class="seg">
+            <div class="seg-hd">
+              <b>Clash Meta YAML（预览）</b>
+              <div class="mini">
+                <button class="btn" data-copy="#clashYaml">复制</button>
               </div>
             </div>
+            <pre id="clashYaml" class="mono"></pre>
           </div>
-
-        </div>
-
-      </div>
-    </section>
-
-    <!-- RIGHT: OUTPUT -->
-    <section class="card">
-      <div class="cardHead">
-        <div class="h">输出（逐条 QR）</div>
-        <div class="actions">
-          <button class="btn" id="btnCopyAllLinks">复制全部可导入内容</button>
-          <button class="btn" id="btnDownloadAllLinks">下载 all.txt</button>
         </div>
       </div>
-
-      <div class="content" id="rightContent">
-        <div class="empty" id="emptyState">
-          粘贴即可。右侧自动出节点二维码。
-        </div>
-
-        <div class="nodes" id="nodes"></div>
-      </div>
-    </section>
+    </div>
   </div>
 
-  <div class="toast" id="toast">已复制</div>
-
-  <!-- QR generator -->
-  <script>
-    (function(global){
-      function QR8bitByte(data) {
-        this.mode = 1;
-        this.data = data;
-      }
-      QR8bitByte.prototype = {
-        getLength: function(){ return this.data.length; },
-        write: function(buffer){
-          for (var i=0;i<this.data.length;i++){
-            buffer.put(this.data.charCodeAt(i), 8);
-          }
-        }
-      };
-
-      function BitBuffer(){
-        this.buffer = [];
-        this.length = 0;
-      }
-      BitBuffer.prototype = {
-        get: function(index){
-          var bufIndex = Math.floor(index / 8);
-          return ((this.buffer[bufIndex] >>> (7 - index % 8)) & 1) == 1;
-        },
-        put: function(num, length){
-          for (var i=0;i<length;i++){
-            this.putBit(((num >>> (length - i - 1)) & 1) == 1);
-          }
-        },
-        putBit: function(bit){
-          var bufIndex = Math.floor(this.length / 8);
-          if (this.buffer.length <= bufIndex) this.buffer.push(0);
-          if (bit) this.buffer[bufIndex] |= (0x80 >>> (this.length % 8));
-          this.length++;
-        }
-      };
-
-      var QRMath = {
-        glog: function(n){
-          if (n < 1) throw new Error("glog(" + n + ")");
-          return QRMath.LOG_TABLE[n];
-        },
-        gexp: function(n){
-          while (n < 0) n += 255;
-          while (n >= 256) n -= 255;
-          return QRMath.EXP_TABLE[n];
-        },
-        EXP_TABLE: new Array(256),
-        LOG_TABLE: new Array(256)
-      };
-      for (var i=0;i<8;i++) QRMath.EXP_TABLE[i] = 1 << i;
-      for (var i=8;i<256;i++) QRMath.EXP_TABLE[i] = QRMath.EXP_TABLE[i-4] ^ QRMath.EXP_TABLE[i-5] ^ QRMath.EXP_TABLE[i-6] ^ QRMath.EXP_TABLE[i-8];
-      for (var i=0;i<255;i++) QRMath.LOG_TABLE[QRMath.EXP_TABLE[i]] = i;
-
-      function QRPolynomial(num, shift){
-        var offset = 0;
-        while (offset < num.length && num[offset] == 0) offset++;
-        this.num = new Array(num.length - offset + shift);
-        for (var i=0;i<num.length - offset;i++) this.num[i] = num[i + offset];
-      }
-      QRPolynomial.prototype = {
-        get: function(index){ return this.num[index]; },
-        getLength: function(){ return this.num.length; },
-        multiply: function(e){
-          var num = new Array(this.getLength() + e.getLength() - 1);
-          for (var i=0;i<num.length;i++) num[i] = 0;
-          for (var i=0;i<this.getLength();i++){
-            for (var j=0;j<e.getLength();j++){
-              num[i + j] ^= QRMath.gexp(QRMath.glog(this.get(i)) + QRMath.glog(e.get(j)));
-            }
-          }
-          return new QRPolynomial(num, 0);
-        },
-        mod: function(e){
-          if (this.getLength() - e.getLength() < 0) return this;
-          var ratio = QRMath.glog(this.get(0)) - QRMath.glog(e.get(0));
-          var num = new Array(this.getLength());
-          for (var i=0;i<this.getLength();i++) num[i] = this.get(i);
-          for (var i=0;i<e.getLength();i++) num[i] ^= QRMath.gexp(QRMath.glog(e.get(i)) + ratio);
-          return new QRPolynomial(num, 0).mod(e);
-        }
-      };
-
-      var QRRSBlock = {
-        RS_BLOCK_TABLE_M: [
-          null,
-          [1, 26, 16],
-          [1, 44, 28],
-          [1, 70, 44],
-          [2, 50, 32],
-          [2, 67, 43],
-          [4, 43, 27],
-          [4, 49, 31],
-          [4, 60, 38],
-          [5, 58, 36],
-          [5, 69, 43],
-        ],
-        getRSBlocks: function(typeNumber){
-          var rsBlock = QRRSBlock.RS_BLOCK_TABLE_M[typeNumber];
-          if (!rsBlock) throw new Error("RSBlock not found: v" + typeNumber);
-          var list = [];
-          for (var i=0;i<rsBlock[0];i++){
-            list.push({ totalCount: rsBlock[1], dataCount: rsBlock[2] });
-          }
-          return list;
-        }
-      };
-
-      function QRCodeModel(typeNumber, data){
-        this.typeNumber = typeNumber;
-        this.modules = null;
-        this.moduleCount = 0;
-        this.dataList = [ new QR8bitByte(data) ];
-      }
-
-      QRCodeModel.prototype = {
-        make: function(){
-          this.moduleCount = this.typeNumber * 4 + 17;
-          this.modules = new Array(this.moduleCount);
-          for (var row=0;row<this.moduleCount;row++){
-            this.modules[row] = new Array(this.moduleCount);
-            for (var col=0;col<this.moduleCount;col++) this.modules[row][col] = null;
-          }
-          this.setupPositionProbePattern(0,0);
-          this.setupPositionProbePattern(this.moduleCount - 7, 0);
-          this.setupPositionProbePattern(0, this.moduleCount - 7);
-          this.setupTimingPattern();
-          this.setupTypeInfo();
-          if (this.typeNumber >= 2) this.setupAlignmentPattern();
-          this.mapData(this.createData(), 0);
-        },
-        setupPositionProbePattern: function(row,col){
-          for (var r=-1;r<=7;r++){
-            if (row + r <= -1 || this.moduleCount <= row + r) continue;
-            for (var c=-1;c<=7;c++){
-              if (col + c <= -1 || this.moduleCount <= col + c) continue;
-              if ((0 <= r && r <= 6 && (c == 0 || c == 6)) ||
-                  (0 <= c && c <= 6 && (r == 0 || r == 6)) ||
-                  (2 <= r && r <= 4 && 2 <= c && c <= 4)){
-                this.modules[row+r][col+c] = true;
-              } else {
-                this.modules[row+r][col+c] = false;
-              }
-            }
-          }
-        },
-        setupTimingPattern: function(){
-          for (var i=8;i<this.moduleCount - 8;i++){
-            if (this.modules[i][6] === null) this.modules[i][6] = (i % 2 == 0);
-            if (this.modules[6][i] === null) this.modules[6][i] = (i % 2 == 0);
-          }
-        },
-        setupAlignmentPattern: function(){
-          var posTable = {
-            2:[6,18], 3:[6,22], 4:[6,26], 5:[6,30],
-            6:[6,34], 7:[6,22,38], 8:[6,24,42], 9:[6,26,46], 10:[6,28,50]
-          };
-          var pos = posTable[this.typeNumber];
-          if (!pos) return;
-          for (var i=0;i<pos.length;i++){
-            for (var j=0;j<pos.length;j++){
-              var row = pos[i], col = pos[j];
-              if (this.modules[row][col] !== null) continue;
-              for (var r=-2;r<=2;r++){
-                for (var c=-2;c<=2;c++){
-                  if (Math.abs(r) == 2 || Math.abs(c) == 2 || (r == 0 && c == 0)){
-                    this.modules[row+r][col+c] = true;
-                  } else {
-                    this.modules[row+r][col+c] = false;
-                  }
-                }
-              }
-            }
-          }
-        },
-        setupTypeInfo: function(){
-          var data = "101010000010010"; // (M, mask0)
-          for (var i=0;i<15;i++){
-            var bit = data.charAt(i) == "1";
-            if (i < 6) this.modules[i][8] = bit;
-            else if (i < 8) this.modules[i+1][8] = bit;
-            else this.modules[this.moduleCount - 15 + i][8] = bit;
-          }
-          for (var i=0;i<15;i++){
-            var bit = data.charAt(i) == "1";
-            if (i < 8) this.modules[8][this.moduleCount - i - 1] = bit;
-            else if (i < 9) this.modules[8][15 - i - 1 + 1] = bit;
-            else this.modules[8][15 - i - 1] = bit;
-          }
-          this.modules[this.moduleCount - 8][8] = true;
-        },
-        createData: function(){
-          var rsBlocks = QRRSBlock.getRSBlocks(this.typeNumber);
-          var buffer = new BitBuffer();
-
-          buffer.put(4, 4); // 8bit
-          var data = this.dataList[0];
-          buffer.put(data.getLength(), 8);
-          data.write(buffer);
-
-          var totalDataCount = 0;
-          for (var i=0;i<rsBlocks.length;i++) totalDataCount += rsBlocks[i].dataCount;
-
-          if (buffer.length + 4 <= totalDataCount * 8) buffer.put(0, 4);
-          while (buffer.length % 8 != 0) buffer.putBit(false);
-
-          var padBytes = [0xec, 0x11];
-          var padIndex = 0;
-          while (buffer.length / 8 < totalDataCount){
-            buffer.put(padBytes[padIndex % 2], 8);
-            padIndex++;
-          }
-
-          var offset = 0;
-          var dcdata = [];
-          var ecdata = [];
-          var maxDcCount = 0, maxEcCount = 0;
-
-          for (var r=0;r<rsBlocks.length;r++){
-            var dcCount = rsBlocks[r].dataCount;
-            var ecCount = rsBlocks[r].totalCount - dcCount;
-            maxDcCount = Math.max(maxDcCount, dcCount);
-            maxEcCount = Math.max(maxEcCount, ecCount);
-
-            dcdata[r] = new Array(dcCount);
-            for (var i=0;i<dcdata[r].length;i++){
-              dcdata[r][i] = 0xff & buffer.buffer[i + offset];
-            }
-            offset += dcCount;
-
-            var rsPoly = QRCodeModel.getErrorCorrectPolynomial(ecCount);
-            var rawPoly = new QRPolynomial(dcdata[r], rsPoly.getLength() - 1);
-            var modPoly = rawPoly.mod(rsPoly);
-
-            ecdata[r] = new Array(rsPoly.getLength() - 1);
-            for (var i=0;i<ecdata[r].length;i++){
-              var modIndex = i + modPoly.getLength() - ecdata[r].length;
-              ecdata[r][i] = (modIndex >= 0) ? modPoly.get(modIndex) : 0;
-            }
-          }
-
-          var totalCodeCount = 0;
-          for (var i=0;i<rsBlocks.length;i++) totalCodeCount += rsBlocks[i].totalCount;
-
-          var dataBytes = new Array(totalCodeCount);
-          var index = 0;
-          for (var i=0;i<maxDcCount;i++){
-            for (var r=0;r<rsBlocks.length;r++){
-              if (i < dcdata[r].length) dataBytes[index++] = dcdata[r][i];
-            }
-          }
-          for (var i=0;i<maxEcCount;i++){
-            for (var r=0;r<rsBlocks.length;r++){
-              if (i < ecdata[r].length) dataBytes[index++] = ecdata[r][i];
-            }
-          }
-          return dataBytes;
-        },
-        mapData: function(data){
-          var inc = -1;
-          var row = this.moduleCount - 1;
-          var bitIndex = 7;
-          var byteIndex = 0;
-
-          for (var col=this.moduleCount - 1; col>0; col-=2){
-            if (col == 6) col--;
-            while (true){
-              for (var c=0;c<2;c++){
-                if (this.modules[row][col - c] === null){
-                  var dark = false;
-                  if (byteIndex < data.length){
-                    dark = (((data[byteIndex] >>> bitIndex) & 1) == 1);
-                  }
-                  var mask = ((row + (col - c)) % 2 == 0); // mask0
-                  this.modules[row][col - c] = mask ? !dark : dark;
-
-                  bitIndex--;
-                  if (bitIndex == -1){
-                    byteIndex++;
-                    bitIndex = 7;
-                  }
-                }
-              }
-              row += inc;
-              if (row < 0 || this.moduleCount <= row){
-                row -= inc;
-                inc = -inc;
-                break;
-              }
-            }
-          }
-        }
-      };
-
-      QRCodeModel.getErrorCorrectPolynomial = function(errorCorrectLength){
-        var a = new QRPolynomial([1],0);
-        for (var i=0;i<errorCorrectLength;i++){
-          a = a.multiply(new QRPolynomial([1, QRMath.gexp(i)],0));
-        }
-        return a;
-      };
-
-      function bestTypeNumberForText(text){
-        var len = text.length;
-        if (len <= 14) return 1;
-        if (len <= 26) return 2;
-        if (len <= 42) return 3;
-        if (len <= 62) return 4;
-        if (len <= 84) return 5;
-        if (len <= 106) return 6;
-        if (len <= 122) return 7;
-        if (len <= 152) return 8;
-        if (len <= 180) return 9;
-        return 10;
-      }
-
-      function drawQRToCanvas(canvas, text){
-        var typeNumber = bestTypeNumberForText(text);
-        var qr = new QRCodeModel(typeNumber, text);
-        qr.make();
-
-        var size = canvas.width;
-        var count = qr.moduleCount;
-        var cell = Math.floor(size / count);
-        var margin = Math.floor((size - cell * count) / 2);
-
-        var ctx = canvas.getContext("2d");
-        ctx.clearRect(0,0,size,size);
-
-        ctx.fillStyle = "rgba(255,255,255,0.02)";
-        ctx.fillRect(0,0,size,size);
-
-        ctx.fillStyle = "rgba(255,255,255,0.92)";
-        for (var r=0;r<count;r++){
-          for (var c=0;c<count;c++){
-            if (qr.modules[r][c]){
-              ctx.fillRect(margin + c*cell, margin + r*cell, cell, cell);
-            }
-          }
-        }
-      }
-
-      global.__drawQRToCanvas = drawQRToCanvas;
-    })(window);
-  </script>
+  <!-- QRCode generator -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
 
   <script>
+    // ===== Helpers =====
     const $ = (sel) => document.querySelector(sel);
+    const escapeNL = (s) => (s || "").replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+    const isHttpUrl = (s) => /^https?:\/\/\S+$/i.test((s||"").trim());
+    const looksLikeJson = (s) => {
+      const t = (s||"").trim();
+      return (t.startsWith("{") && t.endsWith("}")) || (t.startsWith("[") && t.endsWith("]"));
+    };
+    const looksLikeBase64 = (s) => {
+      const t = (s||"").trim();
+      if (t.length < 16) return false;
+      if (/\s/.test(t)) return false;
+      // allow URL-safe base64 too
+      return /^[A-Za-z0-9+/_-]+={0,2}$/.test(t);
+    };
+    const b64enc = (s) => btoa(unescape(encodeURIComponent(s)));
+    const b64dec = (s) => {
+      // handle urlsafe
+      const t = s.replace(/-/g, "+").replace(/_/g, "/");
+      return decodeURIComponent(escape(atob(t)));
+    };
+    const uniq = (arr) => Array.from(new Set(arr.filter(Boolean)));
 
-    function toast(msg="OK"){
-      const t = $("#toast");
-      t.textContent = msg;
-      t.classList.add("show");
-      clearTimeout(window.__toastTimer);
-      window.__toastTimer = setTimeout(()=>t.classList.remove("show"), 980);
+    function setPill(pillEl, stateEl, type, text){
+      pillEl.classList.remove("ok","bad","warn");
+      if (type) pillEl.classList.add(type);
+      stateEl.textContent = text;
     }
 
-    async function copyText(text){
-      try{
-        await navigator.clipboard.writeText(text);
-        toast("已复制");
-      }catch(e){
-        const ta = document.createElement("textarea");
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        document.body.removeChild(ta);
-        toast("已复制");
-      }
-    }
-
-    function downloadText(filename, text){
-      const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
-
-    function setStatus(kind, text, detected="—"){
-      const dot = $("#dot");
-      dot.className = "dot";
-      if (kind === "good") dot.classList.add("good");
-      if (kind === "bad") dot.classList.add("bad");
-      if (kind === "warn") dot.classList.add("warn");
-      $("#statusText").textContent = text;
-      $("#detectedType").textContent = detected;
-    }
-
-    function safeTrim(s){
-      return (s || "").replace(/\u200B/g, "").trim();
-    }
-
-    function isProbablyUrl(s){
-      return /^https?:\/\/\S+/i.test(s.trim());
-    }
-
-    function isProbablyJSON(s){
-      const t = s.trim();
-      return (t.startsWith("{") && t.endsWith("}"));
-    }
-
-    function looksBase64(s){
-      const t = s.trim().replace(/\s+/g,"");
-      if (t.length < 80) return false;
-      if (!/^[A-Za-z0-9+\/=]+$/.test(t)) return false;
-      return true;
-    }
-
-    function tryBase64Decode(b64){
-      try{
-        const cleaned = b64.trim().replace(/\s+/g,"");
-        const pad = cleaned.length % 4;
-        const padded = pad === 0 ? cleaned : cleaned + "=".repeat(4 - pad);
-        const bin = atob(padded);
-        const bytes = new Uint8Array(bin.length);
-        for (let i=0;i<bin.length;i++) bytes[i] = bin.charCodeAt(i);
-        return new TextDecoder("utf-8", {fatal:false}).decode(bytes);
-      }catch(e){
-        return null;
-      }
-    }
-
-    function base64EncodeUtf8(text){
-      const bytes = new TextEncoder().encode(text);
-      let bin = "";
-      bytes.forEach(b => bin += String.fromCharCode(b));
-      return btoa(bin);
-    }
-
-    function splitLines(text){
-      return text
-        .replace(/\r\n/g,"\n")
-        .replace(/\r/g,"\n")
+    function safeSplitLines(text){
+      return escapeNL(text)
         .split("\n")
-        .map(s=>s.trim())
+        .map(x => x.trim())
         .filter(Boolean);
     }
 
-    function normalizeOutboundName(o){
-      return (o.tag || o.name || o.server || o.address || o.type || "node").toString();
-    }
-
-    function detectShareLine(line){
-      const s = line.trim();
-      if (!s) return null;
-      const prefixes = ["ss://","trojan://","vmess://","vless://","hysteria2://","hy2://","tuic://","socks://","http://","https://"];
-      for (const p of prefixes){
-        if (s.toLowerCase().startsWith(p)) return s;
-      }
-      return null;
-    }
-
-    function extractTypeFromLink(link){
-      const m = link.match(/^([a-zA-Z0-9+.-]+):\/\//);
-      return (m ? m[1].toLowerCase() : "link");
-    }
-
-    function extractNameFromLink(link){
-      try{
-        const hashIndex = link.indexOf("#");
-        if (hashIndex >= 0){
-          return decodeURIComponent(link.slice(hashIndex+1)).trim();
-        }
-      }catch(e){}
-      return "";
-    }
-
-    function tryParseJSON(s){
-      try{
-        const cleaned = s.replace(/^\uFEFF/,"").trim();
-        return JSON.parse(cleaned);
-      }catch(e){
-        return null;
-      }
-    }
-
-    async function fetchAsText(url){
-      try{
-        const resp = await fetch(url, { method:"GET", mode:"cors", cache:"no-store" });
-        const text = await resp.text();
-        if (!resp.ok){
-          return { ok:false, error:`HTTP ${resp.status} ${resp.statusText}` };
-        }
-        return { ok:true, text };
-      }catch(e){
-        return { ok:false, error: (e && e.message) ? e.message : String(e) };
-      }
-    }
-
-    function compactJSON(obj){
-      try{
-        return JSON.stringify(obj);
-      }catch(e){
-        return String(obj);
-      }
-    }
-
-    // sing-box outbound -> share link (best-effort)
-    function outboundToShareLink(outbound){
-      const type = (outbound.type || "").toLowerCase();
-      const tag = encodeURIComponent(outbound.tag || outbound.name || outbound.server || "node");
-
-      const server = outbound.server || outbound.address || outbound.host || "";
-      const port = outbound.server_port || outbound.port || "";
-
-      if (type === "shadowsocks" || type === "ss"){
-        const method = outbound.method || "";
-        const password = outbound.password || "";
-        if (!server || !port || !method || !password) return null;
-        const userinfo = `${method}:${password}`;
-        const b64 = base64EncodeUtf8(userinfo).replace(/=+$/,"");
-        return `ss://${b64}@${server}:${port}#${tag}`;
-      }
-
-      if (type === "trojan"){
-        const password = outbound.password || outbound.pass || "";
-        if (!server || !port || !password) return null;
-        const sni = outbound.tls?.server_name || outbound.server_name || outbound.sni || "";
-        const qp = new URLSearchParams();
-        qp.set("security","tls");
-        if (sni) qp.set("sni", sni);
-        return `trojan://${encodeURIComponent(password)}@${server}:${port}?${qp.toString()}#${tag}`;
-      }
-
-      if (type === "vless"){
-        const uuid = outbound.uuid || outbound.id || "";
-        if (!server || !port || !uuid) return null;
-
-        const qp = new URLSearchParams();
-        qp.set("encryption","none");
-
-        const transport = outbound.transport || {};
-        const ttype = (transport.type || outbound.transport_type || "").toLowerCase();
-
-        const tls = outbound.tls || {};
-        if (tls){
-          qp.set("security", tls.enabled === false ? "none" : "tls");
-          const sni = tls.server_name || outbound.server_name || outbound.sni || "";
-          if (sni) qp.set("sni", sni);
-        }
-
-        if (ttype === "ws" || ttype === "websocket"){
-          qp.set("type","ws");
-          const path = transport.path || "/";
-          qp.set("path", path);
-          const host = transport.headers?.Host || transport.headers?.host || "";
-          if (host) qp.set("host", host);
-        }else if (ttype === "grpc"){
-          qp.set("type","grpc");
-          const serviceName = transport.service_name || transport.serviceName || "";
-          if (serviceName) qp.set("serviceName", serviceName);
-        }else if (ttype){
-          qp.set("type", ttype);
-        }
-
-        return `vless://${uuid}@${server}:${port}?${qp.toString()}#${tag}`;
-      }
-
-      if (type === "vmess"){
-        const uuid = outbound.uuid || outbound.id || "";
-        if (!server || !port || !uuid) return null;
-
-        const obj = {
-          v: "2",
-          ps: outbound.tag || "vmess",
-          add: server,
-          port: String(port),
-          id: uuid,
-          aid: "0",
-          net: "tcp",
-          type: "none",
-          host: "",
-          path: "",
-          tls: ""
-        };
-
-        const transport = outbound.transport || {};
-        const ttype = (transport.type || "").toLowerCase();
-        if (ttype === "ws" || ttype === "websocket"){
-          obj.net = "ws";
-          obj.path = transport.path || "/";
-          obj.host = transport.headers?.Host || transport.headers?.host || "";
-        }
-
-        const tls = outbound.tls || {};
-        if (tls && (tls.enabled !== false)){
-          obj.tls = "tls";
-          obj.sni = tls.server_name || "";
-        }
-
-        const b64 = base64EncodeUtf8(JSON.stringify(obj));
-        return `vmess://${b64}`;
-      }
-
-      return null;
-    }
-
-    function parseSingBoxJSON(jsonObj){
-      const outbounds = Array.isArray(jsonObj?.outbounds) ? jsonObj.outbounds : [];
-      const nodes = [];
-
-      for (const o of outbounds){
-        const type = (o?.type || "").toLowerCase();
-        const tag = normalizeOutboundName(o);
-
-        // skip builtin placeholders
-        if (!type || ["direct","block","dns","selector","urltest","url-test","auto","auto-test"].includes(type)) continue;
-
-        const link = outboundToShareLink(o); // best-effort
-        // ✅ 不管能不能转链接，都保留 node（保证右侧必出二维码）
-        nodes.push({
-          name: tag,
-          type: type,
-          link: link,     // may be null
-          raw: o
-        });
-      }
-      return nodes;
-    }
-
-    // --------------------------- 核心：自动识别入口 ---------------------------
-    async function parseInputSmart(inputText){
-      const raw = safeTrim(inputText);
-      if (!raw) return { kind:"empty" };
-
-      // A) 单行 URL：先拉取再解析
-      if (isProbablyUrl(raw) && splitLines(raw).length === 1){
-        const url = raw.trim();
-        const fetched = await fetchAsText(url);
-        if (!fetched.ok){
-          return { kind:"error", detected:"URL", message:`URL 拉取失败：${fetched.error}` };
-        }
-        const inner = await parseInputSmart(fetched.text);
-        inner.detected = "URL → " + (inner.detected || "内容");
-        inner.rawText = fetched.text;
-        inner.sourceUrl = url;
-        return inner;
-      }
-
-      // B) 直接 JSON
-      if (isProbablyJSON(raw)){
-        const obj = tryParseJSON(raw);
-        if (!obj){
-          return { kind:"error", detected:"JSON", message:"不是合法 JSON（请粘贴完整 sing-box JSON）" };
-        }
-        const nodes = parseSingBoxJSON(obj);
-        return {
-          kind:"ok",
-          detected:"sing-box JSON",
-          message:`识别 sing-box JSON：outbounds=${Array.isArray(obj.outbounds)?obj.outbounds.length:0}，节点=${nodes.length}`,
-          rawObj: obj,
-          nodes,
-          rawText: JSON.stringify(obj, null, 2)
-        };
-      }
-
-      // C) 多行分享链接
-      const lines = splitLines(raw);
-      const shareLinks = [];
+    function extractUrisFromText(text){
+      // Pull any protocol:// or scheme:// style URIs; also common proxy schemes without ://
+      // We'll accept lines like "ss://xxx", "vmess://xxx", "trojan://xxx", "vless://xxx", "hysteria2://xxx"
+      // Also accept "ssr://", "tuic://", "hy2://"(some use hy2://)
+      const lines = safeSplitLines(text);
+      const uris = [];
       for (const line of lines){
-        const s = detectShareLine(line);
-        if (s) shareLinks.push(s);
-      }
-      if (shareLinks.length >= 1){
-        const nodes = shareLinks.map((ln, idx)=>({
-          name: extractNameFromLink(ln) || `node-${idx+1}`,
-          type: extractTypeFromLink(ln),
-          link: ln,
-          raw: { share: ln }
-        }));
-        return {
-          kind:"ok",
-          detected:"多行分享链接",
-          message:`识别到分享链接：${shareLinks.length} 条`,
-          nodes,
-          rawText: shareLinks.join("\n")
-        };
-      }
-
-      // D) Base64：解码后再递归识别
-      if (looksBase64(raw)){
-        const decoded = tryBase64Decode(raw);
-        if (decoded){
-          const inner = await parseInputSmart(decoded);
-          inner.detected = "Base64 → " + (inner.detected || "内容");
-          inner.rawText = decoded;
-          inner.base64Original = raw.trim();
-          return inner;
+        const l = line.trim();
+        if (/^(ss|ssr|vmess|vless|trojan|hysteria2|hy2|tuic|http|https):\/\//i.test(l)){
+          uris.push(l);
+          continue;
         }
-        return { kind:"error", detected:"Base64", message:"Base64 看起来像订阅，但解码失败（可能不是 UTF-8 订阅）" };
+        // sometimes there are plain subscription URLs mixed in
+        if (/^https?:\/\/\S+/i.test(l)) uris.push(l);
       }
-
-      // E) 未知
-      return {
-        kind:"error",
-        detected:"未知",
-        message:"无法识别：请粘贴 URL / JSON / Base64 / 多行分享链接"
-      };
+      return uniq(uris);
     }
 
-    // --------------------------- 渲染：必出二维码 + 必出可复制内容 ---------------------------
-    function renderResult(result){
-      const nodesEl = $("#nodes");
-      const emptyEl = $("#emptyState");
-      nodesEl.innerHTML = "";
-
-      if (!result || result.kind === "empty"){
-        emptyEl.style.display = "block";
-        $("#exportText").value = "";
-        $("#rawText").value = "";
-        setStatus("warn","等待输入…","—");
-        window.__lastResult = null;
-        return;
-      }
-
-      if (result.kind !== "ok"){
-        emptyEl.style.display = "block";
-        $("#exportText").value = "";
-        $("#rawText").value = result.rawText || "";
-        setStatus("bad", result.message || "识别失败", result.detected || "—");
-        window.__lastResult = null;
-        return;
-      }
-
-      emptyEl.style.display = "none";
-      const nodes = result.nodes || [];
-      setStatus(nodes.length ? "good" : "warn", result.message || "识别成功", result.detected || "OK");
-
-      if (result.rawText) $("#rawText").value = result.rawText;
-
-      // ✅ 导出：无论如何都生成“可导入内容”
-      // 1) 能转的 share link 一行一个
-      // 2) 不能转的 outbound JSON 一行一个（SINGBOX_OUTBOUND_JSON=...）
-      const shareLinks = [];
-      const outboundJSONLines = [];
-
-      for (const n of nodes){
-        if (n.link) shareLinks.push(n.link);
-        if (n.raw && !n.link){
-          outboundJSONLines.push(`SINGBOX_OUTBOUND_JSON=${compactJSON(n.raw)}`);
-        }
-      }
-
-      const subText = shareLinks.join("\n");
-      const subB64 = subText ? base64EncodeUtf8(subText) : "";
-
-      let exportBundle = "";
-      if (shareLinks.length){
-        exportBundle += shareLinks.join("\n");
-      }
-      if (subB64){
-        exportBundle += (exportBundle ? "\n\n" : "") + "----- BASE64 SUB -----\n" + subB64;
-      }
-      if (outboundJSONLines.length){
-        exportBundle += (exportBundle ? "\n\n" : "") + "----- SING-BOX OUTBOUNDS (RAW) -----\n" + outboundJSONLines.join("\n");
-      }
-
-      $("#exportText").value = exportBundle.trim();
-
-      // ✅ 右侧：逐条节点必出二维码
-      for (let i=0;i<nodes.length;i++){
-        const node = nodes[i];
-        const name = node.name || `node-${i+1}`;
-        const type = node.type || "node";
-        const link = node.link || "";
-
-        // ✅ 重要：无链接时二维码内容 = outbound JSON（压缩一行）
-        const fallbackQR = node.raw ? compactJSON(node.raw) : name;
-        const qrText = link || fallbackQR;
-
-        const item = document.createElement("div");
-        item.className = "node";
-
-        const qrBox = document.createElement("div");
-        qrBox.className = "qr";
-
-        const canvas = document.createElement("canvas");
-        canvas.width = 120;
-        canvas.height = 120;
-        qrBox.appendChild(canvas);
-
-        try{
-          window.__drawQRToCanvas(canvas, qrText);
-        }catch(e){
-          const ctx = canvas.getContext("2d");
-          ctx.clearRect(0,0,120,120);
-          ctx.fillStyle = "rgba(255,255,255,0.12)";
-          ctx.fillRect(0,0,120,120);
-        }
-
-        const meta = document.createElement("div");
-        meta.className = "nodeMeta";
-
-        const top = document.createElement("div");
-        top.className = "nodeTop";
-
-        const nm = document.createElement("div");
-        nm.className = "nodeName";
-        nm.textContent = name;
-
-        const tg = document.createElement("div");
-        tg.className = "tag";
-        tg.textContent = type;
-
-        top.appendChild(nm);
-        top.appendChild(tg);
-
-        const line = document.createElement("div");
-        line.className = "monoLine";
-        line.title = link ? link : fallbackQR;
-        line.textContent = link ? link : "SINGBOX_OUTBOUND_JSON=…（该节点无法转换分享链接，二维码已编码 outbound JSON）";
-
-        const btns = document.createElement("div");
-        btns.className = "nodeBtns";
-
-        const b1 = document.createElement("button");
-        b1.className = "btn";
-        b1.textContent = link ? "复制链接" : "复制 outbound JSON";
-        b1.onclick = () => {
-          if (link) return copyText(link);
-          if (node.raw) return copyText(compactJSON(node.raw));
-          toast("无内容可复制");
-        };
-
-        const b2 = document.createElement("button");
-        b2.className = "btn";
-        b2.textContent = "复制 QR 内容";
-        b2.onclick = () => copyText(qrText);
-
-        const b3 = document.createElement("button");
-        b3.className = "btn";
-        b3.textContent = "复制名称";
-        b3.onclick = () => copyText(name);
-
-        btns.appendChild(b1);
-        btns.appendChild(b2);
-        btns.appendChild(b3);
-
-        meta.appendChild(top);
-        meta.appendChild(line);
-        meta.appendChild(btns);
-
-        item.appendChild(qrBox);
-        item.appendChild(meta);
-        nodesEl.appendChild(item);
-      }
-
-      window.__lastResult = result;
+    function parseSingBox(jsonObj){
+      // Minimal, best-effort:
+      // If user pasted sing-box JSON, we DON'T try to "convert" nodes (needs outbound parsing by type),
+      // but we still extract any embedded URIs that might exist in fields, and always output "as-is" JSON.
+      // Many users already store share-links inside custom fields.
+      const raw = JSON.stringify(jsonObj, null, 2);
+      const uris = extractUrisFromText(raw);
+      return { raw, uris };
     }
 
-    // --------------------------- 自动识别：粘贴即跑 ---------------------------
-    let __debounceTimer = null;
+    function makeShadowrocketSubQrFromUrl(subUrl){
+      // Shadowrocket tends to accept: sub://BASE64(url)
+      // If your Shadowrocket build doesn't, it will still have the plain URL QR next to it.
+      const url = subUrl.trim();
+      return "sub://" + b64enc(url);
+    }
 
-    async function autoParseNow(force=false){
-      const text = $("#input").value;
-      const trimmed = safeTrim(text);
+    function makeSubQrFromMultiLinks(multiText){
+      // "One QR holds many nodes" via sub://BASE64(content)
+      // Works for some clients; Shadowrocket may or may not accept, but it's provided as "all possible outputs".
+      const txt = multiText.trim();
+      return "sub://" + b64enc(txt);
+    }
 
-      if (!trimmed){
-        renderResult({kind:"empty"});
+    function makeClashInstallUrl(subUrl){
+      // widely used by Clash family
+      const u = subUrl.trim();
+      return "clash://install-config?url=" + encodeURIComponent(u);
+    }
+
+    function buildClashMetaYaml(subUrl){
+      const u = (subUrl||"").trim();
+      // If no subUrl, still output a skeleton.
+      return `# Clash Meta profile (generated)
+# Put your subscription url in proxy-providers.sub.url
+mixed-port: 7890
+allow-lan: true
+mode: rule
+log-level: info
+
+# If you have no subscription, ignore proxy-providers and fill proxies manually.
+proxy-providers:
+  sub:
+    type: http
+    url: ${u || "<SUBSCRIPTION_URL>"}
+    interval: 3600
+    path: ./providers/sub.yaml
+    health-check:
+      enable: true
+      url: http://www.gstatic.com/generate_204
+      interval: 300
+
+proxy-groups:
+  - name: PROXY
+    type: select
+    use:
+      - sub
+
+rules:
+  - MATCH,PROXY
+`;
+    }
+
+    async function fetchText(url){
+      const res = await fetch(url, { method:"GET" });
+      const text = await res.text();
+      return { ok: res.ok, status: res.status, text };
+    }
+
+    function clearQrs(){
+      $("#qrGrid").innerHTML = "";
+    }
+
+    async function addQr(title, subtitle, payload){
+      const box = document.createElement("div");
+      box.className = "qrbox";
+
+      const top = document.createElement("div");
+      top.className = "qttl";
+      top.innerHTML = `<div>${title}<div class="muted" style="font-size:11px;opacity:.75">${subtitle||""}</div></div>
+                       <button class="btn" style="padding:7px 9px;font-size:12px" data-copy-raw="1">复制</button>`;
+      box.appendChild(top);
+
+      const canvas = document.createElement("canvas");
+      box.appendChild(canvas);
+
+      const hint = document.createElement("div");
+      hint.className = "qrhint mono";
+      hint.textContent = payload;
+      box.appendChild(hint);
+
+      $("#qrGrid").appendChild(box);
+
+      // Generate QR
+      try{
+        await QRCode.toCanvas(canvas, payload, {
+          errorCorrectionLevel: "M",
+          margin: 1,
+          width: 260
+        });
+      }catch(e){
+        canvas.remove();
+        const pre = document.createElement("pre");
+        pre.textContent = "QR 生成失败：" + (e?.message || e);
+        pre.style.color = "rgba(255,255,255,.7)";
+        box.appendChild(pre);
+      }
+
+      // copy
+      top.querySelector("button").addEventListener("click", async ()=>{
+        await navigator.clipboard.writeText(payload);
+        top.querySelector("button").textContent = "已复制";
+        setTimeout(()=> top.querySelector("button").textContent="复制", 900);
+      });
+    }
+
+    function bindCopyButtons(){
+      document.querySelectorAll("[data-copy]").forEach(btn=>{
+        btn.onclick = async ()=>{
+          const sel = btn.getAttribute("data-copy");
+          const el = document.querySelector(sel);
+          const text = el ? el.textContent : "";
+          await navigator.clipboard.writeText(text);
+          const old = btn.textContent;
+          btn.textContent = "已复制";
+          setTimeout(()=>btn.textContent=old, 900);
+        };
+      });
+    }
+
+    function downloadText(filename, content){
+      const blob = new Blob([content], {type:"text/plain;charset=utf-8"});
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(()=>{
+        URL.revokeObjectURL(a.href);
+        a.remove();
+      }, 0);
+    }
+
+    // ===== Main parse flow =====
+    let lastClashYaml = "";
+    let lastSubUrl = "";
+    let lastNodeUris = [];
+
+    async function parseAndRender(inputRaw){
+      const input = (inputRaw||"").trim();
+
+      clearQrs();
+      $("#subLinks").textContent = "";
+      $("#nodeLinks").textContent = "";
+      $("#clashYaml").textContent = "";
+      lastClashYaml = "";
+      lastSubUrl = "";
+      lastNodeUris = [];
+
+      if (!input){
+        setPill($("#pillIn"), $("#inState"), "", "等待输入");
+        setPill($("#pillOut"), $("#outState"), "", "未解析");
         return;
       }
 
-      setStatus("warn", force ? "强制识别中…" : "自动识别中…", "…");
+      setPill($("#pillIn"), $("#inState"), "warn", "识别中…");
+      setPill($("#pillOut"), $("#outState"), "warn", "解析中…");
+
+      let sourceText = input;
+      let fetchedFrom = "";
 
       try{
-        const result = await parseInputSmart(text);
-        renderResult(result);
+        // 1) If single URL -> fetch then parse fetched content
+        if (isHttpUrl(input)){
+          fetchedFrom = input;
+          const f = await fetchText(input);
+          if (!f.ok){
+            setPill($("#pillOut"), $("#outState"), "bad", `拉取失败 HTTP ${f.status}`);
+            // still output "as-is" for user to use
+            sourceText = input;
+          }else{
+            sourceText = f.text;
+          }
+        }
+
+        // 2) If JSON -> parse
+        let jsonObj = null;
+        if (looksLikeJson(sourceText)){
+          try{
+            jsonObj = JSON.parse(sourceText);
+          }catch(e){
+            jsonObj = null;
+          }
+        }
+
+        // 3) Base64 -> try decode
+        let decoded = "";
+        if (!jsonObj && looksLikeBase64(sourceText)){
+          try{
+            decoded = b64dec(sourceText.trim());
+            // If decode yields something meaningful, treat as new sourceText
+            if (decoded && decoded.length > 8){
+              sourceText = decoded;
+            }
+          }catch(e){
+            // ignore
+          }
+        }
+
+        // 4) Extract URIs
+        let uris = [];
+        if (jsonObj){
+          const parsed = parseSingBox(jsonObj);
+          uris = parsed.uris;
+        }else{
+          uris = extractUrisFromText(sourceText);
+        }
+
+        // classify: subscription url candidates
+        const httpUrls = uris.filter(u => /^https?:\/\//i.test(u));
+        const nodeUris = uris.filter(u => /^(ss|ssr|vmess|vless|trojan|hysteria2|hy2|tuic):\/\//i.test(u));
+
+        // Decide subUrl:
+        // priority:
+        // - if input itself was a URL and fetch succeeded/failed, still treat as subUrl
+        // - else first http url in extracted
+        let subUrl = "";
+        if (fetchedFrom) subUrl = fetchedFrom;
+        else if (httpUrls[0]) subUrl = httpUrls[0];
+
+        // Store
+        lastSubUrl = subUrl;
+        lastNodeUris = nodeUris;
+
+        // Render subscription links
+        const subLines = [];
+
+        if (subUrl){
+          subLines.push(`# Subscription URL`);
+          subLines.push(subUrl);
+          subLines.push("");
+          subLines.push(`# Shadowrocket subscription (sub://BASE64(url))`);
+          subLines.push(makeShadowrocketSubQrFromUrl(subUrl));
+          subLines.push("");
+          subLines.push(`# Clash family one-click`);
+          subLines.push(makeClashInstallUrl(subUrl));
+        }else{
+          subLines.push(`# No subscription URL detected.`);
+          subLines.push(`# If you want subscription QR, paste a subscription URL like https://.../xxx.yaml`);
+        }
+
+        // One-QR multi-links (base64 content)
+        if (nodeUris.length){
+          subLines.push("");
+          subLines.push(`# One-QR multi-nodes (sub://BASE64(multi-line))`);
+          subLines.push(makeSubQrFromMultiLinks(nodeUris.join("\n")));
+        }
+
+        $("#subLinks").textContent = subLines.join("\n");
+
+        // Render nodes
+        $("#nodeLinks").textContent = nodeUris.length
+          ? nodeUris.join("\n")
+          : `（未检测到可识别的节点 URI。你可以粘贴 ss:// / vmess:// / vless:// / trojan:// / hysteria2:// 等。）`;
+
+        // Render Clash YAML
+        const clashYaml = buildClashMetaYaml(subUrl);
+        lastClashYaml = clashYaml;
+        $("#clashYaml").textContent = clashYaml;
+
+        // Render QRs
+        const qrTasks = [];
+
+        // Subscription QRs (best for many nodes)
+        if (subUrl){
+          qrTasks.push(addQr("订阅 URL QR", "通用订阅入口", subUrl));
+          qrTasks.push(addQr("Shadowrocket 订阅 QR", "sub://BASE64(url)", makeShadowrocketSubQrFromUrl(subUrl)));
+          qrTasks.push(addQr("Clash 一键导入 QR", "clash://install-config?url=", makeClashInstallUrl(subUrl)));
+        }
+
+        // Multi-links QR
+        if (nodeUris.length){
+          qrTasks.push(addQr("多节点合并 QR", "sub://BASE64(multi-line)", makeSubQrFromMultiLinks(nodeUris.join("\n"))));
+        }
+
+        // Per-node QRs (Shadowrocket safest)
+        // limit to avoid UI explosion
+        const maxNodeQR = 12;
+        const list = nodeUris.slice(0, maxNodeQR);
+        for (let i=0;i<list.length;i++){
+          const u = list[i];
+          const label = `节点 #${i+1}`;
+          qrTasks.push(addQr(label, "单节点（Shadowrocket ✅）", u));
+        }
+        if (nodeUris.length > maxNodeQR){
+          await addQr("提示", `仅展示前 ${maxNodeQR} 个节点二维码`, "（二维码过多会卡 UI，建议用订阅类二维码）");
+        }
+
+        await Promise.allSettled(qrTasks);
+
+        // State pills
+        setPill($("#pillIn"), $("#inState"), "ok", jsonObj ? "JSON 已解析" : (fetchedFrom ? "已拉取并解析" : "已解析"));
+        setPill($("#pillOut"), $("#outState"), "ok", `输出完成：订阅 ${subUrl? "1" : "0"} | 节点 ${nodeUris.length}`);
+
       }catch(e){
-        renderResult({
-          kind:"error",
-          detected:"解析异常",
-          message:(e && e.message) ? e.message : String(e)
-        });
+        console.error(e);
+        setPill($("#pillOut"), $("#outState"), "bad", "解析失败");
+        $("#subLinks").textContent = "解析失败：\n" + (e?.message || e);
       }
     }
 
-    function scheduleAutoParse(){
-      clearTimeout(__debounceTimer);
-      __debounceTimer = setTimeout(()=>autoParseNow(false), 200);
-    }
+    // ===== UI bindings =====
+    let parseTimer = null;
+    $("#input").addEventListener("input", ()=>{
+      // immediate auto parse
+      if (parseTimer) clearTimeout(parseTimer);
+      parseTimer = setTimeout(()=> parseAndRender($("#input").value), 50);
+    });
 
-    // --------------------------- Buttons ---------------------------
-    $("#btnClear").onclick = () => {
-      $("#input").value = "";
-      $("#exportText").value = "";
-      $("#rawText").value = "";
-      renderResult({kind:"empty"});
-      toast("已清空");
-    };
-
-    $("#btnForceParse").onclick = () => autoParseNow(true);
-
-    $("#btnPaste").onclick = async () => {
+    $("#btnPaste").onclick = async ()=>{
       try{
         const t = await navigator.clipboard.readText();
-        if (t){
-          $("#input").value = t;
-          scheduleAutoParse();
-          toast("已粘贴");
-        }else{
-          toast("剪贴板为空");
-        }
+        $("#input").value = t || "";
+        parseAndRender($("#input").value);
       }catch(e){
-        toast("无法读取剪贴板（请手动粘贴）");
+        alert("无法读取剪贴板（浏览器权限限制）。你直接粘贴即可。");
       }
     };
 
-    $("#btnCopyExport").onclick = () => copyText($("#exportText").value || "");
-    $("#btnCopyRaw").onclick = () => copyText($("#rawText").value || "");
-    $("#btnDownloadExport").onclick = () => downloadText("export.txt", $("#exportText").value || "");
-
-    $("#btnCopyAllLinks").onclick = () => {
-      const r = window.__lastResult;
-      if (!r || r.kind !== "ok") return toast("没有内容可复制");
-      const nodes = r.nodes || [];
-      const shareLinks = [];
-      const outboundJSON = [];
-
-      for (const n of nodes){
-        if (n.link) shareLinks.push(n.link);
-        if (n.raw && !n.link) outboundJSON.push(compactJSON(n.raw));
-      }
-
-      const all = []
-        .concat(shareLinks)
-        .concat(outboundJSON.map(x=>`SINGBOX_OUTBOUND_JSON=${x}`))
-        .join("\n");
-
-      if (!all.trim()) return toast("没有内容可复制");
-      copyText(all);
+    $("#btnClear").onclick = ()=>{
+      $("#input").value = "";
+      parseAndRender("");
     };
 
-    $("#btnDownloadAllLinks").onclick = () => {
-      const r = window.__lastResult;
-      if (!r || r.kind !== "ok") return toast("没有内容可下载");
-      const nodes = r.nodes || [];
-      const shareLinks = [];
-      const outboundJSON = [];
-
-      for (const n of nodes){
-        if (n.link) shareLinks.push(n.link);
-        if (n.raw && !n.link) outboundJSON.push(`SINGBOX_OUTBOUND_JSON=${compactJSON(n.raw)}`);
-      }
-
-      const all = []
-        .concat(shareLinks)
-        .concat(outboundJSON)
-        .join("\n");
-
-      downloadText("all.txt", all);
+    $("#btnDemo").onclick = ()=>{
+      $("#input").value =
+`https://example.com/sub.yaml
+ss://example
+vmess://example`;
+      parseAndRender($("#input").value);
     };
 
-    // --------------------------- Input events ---------------------------
-    $("#input").addEventListener("input", scheduleAutoParse);
-    $("#input").addEventListener("paste", () => scheduleAutoParse());
+    $("#btnDownloadClash").onclick = ()=>{
+      const y = lastClashYaml || buildClashMetaYaml(lastSubUrl || "");
+      downloadText("clash-meta.yaml", y);
+    };
 
-    // init
-    renderResult({kind:"empty"});
+    bindCopyButtons();
+
+    // initial
+    parseAndRender("");
   </script>
 </body>
 </html>
