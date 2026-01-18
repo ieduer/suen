@@ -109,17 +109,96 @@
       border-radius: 999px;
     }
 
+    .appHubGrid{
+      display: grid;
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+      gap: 12px;
+    }
+    @media (min-width: 640px){
+      .appHubGrid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    .appCard{
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(0,0,0,0.22);
+      border-radius: 22px;
+      padding: 14px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      min-width: 0;
+    }
+
+    .appCardLeft{
+      width: 124px;
+      height: 124px;
+      border-radius: 18px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .appCardRight{
+      flex: 1;
+      min-width: 0;
+    }
+
+    .chip{
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.06);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.82);
+      cursor: pointer;
+      user-select: none;
+      transition: transform .08s ease, background .2s ease, border .2s ease;
+    }
+    .chip:hover{ background: rgba(255,255,255,0.10); }
+    .chip:active{ transform: translateY(1px); }
+    .chipActive{
+      background: rgba(120, 85, 255, .28);
+      border-color: rgba(120, 85, 255, .55);
+    }
+
+    .nodesList{
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 420px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .nodeCard{
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(0,0,0,0.22);
+      border-radius: 22px;
+      padding: 14px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      min-width: 0;
+    }
+
+    .nodeQR{
+      width: 148px;
+      height: 148px;
+      border-radius: 18px;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     @media (max-width: 640px){
-      .qrBox{
-        width: 240px;
-        height: 240px;
-        border-radius: 18px;
-      }
-      .qrMini{
-        width: 132px;
-        height: 132px;
-        border-radius: 16px;
-      }
+      .nodeCard{ flex-direction: column; }
+      .nodeQR{ width: 140px; height: 140px; }
+      .appCard{ flex-direction: column; }
+      .appCardLeft{ width: 140px; height: 140px; }
     }
   </style>
 </head>
@@ -161,13 +240,14 @@
         </div>
 
         <div class="grid gap-3">
-          <label class="text-sm hint">粘贴订阅链接 / 分享链接 / sing-box JSON</label>
+          <label class="text-sm hint">粘贴订阅链接 / 分享链接 / sing-box JSON / Base64订阅文本</label>
           <textarea id="input"
             class="w-full min-h-[240px] soft rounded-2xl p-4 outline-none mono text-sm leading-relaxed"
             placeholder="支持：
 1) 订阅 URL：https://example.com/sub
-2) 分享链接：vless://... vmess://... ss://...
-3) sing-box JSON：{ ... }"></textarea>
+2) 分享链接：vless://... vmess://... ss://...（可多行/混合）
+3) sing-box JSON：{ ... }
+4) Base64 订阅文本：dmxlc3M6Ly8uLi4=（解码后含多行链接）"></textarea>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div class="soft rounded-2xl p-3">
@@ -197,7 +277,7 @@
 
               <div class="hint text-xs mt-3 leading-relaxed">
                 只影响右侧“单个大二维码”。<br/>
-                sing-box JSON 的“逐条节点 QR + Clash YAML”不受此处影响。
+                sing-box JSON / 多行分享链接 的“逐条节点 QR + Clash YAML”不受此处影响。
               </div>
             </div>
 
@@ -283,7 +363,7 @@
 
           <div class="flex flex-wrap gap-2 pt-1">
             <button id="btnGenerate" class="btn rounded-2xl px-4 py-2 text-sm">生成单个 QR</button>
-            <button id="btnSplitNodes" class="btn rounded-2xl px-4 py-2 text-sm">拆分 sing-box 节点 → 逐条 QR</button>
+            <button id="btnSplitNodes" class="btn rounded-2xl px-4 py-2 text-sm">拆分节点 → 逐条 QR</button>
             <button id="btnGenClashMeta" class="btn rounded-2xl px-4 py-2 text-sm">生成 Clash Meta YAML</button>
 
             <button id="btnClear" class="btn rounded-2xl px-4 py-2 text-sm">清空</button>
@@ -342,8 +422,8 @@
           <div class="soft rounded-3xl p-4">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
               <div>
-                <div class="text-sm font-medium">节点拆分面板（sing-box JSON → 逐条 QR）</div>
-                <div class="text-xs hint" id="nodesHint">粘贴 sing-box JSON 后点“拆分”。</div>
+                <div class="text-sm font-medium">节点拆分面板（JSON / 多行分享链接 / Base64订阅 → 逐条 QR）</div>
+                <div class="text-xs hint" id="nodesHint">粘贴内容后点“拆分节点”。已优化为纵向列表，避免挤压。</div>
               </div>
 
               <div class="flex flex-wrap gap-2">
@@ -356,12 +436,38 @@
             <div id="nodesSummary" class="mt-3 text-xs hint"></div>
 
             <div id="nodesContainer"
-              class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[420px] overflow-auto thin-scrollbar pr-1">
+              class="mt-4 nodesList thin-scrollbar">
             </div>
 
             <div class="mt-3 text-xs hint leading-relaxed">
-              ✅ 逐条扫码适用于 Shadowrocket / Stash 等。<br/>
-              ✅ Clash 用户建议用下方“Clash Meta YAML 输出面板”直接导入。
+              ✅ 多行分享链接 / Base64订阅：自动拆出每条链接为一个节点卡。<br/>
+              ✅ JSON：从 outbounds 提取并生成分享链接 + QR。
+            </div>
+          </div>
+
+          <!-- App Import Hub -->
+          <div class="soft rounded-3xl p-4">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+              <div>
+                <div class="text-sm font-medium">软件导入中心（自动识别：订阅 / 多链接 / Base64 / JSON）</div>
+                <div class="text-xs hint" id="appHubHint">输入任意 URL / 分享链接 / Base64订阅 / JSON 后自动生成各客户端所需导入链接与二维码。</div>
+              </div>
+
+              <div class="flex flex-wrap gap-2">
+                <button id="btnHubCopyActive" class="btn rounded-2xl px-4 py-2 text-sm">复制当前</button>
+                <button id="btnHubCopyAll" class="btn rounded-2xl px-4 py-2 text-sm">复制全部</button>
+                <button id="btnHubRefresh" class="btn rounded-2xl px-4 py-2 text-sm">刷新识别</button>
+              </div>
+            </div>
+
+            <div class="mt-3 flex flex-wrap gap-2" id="appHubTabs"></div>
+
+            <div class="mt-4 appHubGrid" id="appHubGrid"></div>
+
+            <div class="mt-3 text-xs hint leading-relaxed">
+              ✅ 订阅 URL → 生成各客户端“一键订阅导入” Scheme（最稳）。<br/>
+              ✅ 多行分享链接 / Base64订阅 → 建议“拆分节点面板”逐条扫码（最可靠）。<br/>
+              ✅ sing-box JSON → 建议先“拆分节点 → 逐条扫码”，Clash 用户用 YAML 面板。<br/>
             </div>
           </div>
 
@@ -444,8 +550,39 @@
     const cmEnableDNS = $("cmEnableDNS");
     const cmEnableTun = $("cmEnableTun");
 
-    // lastNodes: [{ type, tag, server, port, share, summary, outbound }]
-    let lastNodes = [];
+    const appHubHint = $("appHubHint");
+    const appHubTabs = $("appHubTabs");
+    const appHubGrid = $("appHubGrid");
+
+    const btnHubCopyActive = $("btnHubCopyActive");
+    const btnHubCopyAll = $("btnHubCopyAll");
+    const btnHubRefresh = $("btnHubRefresh");
+
+    // app hub state
+    let hubItems = []; // [{key,label,primaryText,qrText,copyText,desc}]
+    let hubActiveKey = "shadowrocket";
+
+    function appLabel(key){
+      const map = {
+        shadowrocket: "Shadowrocket",
+        stash: "Stash",
+        clash: "Clash",
+        quantumultx: "Quantumult X",
+        generic: "Generic"
+      };
+      return map[key] || key;
+    }
+
+    function getAllApps(){
+      return ["shadowrocket","stash","clash","quantumultx","generic"];
+    }
+
+    // ============================================================
+    // enhanced recognition: base64 / multi-link / multi-line
+    // ============================================================
+    function safeTrim(s){
+      return (s || "").replace(/\r\n/g,"\n").trim();
+    }
 
     function nowTS(){
       const d = new Date();
@@ -464,10 +601,6 @@
       statusEl.textContent = msg;
     }
 
-    function safeTrim(s){
-      return (s || "").replace(/\r\n/g,"\n").trim();
-    }
-
     function isLikelyJSON(s){
       const t = safeTrim(s);
       if(!t) return false;
@@ -478,45 +611,496 @@
     function extractFirstHttpURL(s){
       const t = safeTrim(s);
       if(!t) return "";
-      const m = t.match(/https?:\/\/[^\s"'<>()]+/i);
+      const m = t.match(/https?:\/\/[^^\s"'<>()]+/i);
       return m ? m[0] : "";
     }
 
-    function detectShareType(s){
+    function extractAllHttpURLs(s){
       const t = safeTrim(s);
+      if(!t) return [];
+      const m = t.match(/https?:\/\/[^^\s"'<>()]+/ig);
+      return m ? Array.from(new Set(m)) : [];
+    }
+
+    function isShareLink(line){
+      return /^(vmess|vless|trojan|ss|ssr|hysteria2|tuic):\/\//i.test(safeTrim(line));
+    }
+
+    function extractShareLinks(s){
+      const t = safeTrim(s);
+      if(!t) return [];
+
+      const out = [];
+
+      // Split by whitespace but keep lines for stability
+      const lines = t.split("\n").map(x=>safeTrim(x)).filter(Boolean);
+      for(const ln of lines){
+        // a line may contain multiple links separated by spaces
+        const parts = ln.split(/\s+/g).map(x=>safeTrim(x)).filter(Boolean);
+        for(const p of parts){
+          if(isShareLink(p)) out.push(p);
+        }
+      }
+
+      return Array.from(new Set(out));
+    }
+
+    function looksLikeBase64(s){
+      const t = safeTrim(s);
+      if(!t) return false;
+      if(t.length < 24) return false;
+      // ignore if it obviously contains json/url/share
+      if(isLikelyJSON(t)) return false;
+      if(/^https?:\/\//i.test(t)) return false;
+      if(isShareLink(t)) return false;
+
+      // allow base64url and regular base64
+      if(!/^[A-Za-z0-9+\/_\-\.=\s]+$/.test(t)) return false;
+
+      // must contain many base64-ish chars and minimal punctuation
+      const noSpace = t.replace(/\s+/g, "");
+      if(noSpace.length % 4 !== 0 && !noSpace.includes("=")){
+        // base64url may not align, still accept
+        return true;
+      }
+      return true;
+    }
+
+    function b64decodeUtf8(b64){
+      // supports base64url
+      const s = safeTrim(b64).replace(/\s+/g, "");
+      const padLen = (4 - (s.length % 4)) % 4;
+      const padded = s
+        .replace(/-/g, "+")
+        .replace(/_/g, "/")
+        + "=".repeat(padLen);
+
+      try{
+        const bin = atob(padded);
+        // decode utf-8
+        try{
+          return decodeURIComponent(Array.prototype.map.call(bin, c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+        }catch(e){
+          return bin;
+        }
+      }catch(e){
+        return "";
+      }
+    }
+
+    function decodeBase64SubscriptionMaybe(raw){
+      const t = safeTrim(raw);
+      if(!looksLikeBase64(t)) return { ok:false, decoded:"", reason:"not_base64" };
+
+      const decoded = b64decodeUtf8(t);
+      if(!decoded) return { ok:false, decoded:"", reason:"decode_failed" };
+
+      // must contain at least one share link after decode
+      const shares = extractShareLinks(decoded);
+      const urls = extractAllHttpURLs(decoded);
+
+      // Consider ok if contains share links OR looks like clash yaml/proxies
+      const seemsClash = /(^|\n)proxies:\s*\n/i.test(decoded) || /proxy-groups:\s*\n/i.test(decoded);
+
+      if(shares.length > 0 || seemsClash || urls.length > 0){
+        return { ok:true, decoded, reason: shares.length ? "decoded_share_links" : (seemsClash ? "decoded_clash_yaml" : "decoded_urls") };
+      }
+
+      return { ok:false, decoded:"", reason:"decoded_not_useful" };
+    }
+
+    function detectInputKind(raw){
+      const t = safeTrim(raw);
       if(!t) return "empty";
+
+      // 1) JSON
       if(isLikelyJSON(t)) return "json";
+
+      // 2) Share link single
+      if(isShareLink(t)) return "share";
+
+      // 3) URL only
       if(/^https?:\/\//i.test(t)) return "url";
-      if(/^(vmess|vless|trojan|ss|ssr|hysteria2|tuic):\/\//i.test(t)) return "share";
-      if(/https?:\/\/[^\s]+/i.test(t)) return "mixed";
+
+      // 4) Multi share links
+      const shares = extractShareLinks(t);
+      if(shares.length >= 2) return "multi_share";
+
+      // 5) Base64 subscription
+      const dec = decodeBase64SubscriptionMaybe(t);
+      if(dec.ok) return "base64";
+
+      // 6) Mixed
+      if(/https?:\/\/[^^\s]+/i.test(t) || shares.length === 1) return "mixed";
+
       return "text";
     }
 
-    function urlEncodeIfNeeded(url){
-      if(!encodeSwitch.checked) return url;
-      try { return encodeURIComponent(url); } catch(e){ return url; }
+    function analyzeInput(raw){
+      const t = safeTrim(raw);
+      const kind = detectInputKind(t);
+
+      // base64
+      let decodedText = "";
+      let decodedReason = "";
+      if(kind === "base64"){
+        const dec = decodeBase64SubscriptionMaybe(t);
+        decodedText = dec.decoded || "";
+        decodedReason = dec.reason || "";
+      }
+
+      // url list and share list (from raw + decoded)
+      const urlsRaw = extractAllHttpURLs(t);
+      const sharesRaw = extractShareLinks(t);
+
+      const urlsDec = decodedText ? extractAllHttpURLs(decodedText) : [];
+      const sharesDec = decodedText ? extractShareLinks(decodedText) : [];
+
+      const urls = Array.from(new Set([...(urlsRaw||[]), ...(urlsDec||[])]));
+      const shares = Array.from(new Set([...(sharesRaw||[]), ...(sharesDec||[])]));
+
+      // json object
+      let jsonObj = null;
+      if(kind === "json"){
+        try{ jsonObj = JSON.parse(t); }catch(e){ jsonObj = null; }
+      }
+
+      // pick best sub url
+      const subUrl = urls.length ? urls[0] : (extractFirstHttpURL(t) || "");
+
+      return { kind, subUrl, urls, shares, decodedText, decodedReason, jsonObj, raw: t };
     }
 
-    function buildImportScheme(app, subUrl){
-      const u = safeTrim(subUrl);
-      if(!u) return "";
-      const encoded = urlEncodeIfNeeded(u);
-      const tag = urlEncodeIfNeeded("Sub2QR");
+    function buildHubItemsFromInput(raw){
+      const a = analyzeInput(raw);
+      const items = [];
 
-      if(app === "clash"){
-        return `clash://install-config?url=${encoded}&name=${tag}`;
+      if(a.kind === "empty") return { items: [], hint: "输入为空。" };
+
+      // URL-only or mixed with URL
+      if(a.subUrl && (a.kind === "url" || a.kind === "mixed")){
+        const u = a.subUrl;
+        for(const app of getAllApps()){
+          if(app === "generic"){
+            items.push({
+              key: app,
+              label: appLabel(app),
+              primaryText: "订阅 URL",
+              desc: "可直接复制或生成二维码",
+              qrText: u,
+              copyText: u
+            });
+            continue;
+          }
+          const scheme = buildImportScheme(app, u);
+          items.push({
+            key: app,
+            label: appLabel(app),
+            primaryText: "一键订阅导入",
+            desc: "Scheme（推荐）",
+            qrText: scheme,
+            copyText: scheme
+          });
+        }
+
+        // if同时含有多条分享链接，提示更优路径
+        if(a.shares.length >= 1){
+          return { items, hint: `识别为订阅 URL（并检测到 ${a.shares.length} 条分享链接）：已生成 Scheme；多链接建议用“拆分节点”。` };
+        }
+
+        return { items, hint: "识别为订阅 URL：已生成各客户端一键导入 Scheme。" };
       }
-      if(app === "stash"){
-        return `stash://install-config?url=${encoded}`;
+
+      // Share links (single or multi)
+      if(a.shares.length >= 1 && (a.kind === "share" || a.kind === "multi_share" || a.kind === "mixed" || a.kind === "base64")){
+        const count = a.shares.length;
+
+        // If only one share link, we can QR it for every app
+        if(count === 1){
+          for(const app of getAllApps()){
+            items.push({
+              key: app,
+              label: appLabel(app),
+              primaryText: "单节点分享链接",
+              desc: "直接扫码导入",
+              qrText: a.shares[0],
+              copyText: a.shares[0]
+            });
+          }
+          if(a.kind === "base64"){
+            return { items, hint: "识别为 Base64 订阅：解码后仅 1 条链接，已生成通用扫码导入。" };
+          }
+          return { items, hint: "识别为单节点分享链接：已生成通用扫码导入。" };
+        }
+
+        // Multi-share: show copy bundle; QR is intentionally blank (too dense)
+        const bundle = a.shares.join("\n");
+        for(const app of getAllApps()){
+          items.push({
+            key: app,
+            label: appLabel(app),
+            primaryText: `多链接（${count}）`,
+            desc: "建议：点上方“拆分节点”逐条扫码",
+            qrText: "",
+            copyText: bundle
+          });
+        }
+        if(a.kind === "base64"){
+          return { items, hint: `识别为 Base64 订阅：解码得到 ${count} 条链接。建议用“拆分节点面板”逐条扫码。` };
+        }
+        return { items, hint: `识别为多行分享链接：共 ${count} 条。建议用“拆分节点面板”逐条扫码。` };
       }
-      if(app === "shadowrocket"){
-        return `shadowrocket://add/sub?url=${encoded}`;
+
+      // JSON
+      if(a.kind === "json"){
+        const items2 = [
+          { key: "shadowrocket", label: "Shadowrocket", primaryText: "建议：拆分节点", desc: "逐条扫码最可靠", qrText: "", copyText: "" },
+          { key: "stash", label: "Stash", primaryText: "建议：拆分节点", desc: "逐条扫码最可靠", qrText: "", copyText: "" },
+          { key: "clash", label: "Clash", primaryText: "建议：生成 YAML", desc: "用下方 Clash Meta YAML 面板导入", qrText: "", copyText: "" },
+          { key: "quantumultx", label: "Quantumult X", primaryText: "建议：拆分节点", desc: "再按客户端格式导入", qrText: "", copyText: "" },
+          { key: "generic", label: "Generic", primaryText: "JSON 已识别", desc: "此处不直接做巨大 QR（密度过高）", qrText: "", copyText: "" }
+        ];
+        return { items: items2, hint: "识别为 sing-box JSON：建议拆分节点生成逐条 QR；Clash 用 YAML 输出更专业。" };
       }
-      if(app === "quantumultx"){
-        return `quantumult-x://add-resource?remote-resource=${encoded}&tag=${tag}&resource-type=server`;
+
+      // Base64 but decoded not useful: fallback to RAW
+      if(a.kind === "base64" && !a.shares.length && !a.subUrl){
+        const rawText = safeTrim(raw);
+        const items3 = [];
+        for(const app of getAllApps()){
+          items3.push({
+            key: app,
+            label: appLabel(app),
+            primaryText: "Base64 文本",
+            desc: "解码后未识别到链接，按 RAW 输出",
+            qrText: rawText,
+            copyText: rawText
+          });
+        }
+        return { items: items3, hint: "识别为 Base64，但解码后未发现可用链接：已按 RAW 输出。" };
       }
-      return u;
+
+      // text fallback
+      const t = safeTrim(raw);
+      const items4 = [];
+      for(const app of getAllApps()){
+        items4.push({
+          key: app,
+          label: appLabel(app),
+          primaryText: "RAW 文本",
+          desc: "直接复制/二维码",
+          qrText: t,
+          copyText: t
+        });
+      }
+      return { items: items4, hint: "未识别为订阅/分享/JSON/Base64：已按 RAW 文本生成。" };
     }
+
+    function clearAppHub(){
+      hubItems = [];
+      appHubTabs.innerHTML = "";
+      appHubGrid.innerHTML = "";
+      appHubHint.textContent = "输入任意 URL / 分享链接 / sing-box JSON 后自动生成各客户端所需导入链接与二维码。";
+    }
+
+    function setHubActive(key){
+      hubActiveKey = key;
+      // update tab styles
+      const chips = appHubTabs.querySelectorAll(".chip");
+      chips.forEach(ch => {
+        const k = ch.getAttribute("data-key");
+        if(k === hubActiveKey) ch.classList.add("chipActive");
+        else ch.classList.remove("chipActive");
+      });
+
+      // filter grid: show active app first + show all (platform feel)
+      renderAppHubGrid(hubItems, hubActiveKey);
+    }
+
+    function renderAppHubTabs(){
+      appHubTabs.innerHTML = "";
+      const apps = getAllApps();
+      for(const k of apps){
+        const chip = document.createElement("div");
+        chip.className = "chip";
+        chip.textContent = appLabel(k);
+        chip.setAttribute("data-key", k);
+        chip.addEventListener("click", ()=> setHubActive(k));
+        appHubTabs.appendChild(chip);
+      }
+    }
+
+    function renderAppHubGrid(items, activeKey){
+      appHubGrid.innerHTML = "";
+      if(!Array.isArray(items) || items.length === 0){
+        appHubGrid.innerHTML = "";
+        return;
+      }
+
+      // sort: active first
+      const sorted = [...items].sort((a,b)=>{
+        if(a.key === activeKey && b.key !== activeKey) return -1;
+        if(a.key !== activeKey && b.key === activeKey) return 1;
+        return getAllApps().indexOf(a.key) - getAllApps().indexOf(b.key);
+      });
+
+      for(const it of sorted){
+        const card = document.createElement("div");
+        card.className = "appCard";
+
+        const left = document.createElement("div");
+        left.className = "appCardLeft glass2";
+        const qrDiv = document.createElement("div");
+        qrDiv.style.width = "116px";
+        qrDiv.style.height = "116px";
+        left.appendChild(qrDiv);
+
+        if(it.qrText){
+          new QRCode(qrDiv, { text: it.qrText, width: 116, height: 116, correctLevel: QRCode.CorrectLevel.M });
+        }else{
+          const ph = document.createElement("div");
+          ph.className = "text-xs hint text-center px-2";
+          ph.textContent = "建议用拆分节点";
+          qrDiv.appendChild(ph);
+        }
+
+        const right = document.createElement("div");
+        right.className = "appCardRight";
+
+        const title = document.createElement("div");
+        title.className = "text-sm font-semibold truncate";
+        title.textContent = `${it.label}`;
+
+        const meta = document.createElement("div");
+        meta.className = "text-xs hint mt-1";
+        meta.textContent = `${it.primaryText} · ${it.desc}`;
+
+        const textarea = document.createElement("textarea");
+        textarea.className = "w-full mt-3 soft rounded-2xl p-3 outline-none mono text-xs leading-relaxed";
+        textarea.rows = 3;
+        textarea.readOnly = true;
+        textarea.value = it.copyText || "";
+
+        const actions = document.createElement("div");
+        actions.className = "mt-3 flex flex-wrap gap-2";
+
+        const btnCopy = document.createElement("button");
+        btnCopy.className = "btn rounded-2xl px-3 py-2 text-xs";
+        btnCopy.textContent = "复制";
+        btnCopy.addEventListener("click", async ()=>{
+          if(!it.copyText){
+            setStatus("此项没有可复制内容。", "warn");
+            return;
+          }
+          try{
+            await navigator.clipboard.writeText(it.copyText);
+            setStatus(`已复制：${it.label}`, "ok");
+          }catch(e){
+            textarea.select();
+            document.execCommand("copy");
+            setStatus(`已复制（fallback）：${it.label}`, "ok");
+          }
+        });
+
+        const btnToSingle = document.createElement("button");
+        btnToSingle.className = "btn rounded-2xl px-3 py-2 text-xs";
+        btnToSingle.textContent = "送到单个 QR";
+        btnToSingle.addEventListener("click", ()=>{
+          if(!it.copyText){
+            setStatus("此项没有可生成内容。", "warn");
+            return;
+          }
+          outputEl.value = it.copyText;
+          makeQR(it.copyText);
+          setStatus("已送到单个 QR 面板 ✅", "ok");
+        });
+
+        const btnAction = document.createElement("button");
+        btnAction.className = "btn rounded-2xl px-3 py-2 text-xs";
+        btnAction.textContent = "快捷操作";
+        btnAction.addEventListener("click", ()=>{
+          const raw = safeTrim(inputEl.value);
+          const a = analyzeInput(raw);
+          if(a.kind === "json" || a.shares.length >= 2 || a.kind === "base64"){
+            splitNodesUniversal();
+            if(lastNodes && lastNodes.length){
+              generateClashMetaYAML();
+            }
+            setStatus("已自动执行：拆分节点（如可） + 生成 Clash Meta YAML（如可） ✅", "ok");
+            return;
+          }
+          setSelectedMode("scheme");
+          generateSingle();
+          setStatus("已执行：单个 QR（Scheme/RAW）✅", "ok");
+        });
+
+        actions.appendChild(btnCopy);
+        actions.appendChild(btnToSingle);
+        actions.appendChild(btnAction);
+
+        right.appendChild(title);
+        right.appendChild(meta);
+        right.appendChild(textarea);
+        right.appendChild(actions);
+
+        card.appendChild(left);
+        card.appendChild(right);
+        appHubGrid.appendChild(card);
+      }
+    }
+
+    function refreshAppHub(){
+      const raw = safeTrim(inputEl.value);
+      if(!raw){
+        clearAppHub();
+        return;
+      }
+      const r = buildHubItemsFromInput(raw);
+      hubItems = r.items;
+      appHubHint.textContent = r.hint;
+      renderAppHubTabs();
+      setHubActive(hubActiveKey || "shadowrocket");
+    }
+
+    async function hubCopyActive(){
+      const active = hubItems.find(x => x.key === hubActiveKey) || hubItems[0];
+      if(!active || !active.copyText){
+        setStatus("当前项没有可复制内容。", "warn");
+        return;
+      }
+      try{
+        await navigator.clipboard.writeText(active.copyText);
+        setStatus(`已复制当前：${active.label}`, "ok");
+      }catch(e){
+        setStatus("复制失败（浏览器限制）。", "bad");
+      }
+    }
+
+    async function hubCopyAll(){
+      if(!Array.isArray(hubItems) || hubItems.length === 0){
+        setStatus("导入中心为空。", "warn");
+        return;
+      }
+      const lines = hubItems
+        .filter(x => x.copyText)
+        .map(x => `# ${x.label} · ${x.primaryText}\n${x.copyText}`)
+        .join("\n\n");
+
+      if(!lines){
+        setStatus("没有可复制内容。", "warn");
+        return;
+      }
+
+      try{
+        await navigator.clipboard.writeText(lines);
+        setStatus("已复制全部 ✅", "ok");
+      }catch(e){
+        setStatus("复制失败（浏览器限制）。", "bad");
+      }
+    }
+
+    // lastNodes: [{ type, tag, server, port, share, summary, outbound }]
+    let lastNodes = [];
 
     // ============================================================
     // Single QR
@@ -892,20 +1476,22 @@
     }
 
     // ============================================================
-    // Nodes Panel
+    // Nodes Panel (universal)
     // ============================================================
+    // lastNodes: [{ type, tag, server, port, share, summary, outbound }]
+
     function clearNodesPanel(){
       lastNodes = [];
       nodesContainer.innerHTML = "";
       nodesSummary.textContent = "";
-      nodesHint.textContent = "粘贴 sing-box JSON 后点“拆分”。";
+      nodesHint.textContent = "粘贴内容后点“拆分节点”。";
     }
 
     function renderNodes(nodes){
       nodesContainer.innerHTML = "";
       if(!Array.isArray(nodes) || nodes.length === 0){
         nodesSummary.textContent = "";
-        nodesHint.textContent = "没有拆出可用节点（检查 JSON 的 outbounds）。";
+        nodesHint.textContent = "没有拆出可用节点（检查输入：JSON/outbounds 或 多行分享链接/Base64）。";
         return;
       }
 
@@ -914,19 +1500,19 @@
 
       for(const node of nodes){
         const card = document.createElement("div");
-        card.className = "soft rounded-3xl p-4 flex gap-4 items-start";
+        card.className = "nodeCard";
 
         const left = document.createElement("div");
-        left.className = "qrMini glass2 shrink-0 flex items-center justify-center";
+        left.className = "nodeQR glass2";
         const qrDiv = document.createElement("div");
-        qrDiv.style.width = "120px";
-        qrDiv.style.height = "120px";
+        qrDiv.style.width = "132px";
+        qrDiv.style.height = "132px";
         left.appendChild(qrDiv);
 
         new QRCode(qrDiv, {
           text: node.share || node.summary,
-          width: 120,
-          height: 120,
+          width: 132,
+          height: 132,
           correctLevel: QRCode.CorrectLevel.M
         });
 
@@ -939,7 +1525,7 @@
 
         const meta = document.createElement("div");
         meta.className = "text-xs hint mt-1 break-all";
-        meta.textContent = `${node.type.toUpperCase()} · ${node.server}:${node.port}`;
+        meta.textContent = `${(node.type || "LINK").toUpperCase()} · ${node.server || ""}${node.port ? (":" + node.port) : ""}`;
 
         const textarea = document.createElement("textarea");
         textarea.className = "w-full mt-3 soft rounded-2xl p-3 outline-none mono text-xs leading-relaxed";
@@ -956,11 +1542,11 @@
         btnCopy.addEventListener("click", async ()=>{
           try{
             await navigator.clipboard.writeText(node.share || "");
-            setStatus(`已复制：${node.tag || node.type}`, "ok");
+            setStatus(`已复制：${node.tag || node.type || "link"}`, "ok");
           }catch(e){
             textarea.select();
             document.execCommand("copy");
-            setStatus(`已复制（fallback）：${node.tag || node.type}`, "ok");
+            setStatus(`已复制（fallback）：${node.tag || node.type || "link"}`, "ok");
           }
         });
 
@@ -980,13 +1566,13 @@
             return;
           }
           const a = document.createElement("a");
-          const safeName = (node.tag || `${node.type}_${node.server}_${node.port}`).replace(/[^\w\-\.]+/g, "_");
+          const safeName = (node.tag || `${node.type || "link"}`).replace(/[^\w\-\.]+/g, "_");
           a.href = dataUrl;
           a.download = `${safeName}.png`;
           document.body.appendChild(a);
           a.click();
           a.remove();
-          setStatus(`已下载 QR：${node.tag || node.type}`, "ok");
+          setStatus(`已下载 QR：${node.tag || node.type || "link"}`, "ok");
         });
 
         const btnOpen = document.createElement("button");
@@ -1013,29 +1599,10 @@
       }
     }
 
-    function splitSingBoxNodes(){
-      const raw = safeTrim(inputEl.value);
-      if(!raw){
-        setStatus("请先粘贴 sing-box JSON。", "warn");
-        return;
-      }
-      if(!isLikelyJSON(raw)){
-        setStatus("这不是合法 JSON。", "bad");
-        return;
-      }
-
-      let cfg = null;
-      try{ cfg = JSON.parse(raw); }
-      catch(e){ setStatus("JSON 解析失败。", "bad"); return; }
-
+    function buildNodesFromJSON(cfg){
       const outbounds = Array.isArray(cfg.outbounds) ? cfg.outbounds : [];
-      if(outbounds.length === 0){
-        setStatus("JSON 中未找到 outbounds。", "warn");
-        renderNodes([]);
-        return;
-      }
-
       const nodes = [];
+
       for(const o of outbounds){
         if(!isUsefulOutbound(o)) continue;
         const share = outboundToShareUri(o);
@@ -1051,16 +1618,132 @@
         });
       }
 
-      lastNodes = nodes;
+      return nodes;
+    }
 
-      if(nodes.length === 0){
-        setStatus("拆分完成，但没有生成可用分享链接。", "warn");
-        renderNodes([]);
+    function buildNodesFromShareLinks(links){
+      const nodes = [];
+      const arr = Array.isArray(links) ? links : [];
+
+      for(let i=0;i<arr.length;i++){
+        const link = safeTrim(arr[i]);
+        if(!link) continue;
+
+        // best effort parse host/port from share link
+        let server = "";
+        let port = "";
+        let type = "link";
+
+        const m = link.match(/^(vmess|vless|trojan|ss|ssr|hysteria2|tuic):\/\//i);
+        if(m) type = m[1].toLowerCase();
+
+        // vless/trojan/hysteria2/tuic commonly have @host:port
+        const at = link.match(/@([^\s/:?#]+):(\d+)/);
+        if(at){
+          server = at[1] || "";
+          port = at[2] || "";
+        }else{
+          // ss: may have @host:port
+          const ss = link.match(/@([^\s/:?#]+):(\d+)/);
+          if(ss){
+            server = ss[1] || "";
+            port = ss[2] || "";
+          }
+        }
+
+        // tag: if has #remark
+        let tag = "";
+        const hash = link.split("#");
+        if(hash.length >= 2){
+          try{ tag = decodeURIComponent(hash.slice(1).join("#")); }catch(e){ tag = hash.slice(1).join("#"); }
+        }
+        if(!tag){
+          tag = `Link_${i+1}`;
+        }
+
+        nodes.push({
+          type,
+          tag,
+          server,
+          port,
+          share: link,
+          summary: tag,
+          outbound: null
+        });
+      }
+
+      return nodes;
+    }
+
+    function splitNodesUniversal(){
+      const raw = safeTrim(inputEl.value);
+      if(!raw){
+        setStatus("请先粘贴内容（JSON / 多行链接 / Base64）。", "warn");
         return;
       }
 
-      setStatus(`拆分成功 ✅ 共 ${nodes.length} 个节点已生成逐条 QR。`, "ok");
-      renderNodes(nodes);
+      const a = analyzeInput(raw);
+
+      // 1) JSON
+      if(a.kind === "json"){
+        if(!a.jsonObj){
+          setStatus("JSON 解析失败。", "bad");
+          renderNodes([]);
+          refreshAppHub();
+          return;
+        }
+        const nodes = buildNodesFromJSON(a.jsonObj);
+        lastNodes = nodes;
+
+        if(nodes.length === 0){
+          setStatus("拆分完成，但没有生成可用分享链接（检查 outbounds）。", "warn");
+          renderNodes([]);
+          refreshAppHub();
+          return;
+        }
+
+        setStatus(`拆分成功 ✅ 共 ${nodes.length} 个节点已生成逐条 QR。`, "ok");
+        renderNodes(nodes);
+        refreshAppHub();
+        return;
+      }
+
+      // 2) base64
+      if(a.kind === "base64"){
+        if(a.shares.length === 0){
+          setStatus("识别为 Base64，但未拆出链接：请确认解码内容。", "warn");
+          renderNodes([]);
+          refreshAppHub();
+          return;
+        }
+        const nodes = buildNodesFromShareLinks(a.shares);
+        lastNodes = nodes;
+        setStatus(`Base64 解码成功 ✅ 共 ${nodes.length} 条链接已拆分逐条 QR。`, "ok");
+        renderNodes(nodes);
+        refreshAppHub();
+        return;
+      }
+
+      // 3) multi share
+      if(a.shares.length >= 1){
+        const nodes = buildNodesFromShareLinks(a.shares);
+        lastNodes = nodes;
+        if(nodes.length === 0){
+          setStatus("未拆出可用链接。", "warn");
+          renderNodes([]);
+          refreshAppHub();
+          return;
+        }
+        setStatus(`拆分成功 ✅ 共 ${nodes.length} 条链接已生成逐条 QR。`, "ok");
+        renderNodes(nodes);
+        refreshAppHub();
+        return;
+      }
+
+      // fallback
+      setStatus("无法拆分：请粘贴 sing-box JSON 或 多行分享链接/Base64订阅文本。", "warn");
+      renderNodes([]);
+      refreshAppHub();
     }
 
     async function copyAllNodes(){
@@ -1518,6 +2201,7 @@
       cmOutput.value = y;
       cmHint.textContent = "已生成 Clash Meta YAML ✅ 可复制或下载导入。";
       setStatus("Clash Meta YAML 已生成 ✅", "ok");
+      refreshAppHub();
     }
 
     async function copyClashMetaYAML(){
@@ -1585,7 +2269,7 @@
     // events
     // ============================================================
     $("btnGenerate").addEventListener("click", generateSingle);
-    $("btnSplitNodes").addEventListener("click", splitSingBoxNodes);
+    $("btnSplitNodes").addEventListener("click", splitNodesUniversal);
     $("btnGenClashMeta").addEventListener("click", generateClashMetaYAML);
 
     $("btnClear").addEventListener("click", ()=>{
@@ -1603,6 +2287,10 @@
 
     $("btnMinify").addEventListener("click", jsonMinify);
     $("btnPretty").addEventListener("click", jsonPretty);
+
+    btnHubCopyActive.addEventListener("click", hubCopyActive);
+    btnHubCopyAll.addEventListener("click", hubCopyAll);
+    btnHubRefresh.addEventListener("click", refreshAppHub);
 
     $("btnCopyAllNodes").addEventListener("click", copyAllNodes);
     $("btnDownloadAllNodes").addEventListener("click", downloadAllNodesTxt);
@@ -1632,10 +2320,20 @@
       if(mode === "scheme" || mode === "auto") generateSingle();
     });
 
+    let hubTimer = null;
+    inputEl.addEventListener("input", ()=>{
+      clearTimeout(hubTimer);
+      hubTimer = setTimeout(()=>{
+        refreshAppHub();
+      }, 180);
+    });
+
     // init
     refreshModeBadge();
     clearNodesPanel();
-    setStatus("流程：贴 JSON → 拆节点 → 生成 Clash Meta YAML（复制/下载/尝试一键导入）。", "info");
+    clearAppHub();
+    setStatus("流程：贴 JSON/多行链接/Base64 → 拆分节点 →（JSON可选）生成 Clash Meta YAML。", "info");
+    refreshAppHub();
   </script>
 </body>
 </html>
