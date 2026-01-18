@@ -535,6 +535,98 @@
     };
     const uniq = (arr) => Array.from(new Set(arr.filter(Boolean)));
 
+    // ===== node naming (append IP/host suffix) =====
+    function hostOnlyFromHostPort(hp){
+      if (!hp) return '';
+      // strip brackets for IPv6
+      const x = String(hp).trim().replace(/^\[/,'').replace(/\]$/,'');
+      // keep host only (remove :port)
+      return x.split(':')[0];
+    }
+
+    function extractHostFromAtStyleUri(uri){
+      // For vless/trojan/tuic/hysteria2/ss etc: scheme://userinfo@host:port?...#name
+      try{
+        const u = String(uri || '').trim();
+        const at = u.indexOf('@');
+        if (at === -1) return '';
+        const after = u.slice(at + 1);
+        const end = (()=>{
+          const q = after.indexOf('?');
+          const h = after.indexOf('#');
+          if (q === -1 && h === -1) return after.length;
+          if (q === -1) return h;
+          if (h === -1) return q;
+          return Math.min(q, h);
+        })();
+        return after.slice(0, end);
+      }catch(e){
+        return '';
+      }
+    }
+
+    function tryAppendSuffixToHashName(uri, suffix){
+      const u = String(uri || '').trim();
+      if (!suffix) return u;
+      const hash = u.indexOf('#');
+      const base = (hash > -1) ? u.slice(0, hash) : u;
+      const nameRaw = (hash > -1) ? u.slice(hash + 1) : '';
+      let name = '';
+      try{ name = nameRaw ? decodeURIComponent(nameRaw) : ''; }catch(e){ name = nameRaw || ''; }
+      // If there is no name, keep it minimal and only add suffix as name.
+      const newName = name
+        ? (name.endsWith(suffix) ? name : (name + ' ' + suffix))
+        : suffix;
+      return base + '#' + encodeURIComponent(newName);
+    }
+
+    function tryAppendSuffixToVmess(uri, suffix){
+      const u = String(uri || '').trim();
+      if (!u.toLowerCase().startsWith('vmess://')) return u;
+      if (!suffix) return u;
+      const b64 = u.slice('vmess://'.length).trim();
+      try{
+        const jsonStr = b64dec(b64);
+        const obj = JSON.parse(jsonStr);
+        const ps = String(obj.ps || 'vmess');
+        obj.ps = ps.endsWith(suffix) ? ps : (ps + ' ' + suffix);
+        const outB64 = b64enc(JSON.stringify(obj));
+        return 'vmess://' + outB64;
+      }catch(e){
+        return u;
+      }
+    }
+
+    function addIpSuffixToNodeUri(uri){
+      const u = String(uri || '').trim();
+      if (!u) return u;
+      const scheme = (u.match(/^([a-z0-9]+):\/\//i)?.[1] || '').toLowerCase();
+
+      // vmess has name inside base64 JSON
+      if (scheme === 'vmess'){
+        // suffix from "add" field if possible
+        try{
+          const b64 = u.slice('vmess://'.length).trim();
+          const jsonStr = b64dec(b64);
+          const obj = JSON.parse(jsonStr);
+          const host = hostOnlyFromHostPort(obj.add || '');
+          const suffix = host ? ('·' + host) : '';
+          return tryAppendSuffixToVmess(u, suffix);
+        }catch(e){
+          return u;
+        }
+      }
+
+      // vless/tuic/hy2/ss/trojan etc: suffix from host after @
+      const hp = extractHostFromAtStyleUri(u);
+      const host = hostOnlyFromHostPort(hp);
+      const suffix = host ? ('·' + host) : '';
+      if (!suffix) return u;
+
+      // Most schemes support #name
+      return tryAppendSuffixToHashName(u, suffix);
+    }
+
     function safeSplitLines(text){
       return escapeNL(text).split("\n").map(x => x.trim()).filter(Boolean);
     }
@@ -1034,7 +1126,8 @@
       }
 
       const httpUrls = uris.filter(u => /^https?:\/\//i.test(u));
-      const nodeUris = uris.filter(u => /^(ss|ssr|vmess|vless|trojan|hysteria2|hy2|tuic):\/\//i.test(u));
+      const nodeUrisRaw = uris.filter(u => /^(ss|ssr|vmess|vless|trojan|hysteria2|hy2|tuic):\/\//i.test(u));
+      const nodeUris = nodeUrisRaw.map(addIpSuffixToNodeUri);
 
       const allSub = uniq([ ...subUrls, ...httpUrls ]);
       const primarySubUrl = allSub[0] || '';
@@ -1062,28 +1155,27 @@
           lines.push(nodeUris[0]);
           qrItems.push({ title: 'Node', subtitle: 'Scan to import this node', payload: nodeUris[0] });
         } else if (isMultiNode){
-          // Shadowrocket cannot reliably "split" a single QR that contains multi-node payload.
-          // Best UX: show a subscription QR (optional) + split each node into its own QR.
+          // Primary QR should be ONE aggregate QR that imports multiple nodes in Shadowrocket.
+          // Individual node QRs already exist in the Nodes panel.
+          const agg = makeAggregateSubFromNodes(nodeUris);
+
+          lines.push('# Aggregate (multi-node)');
+          lines.push(agg);
+
+          // Optional: also keep subscription URL helpers if user provided URL
           if (primarySubUrl){
+            lines.push('');
             lines.push('# Subscription URL');
             lines.push(primarySubUrl);
             lines.push('');
-            lines.push('# Shadowrocket subscription (sub://)');
-            lines.push(makeShadowrocketSub(primarySubUrl));
-            lines.push('');
             lines.push('# Shadowrocket one-click');
             lines.push(makeSRInstall(primarySubUrl));
-
-            qrItems.push({ title: 'One-click', subtitle: 'shadowrocket://add/sub?url=', payload: makeSRInstall(primarySubUrl) });
-            qrItems.push({ title: 'sub://', subtitle: 'Shadowrocket subscription', payload: makeShadowrocketSub(primarySubUrl) });
+            lines.push('# Shadowrocket subscription (sub://)');
+            lines.push(makeShadowrocketSub(primarySubUrl));
           }
 
-          lines.push('');
-          lines.push('# Split node links');
-          lines.push(nodeUris.join('\n'));
-
-          // Split node QRs (what users actually want)
-          qrItems.push(...makeNodeQrItems(nodeUris, 12));
+          // One reliable QR only
+          qrItems.push({ title: 'Aggregate', subtitle: 'Shadowrocket multi-node import', payload: agg });
         } else {
           lines.push('# Paste a node link or subscription URL');
         }
@@ -1118,7 +1210,7 @@
           lines.push('');
           lines.push('# Nodes');
           lines.push(nodeUris.join('\n'));
-          qrItems.push({ title: 'Aggregate', subtitle: 'sub://BASE64(multi-line)', payload: makeAggregateSubFromNodes(nodeUris) });
+          qrItems.push({ title: 'Aggregate', subtitle: 'sub://BASE64(multi-line nodes)', payload: makeAggregateSubFromNodes(nodeUris) });
         }
         if (!primarySubUrl && !nodeUris.length){
           lines.push('# Paste sing-box JSON / share links / subscription URL');
@@ -1140,10 +1232,8 @@
 
         lines.push('');
         lines.push('# Split node links');
-        lines.push(nodeUris.join('\n'));
-
-        // Show per-node QRs (most scanners reliably decode these)
-        qrItems.push(...makeNodeQrItems(nodeUris, 12));
+        lines.push(nodeUris.slice(0, 60).join('\n'));
+        qrItems.push({ title: 'Aggregate', subtitle: 'Multi-node import (sub://)', payload: makeAggregateSubFromNodes(nodeUris) });
       } else if (primarySubUrl){
         lines.push('# Subscription URL');
         lines.push(primarySubUrl);
