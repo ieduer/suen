@@ -814,6 +814,28 @@
       }
     }
 
+    function makeNodeQrItems(nodeUris, limit = 12){
+      const out = [];
+      const arr = Array.isArray(nodeUris) ? nodeUris : [];
+      for (let i = 0; i < Math.min(arr.length, limit); i++){
+        const u = arr[i];
+        const info = nodeLabel(u);
+        out.push({
+          title: `Node ${i+1}`,
+          subtitle: `${info.scheme} · ${info.title}`,
+          payload: u
+        });
+      }
+      if (arr.length > limit){
+        out.push({
+          title: `+${arr.length - limit} more`,
+          subtitle: 'Use the Nodes panel to browse and scan each node',
+          payload: ''
+        });
+      }
+      return out.filter(x => x.payload);
+    }
+
     function renderNodeList(nodeUris){
       const list = $('#nodeList');
       const q = ($('#nodeSearch').value || '').trim().toLowerCase();
@@ -877,8 +899,22 @@
         };
 
         try{
-          const url = await qrDataUrl(it.payload);
-          img.src = url;
+          const payload = String(it.payload || '');
+          // Very long payloads create extremely dense QRs that many camera scanners (including Shadowrocket) fail to decode.
+          // Keep QR generation "reliable" by refusing oversized payloads.
+          const MAX_QR_LEN = 1100;
+          if (payload.length > MAX_QR_LEN){
+            img.remove();
+            const pre = document.createElement('pre');
+            pre.style.color = 'rgba(255,255,255,.70)';
+            pre.style.margin = '0';
+            pre.style.padding = '10px 12px';
+            pre.textContent = `QR skipped: payload too long (${payload.length} chars). Copy the text link instead.`;
+            box.appendChild(pre);
+          }else{
+            const url = await qrDataUrl(payload);
+            img.src = url;
+          }
         }catch(e){
           img.remove();
           const pre = document.createElement('pre');
@@ -897,10 +933,6 @@
 
     function renderNodeLinksText(nodeUris){
       $('#nodeLinks').textContent = nodeUris.length ? nodeUris.join('\n') : '(No node links detected)';
-    }
-
-    function renderExportsText(lines){
-      $('#exports').textContent = lines.join('\n');
     }
 
     async function renderSelected(nodeUris){
@@ -1028,25 +1060,30 @@
         if (isSingleNode){
           lines.push('# Node');
           lines.push(nodeUris[0]);
-          qrItems.push({ title: 'Node', subtitle: 'Best compatibility', payload: nodeUris[0] });
+          qrItems.push({ title: 'Node', subtitle: 'Scan to import this node', payload: nodeUris[0] });
         } else if (isMultiNode){
+          // Shadowrocket cannot reliably "split" a single QR that contains multi-node payload.
+          // Best UX: show a subscription QR (optional) + split each node into its own QR.
           if (primarySubUrl){
             lines.push('# Subscription URL');
             lines.push(primarySubUrl);
             lines.push('');
-            lines.push('# Shadowrocket sub://');
+            lines.push('# Shadowrocket subscription (sub://)');
             lines.push(makeShadowrocketSub(primarySubUrl));
             lines.push('');
             lines.push('# Shadowrocket one-click');
             lines.push(makeSRInstall(primarySubUrl));
 
-            qrItems.push({ title: 'Subscription URL', subtitle: 'Import all (URL)', payload: primarySubUrl });
+            qrItems.push({ title: 'One-click', subtitle: 'shadowrocket://add/sub?url=', payload: makeSRInstall(primarySubUrl) });
             qrItems.push({ title: 'sub://', subtitle: 'Shadowrocket subscription', payload: makeShadowrocketSub(primarySubUrl) });
           }
+
           lines.push('');
-          lines.push('# Aggregate (multi-node)');
-          lines.push(makeAggregateSubFromNodes(nodeUris));
-          qrItems.push({ title: 'Aggregate', subtitle: 'sub://BASE64(multi-line)', payload: makeAggregateSubFromNodes(nodeUris) });
+          lines.push('# Split node links');
+          lines.push(nodeUris.join('\n'));
+
+          // Split node QRs (what users actually want)
+          qrItems.push(...makeNodeQrItems(nodeUris, 12));
         } else {
           lines.push('# Paste a node link or subscription URL');
         }
@@ -1100,10 +1137,13 @@
           lines.push(primarySubUrl);
           qrItems.push({ title: 'Subscription URL', subtitle: 'Import all (URL)', payload: primarySubUrl });
         }
+
         lines.push('');
-        lines.push('# Aggregate (multi-node)');
-        lines.push(makeAggregateSubFromNodes(nodeUris));
-        qrItems.push({ title: 'Aggregate', subtitle: 'sub://BASE64(multi-line)', payload: makeAggregateSubFromNodes(nodeUris) });
+        lines.push('# Split node links');
+        lines.push(nodeUris.join('\n'));
+
+        // Show per-node QRs (most scanners reliably decode these)
+        qrItems.push(...makeNodeQrItems(nodeUris, 12));
       } else if (primarySubUrl){
         lines.push('# Subscription URL');
         lines.push(primarySubUrl);
@@ -1141,8 +1181,7 @@
         lines.push('');
       }
 
-      lines.push('# Clash Meta YAML (download / copy from this page)');
-      lines.push('(Use the Download button)');
+      lines.push('# Clash Meta YAML: use Download YAML');
 
       appState.clashYaml = clashYaml;
       return lines;
