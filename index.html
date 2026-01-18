@@ -1,1045 +1,1428 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Proxy QR Lab</title>
-
-  <!-- QRCode library -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-
+  <title>Sub2QR</title>
   <style>
     :root{
-      --bg0:#070a12;
-      --bg1:#0b1020;
+      --bg0:#0b1220;
+      --bg1:#0f1a2c;
       --card:rgba(255,255,255,.06);
       --card2:rgba(255,255,255,.08);
-      --bd:rgba(255,255,255,.14);
-      --text:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.70);
-      --muted2:rgba(255,255,255,.55);
-      --accent:#7c3aed;
-      --accent2:#22c55e;
-      --danger:#ef4444;
-      --warn:#f59e0b;
-      --shadow:0 12px 40px rgba(0,0,0,.35);
+      --bd:rgba(255,255,255,.10);
+      --txt:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.55);
+      --ok:#35c56a;
+      --warn:#f7c948;
+      --bad:#ff5a6a;
+      --shadow: 0 18px 55px rgba(0,0,0,.38);
+      --r:18px;
+      --r2:14px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     }
-    *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, "SF Pro Display", "PingFang SC","Microsoft Yahei", Arial, sans-serif;
       background:
-        radial-gradient(1200px 700px at 15% 10%, rgba(124,58,237,.22), transparent 60%),
-        radial-gradient(1000px 700px at 85% 15%, rgba(34,197,94,.16), transparent 55%),
-        radial-gradient(900px 600px at 35% 90%, rgba(59,130,246,.15), transparent 55%),
+        radial-gradient(1200px 800px at 15% 10%, rgba(120,80,255,.22), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(0,220,255,.15), transparent 55%),
+        radial-gradient(1100px 900px at 60% 90%, rgba(0,255,160,.10), transparent 55%),
         linear-gradient(180deg, var(--bg0), var(--bg1));
-      min-height:100vh;
-    }
-    .wrap{max-width:1200px;margin:0 auto;padding:22px 16px 48px}
-    .top{
-      display:flex;gap:14px;align-items:flex-end;justify-content:space-between;
-      margin-bottom:14px;
-    }
-    .brand{
-      display:flex;flex-direction:column;gap:6px;
-    }
-    .brand h1{
-      margin:0;font-size:22px;letter-spacing:.2px;
-      display:flex;align-items:center;gap:10px;
-    }
-    .badge{
-      font-size:12px;padding:4px 10px;border-radius:999px;
-      background:rgba(124,58,237,.18);
-      border:1px solid rgba(124,58,237,.35);
-      color:rgba(255,255,255,.88);
-    }
-    .sub{
-      color:var(--muted2);font-size:13px;margin:0;
-      max-width:760px;line-height:1.35;
-    }
-    .rightBtns{
-      display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;
-    }
-    button{
-      border:1px solid var(--bd);
-      background:rgba(255,255,255,.06);
-      color:var(--text);
-      padding:10px 12px;
-      border-radius:12px;
-      cursor:pointer;
-      box-shadow:none;
-      transition:.18s ease;
-    }
-    button:hover{transform:translateY(-1px);background:rgba(255,255,255,.08)}
-    button:active{transform:translateY(0)}
-    button.primary{
-      border-color:rgba(124,58,237,.55);
-      background:rgba(124,58,237,.22);
-    }
-    button.good{
-      border-color:rgba(34,197,94,.55);
-      background:rgba(34,197,94,.18);
-    }
-    button.danger{
-      border-color:rgba(239,68,68,.55);
-      background:rgba(239,68,68,.14);
+      color:var(--txt);
+      overflow-x:hidden;
     }
 
-    .grid{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:14px;
-      align-items:start;
+    .wrap{max-width: 1480px;margin: 18px auto;padding: 0 16px 28px;}
+
+    .dot{width:10px;height:10px;border-radius:99px;background: linear-gradient(135deg, rgba(120,80,255,.9), rgba(0,220,255,.9));box-shadow: 0 0 18px rgba(0,220,255,.35);}
+
+    .btn{
+      appearance:none;
+      border:1px solid var(--bd);
+      background: rgba(255,255,255,.05);
+      color:var(--txt);
+      padding:10px 12px;
+      border-radius: 14px;
+      cursor:pointer;
+      transition: .15s ease;
+      box-shadow: 0 12px 30px rgba(0,0,0,.25);
+      font-size:13px;
+      height:44px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      user-select:none;
     }
-    @media (max-width: 980px){
-      .grid{grid-template-columns:1fr}
+    .btn:hover{transform:translateY(-1px); background: rgba(255,255,255,.08)}
+    .btn:active{transform:translateY(0)}
+    .btn.small{padding:7px 10px;font-size:12px;border-radius:11px;height:34px}
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-size:12px;
+      padding:7px 10px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:999px;
+      color:var(--muted);
+      background: rgba(0,0,0,.12);
+      white-space:nowrap;
+      user-select:none;
     }
+    .pill i{width:8px;height:8px;border-radius:99px;background: rgba(255,255,255,.25);display:inline-block;}
+    .pill.ok i{background: var(--ok)}
+    .pill.bad i{background: var(--bad)}
+    .pill.warn i{background: var(--warn)}
+    .pillBig{padding:9px 12px;font-size:12px;background: rgba(0,0,0,.10)}
+
+    .hero{
+      border:1px solid var(--bd);
+      background: rgba(255,255,255,.04);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      padding:16px 16px 14px;
+      margin-bottom: 16px;
+    }
+    .heroTop{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom: 10px;}
+    .heroBrand{display:flex;align-items:center;gap:12px;}
+    .heroTitle{font-weight:800;letter-spacing:.6px;font-size:16px;}
+    .heroSub{color: rgba(255,255,255,.55);font-size:12px;margin-top:2px;}
+
+    .beltRow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+    .belt{flex:1;display:flex;align-items:center;gap:10px;min-width: 320px;max-width: 1100px;}
+    .beltInput{
+      flex:1;
+      height: 44px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      color: rgba(255,255,255,.92);
+      outline:none;
+      font-size:12px;
+      padding: 0 12px;
+      font-family: var(--mono);
+      box-shadow: 0 12px 30px rgba(0,0,0,.20);
+    }
+    .beltInput::placeholder{color: rgba(255,255,255,.42)}
+
+    .kpiRow{display:flex;gap:10px;flex-wrap:wrap;margin-top: 10px;}
+
+    .layout{display:grid;grid-template-columns: 280px 1fr;gap: 16px;align-items:start;}
+    @media (max-width: 1100px){.layout{grid-template-columns:1fr;}}
+
+    .side{position:sticky;top:14px;display:flex;flex-direction:column;gap:12px;}
+    @media (max-width: 1100px){.side{position:static;}}
+
+    .sideCard{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      border-radius: var(--r);
+      box-shadow: 0 18px 55px rgba(0,0,0,.18);
+      padding: 12px;
+    }
+    .sideTitle{
+      font-size:12px;
+      color: rgba(255,255,255,.70);
+      letter-spacing:.4px;
+      margin-bottom: 10px;
+      font-weight:700;
+    }
+    .sideTabs{display:flex;flex-direction:column;gap:8px;}
+    .sideBtns{display:flex;gap:8px;flex-wrap:wrap}
+    .mutedBox{background: rgba(0,0,0,.12)}
+
+    .main{display:flex;flex-direction:column;gap:16px;}
 
     .card{
-      background:var(--card);
       border:1px solid var(--bd);
-      border-radius:16px;
-      padding:14px;
-      box-shadow:var(--shadow);
-      backdrop-filter: blur(10px);
-    }
-    .cardHeader{
-      display:flex;gap:10px;align-items:center;justify-content:space-between;
-      margin-bottom:10px;
-    }
-    .cardTitle{
-      font-weight:650;font-size:14px;color:rgba(255,255,255,.88);
-      display:flex;align-items:center;gap:8px;
-    }
-    .pill{
-      font-size:12px;color:rgba(255,255,255,.72);
-      border:1px solid rgba(255,255,255,.16);
-      padding:3px 8px;border-radius:999px;
-      background:rgba(255,255,255,.05);
+      background: var(--card);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
     }
 
-    textarea{
-      width:100%;
-      min-height:190px;
-      resize:vertical;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(0,0,0,.18);
-      color:var(--text);
-      padding:12px 12px;
-      outline:none;
-      line-height:1.35;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size:12.6px;
+    .hd{
+      padding:13px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      background: rgba(255,255,255,.04);
+      border-bottom:1px solid rgba(255,255,255,.06);
     }
-    .hintRow{
-      display:flex;gap:10px;justify-content:space-between;align-items:center;
-      margin-top:10px;flex-wrap:wrap;
-    }
-    .hint{
-      color:var(--muted2);
-      font-size:12px;
-    }
-    .kpi{
-      display:flex;gap:8px;align-items:center;
-      flex-wrap:wrap;
-    }
-    .kpi .dot{
-      width:8px;height:8px;border-radius:50%;
-      background:rgba(255,255,255,.25);
-    }
-    .kpi .ok{background:rgba(34,197,94,.85)}
-    .kpi .warn{background:rgba(245,158,11,.9)}
-    .kpi .bad{background:rgba(239,68,68,.9)}
+    .ttl{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.4px;}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;align-items:center;}
 
-    .list{
-      display:flex;flex-direction:column;gap:10px;
-    }
-    .node{
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:14px;
-      padding:10px;
-      background:rgba(255,255,255,.04);
-    }
-    .nodeTop{
-      display:flex;gap:10px;justify-content:space-between;align-items:flex-start;
-    }
-    .nodeName{
-      font-weight:650;
-      font-size:13px;
-      color:rgba(255,255,255,.90);
-      display:flex;align-items:center;gap:8px;flex-wrap:wrap;
-    }
-    .tag{
-      font-size:11px;padding:2px 8px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.18);
-      color:rgba(255,255,255,.70);
-      background:rgba(255,255,255,.05);
-    }
-    .nodeBody{
-      margin-top:7px;
-      color:rgba(255,255,255,.78);
-      font-size:12px;
-      line-height:1.25;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:6px 10px;
-    }
-    @media(max-width:700px){
-      .nodeBody{grid-template-columns:1fr}
-    }
-    .kv{display:flex;gap:8px;align-items:center}
-    .k{color:var(--muted2);min-width:66px}
-    .v{color:rgba(255,255,255,.86);word-break:break-all}
+    .panel{padding:14px 16px 18px;display:flex;flex-direction:column;gap:12px;}
 
-    .tabs{
-      display:flex;gap:8px;flex-wrap:wrap;
-      margin-bottom:10px;
-    }
+    .tabs{display:flex;gap:8px;flex-wrap:wrap}
     .tab{
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(255,255,255,.05);
-      color:rgba(255,255,255,.84);
-      cursor:pointer;
-      user-select:none;
-      font-size:12px;
-      transition:.16s ease;
-    }
-    .tab.active{
-      background:rgba(124,58,237,.22);
-      border-color:rgba(124,58,237,.45);
-    }
-
-    .out{
-      display:flex;flex-direction:column;gap:10px;
-    }
-    .block{
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:14px;
-      background:rgba(255,255,255,.04);
-      overflow:hidden;
-    }
-    .blockHead{
-      padding:9px 10px;
-      display:flex;gap:10px;align-items:center;justify-content:space-between;
-      background:rgba(255,255,255,.03);
-      border-bottom:1px solid rgba(255,255,255,.10);
-    }
-    .blockHead .left{
-      display:flex;gap:8px;align-items:center;flex-wrap:wrap;
-      font-weight:650;font-size:12.5px;color:rgba(255,255,255,.88);
-    }
-    .blockHead .right{
-      display:flex;gap:8px;align-items:center;flex-wrap:wrap;
-    }
-    .mini{
-      padding:6px 10px;border-radius:10px;font-size:12px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(255,255,255,.05);
-      color:rgba(255,255,255,.86);
-      cursor:pointer;
-    }
-    .mini:hover{background:rgba(255,255,255,.08)}
-    pre{
-      margin:0;
-      padding:10px 10px;
-      color:rgba(255,255,255,.86);
-      font-size:12px;
-      line-height:1.25;
-      white-space:pre-wrap;
-      word-break:break-word;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    }
-
-    .qrGrid{
-      display:grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap:10px;
-      padding:10px;
-    }
-    @media(max-width:700px){
-      .qrGrid{grid-template-columns:1fr}
-    }
-    .qrItem{
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:14px;
-      background:rgba(0,0,0,.12);
-      padding:10px;
-      display:flex;gap:12px;align-items:center;
-    }
-    .qrCanvas{
-      width:128px;height:128px;
-      border-radius:12px;
-      background:rgba(255,255,255,.05);
+      display:flex;align-items:center;justify-content:space-between;
+      padding:10px 12px;border-radius: 14px;
       border:1px solid rgba(255,255,255,.10);
-      display:flex;align-items:center;justify-content:center;
-      flex-shrink:0;
+      background: rgba(0,0,0,.12);
+      color: rgba(255,255,255,.75);
+      cursor:pointer;
+      font-size:12px;
+      user-select:none;
+      transition: .15s ease;
+      width: 100%;
+      box-sizing:border-box;
+    }
+    .tab:hover{transform: translateY(-1px); background: rgba(255,255,255,.06)}
+    .tab.active{background: rgba(255,255,255,.10); color: rgba(255,255,255,.92)}
+
+    .seg{border:1px solid rgba(255,255,255,.08);background: rgba(0,0,0,.14);border-radius: var(--r2);overflow:hidden;}
+    .seg .seg-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;padding: 10px 12px;border-bottom:1px solid rgba(255,255,255,.06);background: rgba(255,255,255,.03);}
+    .seg .seg-hd b{font-size:13px}
+    .seg .seg-hd .mini{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+    .seg pre{margin:0;padding:12px;white-space: pre-wrap;word-break: break-all;font-size:12px;line-height:1.35;color: rgba(255,255,255,.88);font-family: var(--mono);}
+
+    .twoCols{display:grid;grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));gap:12px;padding:12px;}
+
+    .qrbox{border:1px solid rgba(255,255,255,.08);background: rgba(0,0,0,.14);border-radius: 14px;padding: 10px;overflow:hidden;display:flex;flex-direction:column;gap:8px;}
+    .qrbox .qttl{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted)}
+    .qrimg{width: 100%;max-width: 520px;border-radius: 14px;background: rgba(255,255,255,.92);padding: 10px;box-sizing:border-box;margin:auto;}
+    .qrhint{font-size:11px;color: rgba(255,255,255,.50);line-height:1.25;font-family: var(--mono);max-height: 52px;overflow:hidden;text-overflow: ellipsis;}
+
+    .splitWide{display:grid;grid-template-columns: 420px 1fr;gap: 16px;}
+    @media (max-width: 1100px){.splitWide{grid-template-columns:1fr;}}
+
+    .nodes{
+      border:1px solid var(--bd);
+      background: var(--card);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
       overflow:hidden;
-    }
-    .qrMeta{
-      display:flex;flex-direction:column;gap:6px;min-width:0;
-    }
-    .qrTitle{
-      font-weight:700;font-size:13px;
-      color:rgba(255,255,255,.92);
-    }
-    .qrDesc{
-      font-size:12px;color:rgba(255,255,255,.65);
-      line-height:1.2;
-      word-break:break-word;
+      display:flex;
+      flex-direction:column;
+      min-height: 260px;
     }
 
-    .toast{
-      position:fixed;
-      left:50%;
-      bottom:22px;
-      transform:translateX(-50%);
-      background:rgba(0,0,0,.75);
-      border:1px solid rgba(255,255,255,.14);
-      color:rgba(255,255,255,.92);
-      padding:10px 14px;
-      border-radius:999px;
-      font-size:12.5px;
-      opacity:0;
-      pointer-events:none;
-      transition:.2s ease;
-      backdrop-filter: blur(12px);
+    .search{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      color: rgba(255,255,255,.88);
+      padding:7px 10px;
+      border-radius: 999px;
+      font-size:12px;
+      outline:none;
+      width: 160px;
+      height:34px;
+      font-family: var(--mono);
     }
-    .toast.show{opacity:1;bottom:28px}
+
+    .nlist{padding:12px;display:flex;flex-direction:column;gap:8px;max-height: 520px;overflow:auto;}
+    .nitem{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      border-radius: 12px;
+      padding:9px 10px;
+      cursor:pointer;
+      transition: .15s ease;
+      display:flex;
+      flex-direction:column;
+      gap:5px;
+    }
+    .nitem:hover{transform: translateY(-1px); background: rgba(255,255,255,.06)}
+    .nitem.active{background: rgba(255,255,255,.10)}
+    .nname{font-size:12px;color: rgba(255,255,255,.88);line-height:1.2;}
+    .nmeta{font-size:11px;color: rgba(255,255,255,.50);font-family: var(--mono);white-space: nowrap;overflow:hidden;text-overflow: ellipsis;}
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.12);
+      font-size:12px;
+      color: rgba(255,255,255,.70)
+    }
+    .chip b{color: rgba(255,255,255,.92)}
+    .muted{color:var(--muted)}
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <div class="top">
-      <div class="brand">
-        <h1>Proxy QR Lab <span class="badge">v2.2</span></h1>
-        <p class="sub">
-          Paste anything (single node / mixed nodes / subscription URL / base64 blob). We auto-detect → normalize → export.
-          Shadowrocket multi-node QR is now **pure-text bundle** (newline-separated links) so it can auto-split.
-        </p>
+
+    <!-- HERO / INPUT BELT -->
+    <div class="hero">
+      <div class="heroTop">
+        <div class="heroBrand">
+          <div class="dot"></div>
+          <div>
+            <div class="heroTitle">Sub2QR</div>
+            <div class="heroSub">Paste anything. Get QR + links + Clash Meta YAML.</div>
+          </div>
+        </div>
       </div>
 
-      <div class="rightBtns">
-        <button class="primary" id="btnParse">Parse</button>
-        <button class="good" id="btnCopyAll">Copy Bundle</button>
-        <button class="danger" id="btnClear">Clear</button>
+      <div class="beltRow">
+        <div class="belt">
+          <input class="beltInput" id="quickInput" spellcheck="false" placeholder="Paste URL / sing-box JSON / multi-line links / Base64" />
+          <button class="btn" id="btnPaste">Paste</button>
+        </div>
+        <div class="pill pillBig" id="pillOut"><i></i><span id="outState">Not parsed</span></div>
       </div>
+
+      <div class="kpiRow" id="kpi"></div>
     </div>
 
-    <div class="grid">
-      <!-- LEFT: input + nodes -->
-      <div class="card">
-        <div class="cardHeader">
-          <div class="cardTitle">Input</div>
-          <div class="pill" id="stat">idle</div>
+    <!-- MAIN LAYOUT -->
+    <div class="layout">
+      <aside class="side">
+        <div class="sideCard">
+          <div class="sideTitle">Software</div>
+          <div class="tabs sideTabs" id="tabs"></div>
         </div>
 
-        <textarea id="input" spellcheck="false" placeholder="Paste here:
-- ss://... / vmess://... / vless://... / trojan://...
-- a bunch of links mixed together
-- a sub URL: https://example.com/sub
-- base64 subscriptions (raw)"></textarea>
-
-        <div class="hintRow">
-          <div class="hint" id="hint">Auto-parse on paste/typing (debounced). Use Parse for manual refresh.</div>
-          <div class="kpi" id="kpi">
-            <span class="dot"></span><span class="hint" id="kpiText">0 nodes</span>
+        <div class="sideCard">
+          <div class="sideTitle">Quick actions</div>
+          <div class="sideBtns">
+            <button class="btn small" data-copy="#primaryLinks">Copy Primary</button>
+            <button class="btn small" data-copy="#exports">Copy Exports</button>
+            <button class="btn small" id="btnDownloadClash2">Download YAML</button>
           </div>
         </div>
 
-        <div style="height:12px"></div>
-
-        <div class="cardHeader" style="margin-bottom:8px">
-          <div class="cardTitle">Detected Nodes</div>
-          <div class="pill" id="nodeCount">0</div>
+        <div class="sideCard mutedBox">
+          <div class="muted" style="font-size:12px;line-height:1.45">
+            Tip: single node → direct QR.<br/>
+            multiple nodes → subscription + split nodes.
+          </div>
         </div>
+      </aside>
 
-        <div class="list" id="nodeList"></div>
-      </div>
+      <main class="main">
 
-      <!-- RIGHT: exports -->
-      <div class="card">
-        <div class="cardHeader">
-          <div class="cardTitle">Export</div>
-          <div class="pill" id="exportMode">Shadowrocket</div>
-        </div>
+        <!-- PRIMARY -->
+        <section class="card">
+          <div class="hd">
+            <div class="ttl">Primary</div>
+            <div class="actions">
+              <button class="btn small" data-copy="#primaryLinks">Copy</button>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="seg">
+              <div class="seg-hd">
+                <b>Links</b>
+                <div class="mini">
+                  <button class="btn small" data-copy="#primaryLinks">Copy</button>
+                </div>
+              </div>
+              <pre id="primaryLinks"></pre>
+            </div>
 
-        <div class="tabs" id="tabs"></div>
-        <div class="out" id="output"></div>
-      </div>
+            <div class="seg">
+              <div class="seg-hd">
+                <b>QR</b>
+                <div class="mini"></div>
+              </div>
+              <div class="twoCols" id="primaryQr"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- NODES + SELECTED -->
+        <section class="splitWide">
+          <div class="nodes" id="nodesBox">
+            <div class="hd">
+              <div class="ttl">Nodes</div>
+              <div class="actions">
+                <input class="search" id="nodeSearch" placeholder="Search" />
+                <button class="btn small" data-copy="#nodeLinks">Copy</button>
+              </div>
+            </div>
+            <div class="nlist" id="nodeList"></div>
+          </div>
+
+          <div class="card">
+            <div class="hd">
+              <div class="ttl">Selected</div>
+              <div class="actions">
+                <button class="btn small" id="btnCopySelected">Copy</button>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="seg">
+                <div class="seg-hd">
+                  <b>QR</b>
+                  <div class="mini"></div>
+                </div>
+                <div class="twoCols" id="selectedQr"></div>
+              </div>
+              <div class="seg">
+                <div class="seg-hd">
+                  <b>Link</b>
+                  <div class="mini">
+                    <button class="btn small" data-copy="#selectedText">Copy</button>
+                  </div>
+                </div>
+                <pre id="selectedText"></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- EXPORTS -->
+        <section class="card">
+          <div class="hd">
+            <div class="ttl">Exports</div>
+            <div class="actions">
+              <button class="btn small" data-copy="#exports">Copy</button>
+              <button class="btn small" id="btnDownloadClash">Download Clash Meta YAML</button>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="seg">
+              <div class="seg-hd">
+                <b>Text</b>
+                <div class="mini">
+                  <button class="btn small" data-copy="#exports">Copy</button>
+                </div>
+              </div>
+              <pre id="exports"></pre>
+            </div>
+
+            <div class="seg">
+              <div class="seg-hd">
+                <b>All node links</b>
+                <div class="mini">
+                  <button class="btn small" data-copy="#nodeLinks">Copy</button>
+                </div>
+              </div>
+              <pre id="nodeLinks"></pre>
+            </div>
+          </div>
+        </section>
+
+      </main>
     </div>
+
   </div>
 
-  <div class="toast" id="toast"></div>
+  <!-- QR lib (CDN primary; JS supports qrcodejs constructor-style fallback too) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js" referrerpolicy="no-referrer"></script>
 
-<script>
-/* =========================
-   Version + Toast
-========================= */
-const APP_VERSION = "v2.2";
-function toast(msg){
-  const el = document.getElementById("toast");
-  el.textContent = msg;
-  el.classList.add("show");
-  clearTimeout(toast._t);
-  toast._t = setTimeout(()=>el.classList.remove("show"), 1200);
-}
+  <script>
+    // ===== DOM helpers =====
+    const $ = (sel) => document.querySelector(sel);
+    const escapeNL = (s) => (s || "").replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+    const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
-/* =========================
-   Utils
-========================= */
-function safeTrim(s){ return (s||"").toString().trim(); }
-
-function tryB64Decode(s){
-  // tolerate urlsafe base64
-  try{
-    const t = s.replace(/-/g, "+").replace(/_/g, "/");
-    const pad = "=".repeat((4 - (t.length % 4)) % 4);
-    return atob(t + pad);
-  }catch(e){ return null; }
-}
-
-function isProbablyURL(s){
-  return /^https?:\/\/\S+/i.test(s);
-}
-
-function isNodeLink(s){
-  return /^(ss|ssr|vmess|vless|trojan|hysteria2|hy2|tuic):\/\//i.test(s);
-}
-
-function uniq(arr){
-  const seen = new Set();
-  const out = [];
-  for(const x of arr){
-    if(!seen.has(x)){
-      seen.add(x);
-      out.push(x);
-    }
-  }
-  return out;
-}
-
-/* =========================
-   Parsing Core
-========================= */
-function extractTokens(raw){
-  const text = safeTrim(raw);
-  if(!text) return [];
-
-  // split by whitespace, commas, semicolons
-  let tokens = text
-    .replace(/\r/g, "\n")
-    .split(/[\s,;]+/g)
-    .map(s => safeTrim(s))
-    .filter(Boolean);
-
-  return tokens;
-}
-
-function parseMixedInput(raw){
-  // Goal:
-  // 1) Collect node links directly.
-  // 2) If raw includes base64-only blob, try decode and re-parse.
-  // 3) If raw includes "sub://" or "subscription:" etc, extract inner.
-  // 4) If includes URL(s), keep them as "subscription URLs" output.
-  const text = safeTrim(raw);
-  if(!text){
-    return { nodes: [], subUrls: [] };
-  }
-
-  const tokens = extractTokens(text);
-
-  const nodes = [];
-  const subUrls = [];
-
-  // direct node links + urls
-  for(const t of tokens){
-    if(isNodeLink(t)) nodes.push(t);
-    else if(isProbablyURL(t)) subUrls.push(t);
-  }
-
-  // if nothing obvious, attempt base64 decode the whole input
-  if(nodes.length === 0 && subUrls.length === 0){
-    // maybe it's base64 subscription content (which decodes into multiple node links)
-    const b64 = text.replace(/\s+/g, "");
-    const decoded = tryB64Decode(b64);
-    if(decoded && decoded.length > 12){
-      const dtokens = extractTokens(decoded);
-      for(const t of dtokens){
-        if(isNodeLink(t)) nodes.push(t);
-        else if(isProbablyURL(t)) subUrls.push(t);
-      }
-    }
-  }
-
-  // Some people paste "sub://xxxxx"
-  // It might be base64(url) or base64(text). We'll decode and parse if possible.
-  const subScheme = tokens.find(x => /^sub:\/\//i.test(x));
-  if(subScheme){
-    const b64 = subScheme.replace(/^sub:\/\//i, "").trim();
-    const decoded = tryB64Decode(b64);
-    if(decoded){
-      const dtokens = extractTokens(decoded);
-      for(const t of dtokens){
-        if(isNodeLink(t)) nodes.push(t);
-        else if(isProbablyURL(t)) subUrls.push(t);
-      }
-    }
-  }
-
-  return {
-    nodes: uniq(nodes),
-    subUrls: uniq(subUrls)
-  };
-}
-
-/* =========================
-   Node pretty info (best effort)
-========================= */
-function guessProto(uri){
-  const m = uri.match(/^([a-z0-9]+):\/\//i);
-  return m ? m[1].toLowerCase() : "unknown";
-}
-
-function guessHostPort(uri){
-  // Best effort host/port extraction for display (not strict)
-  // - ss:// may be base64 payload, hard to parse reliably without full decoder
-  // - vless/trojan usually have @host:port
-  try{
-    const u = uri.trim();
-    const at = u.indexOf("@");
-    if(at > -1){
-      const tail = u.slice(at + 1);
-      const hostport = tail.split(/[/?#]/)[0];
-      const [host, port] = hostport.split(":");
-      return { host: host || "", port: port || "" };
-    }
-    return { host:"", port:"" };
-  }catch(e){
-    return { host:"", port:"" };
-  }
-}
-
-function displayNameForNode(uri, idx){
-  const proto = guessProto(uri).toUpperCase();
-  const { host, port } = guessHostPort(uri);
-  if(host){
-    return `${proto} ${host}${port ? ":"+port : ""}`;
-  }
-  return `${proto} node #${idx+1}`;
-}
-
-/* =========================
-   Bundle + QR Splitting Logic
-========================= */
-function makePlainTextBundle(nodeUris){
-  // newline-separated raw node links
-  return nodeUris.join("\n");
-}
-
-function splitBundleByMaxChars(lines, maxChars){
-  // lines: array of node URIs
-  // Return array of chunks (each chunk array of lines)
-  const chunks = [];
-  let cur = [];
-  let curLen = 0;
-
-  for(const line of lines){
-    const addLen = (cur.length ? 1 : 0) + line.length; // +1 for newline
-    if(cur.length > 0 && curLen + addLen > maxChars){
-      chunks.push(cur);
-      cur = [];
-      curLen = 0;
-    }
-    cur.push(line);
-    curLen += addLen;
-  }
-  if(cur.length) chunks.push(cur);
-  return chunks;
-}
-
-/* =========================
-   Exports (tabs)
-========================= */
-const TABS = [
-  { id:"shadowrocket", name:"Shadowrocket" },
-  { id:"clash",       name:"Clash (YAML)" },
-  { id:"singbox",     name:"sing-box (JSON)" },
-  { id:"plaintext",   name:"Plain Text" },
-];
-
-function buildClashYaml(nodes, subUrls){
-  // Minimal YAML output (user can paste/merge)
-  // Not doing full provider wiring (because input may be mixed).
-  // We output a proxy list with raw URIs as "proxy-groups" is not a direct format
-  // For Clash, URIs need conversion; so we mainly output subscription URLs & raw list
-  // This tab is for convenience, not guaranteed import.
-  const lines = [];
-  lines.push(`# Proxy QR Lab ${APP_VERSION}`);
-  lines.push(`# NOTE: Clash requires proper proxy objects. Raw URIs may not import directly.`);
-  lines.push(``);
-  if(subUrls.length){
-    lines.push(`# Subscription URLs:`);
-    for(const u of subUrls) lines.push(`# - ${u}`);
-    lines.push(``);
-  }
-  lines.push(`# Raw node URIs (convert with a converter if needed):`);
-  for(const n of nodes) lines.push(`- ${n}`);
-  return lines.join("\n");
-}
-
-function buildSingBoxJson(nodes, subUrls){
-  const obj = {
-    _meta: { generator: "Proxy QR Lab", version: APP_VERSION },
-    subscription_urls: subUrls,
-    raw_nodes: nodes,
-    note: "sing-box needs proper outbound objects; this is a transport bundle for conversion."
-  };
-  return JSON.stringify(obj, null, 2);
-}
-
-function buildPlainText(nodes, subUrls){
-  const out = [];
-  out.push(`# Proxy QR Lab ${APP_VERSION}`);
-  out.push(``);
-  if(subUrls.length){
-    out.push(`# Subscription URLs`);
-    for(const u of subUrls) out.push(u);
-    out.push(``);
-  }
-  out.push(`# Nodes (${nodes.length})`);
-  out.push(makePlainTextBundle(nodes));
-  return out.join("\n");
-}
-
-/* =========================
-   Shadowrocket export (核心改动)
-   - Multi-node QR uses plain text bundle (newline separated)
-   - If too long, auto-split into multiple QRs (Part 1/2/3...)
-========================= */
-function buildShadowrocketExport(nodes, subUrls){
-  const blocks = [];
-
-  // 1) If user provided subscription URLs, those are best for Shadowrocket
-  if(subUrls.length){
-    blocks.push({
-      title: "Subscription URLs",
-      subtitle: "Best option for auto-update (copy into Shadowrocket → Subscribe)",
-      text: subUrls.join("\n"),
-      qrs: subUrls.map((u, i)=>({
-        title: `Sub URL #${i+1}`,
-        desc: u,
-        payload: u
-      }))
-    });
-  }
-
-  // 2) Nodes bundle as PURE TEXT (important)
-  if(nodes.length){
-    const bundleText = makePlainTextBundle(nodes);
-
-    // We never "skip". If too long, split to parts.
-    const MAX_PER_QR = 2200;   // keep scanning stable
-    const HARD_LIMIT = 2950;   // absolute safety guard for QR encode density
-
-    let qrItems = [];
-
-    if(bundleText.length <= HARD_LIMIT){
-      if(bundleText.length <= MAX_PER_QR){
-        qrItems.push({
-          title: "Bundle (All nodes)",
-          desc: `newline-separated • ${nodes.length} nodes`,
-          payload: bundleText
-        });
-      }else{
-        const chunks = splitBundleByMaxChars(nodes, MAX_PER_QR);
-        qrItems = chunks.map((arr, idx)=>({
-          title: `Bundle Part ${idx+1}/${chunks.length}`,
-          desc: `nodes: ${arr.length}`,
-          payload: makePlainTextBundle(arr)
-        }));
-      }
-    }else{
-      // extremely long: still split by 1600 to avoid insane density
-      const chunks = splitBundleByMaxChars(nodes, 1600);
-      qrItems = chunks.map((arr, idx)=>({
-        title: `Bundle Part ${idx+1}/${chunks.length}`,
-        desc: `nodes: ${arr.length}`,
-        payload: makePlainTextBundle(arr)
-      }));
+    function setPill(pillEl, stateEl, type, text){
+      pillEl.classList.remove("ok","bad","warn");
+      if (type) pillEl.classList.add(type);
+      stateEl.textContent = text;
     }
 
-    blocks.push({
-      title: "Nodes Bundle (Pure Text)",
-      subtitle: "This is the QR payload Shadowrocket can auto-split (each line is a node link).",
-      text: bundleText,
-      qrs: qrItems
-    });
-  }
-
-  // 3) If nothing
-  if(!blocks.length){
-    blocks.push({
-      title: "No valid nodes found",
-      subtitle: "Paste ss:// vmess:// vless:// trojan:// or subscription URL.",
-      text: "",
-      qrs: []
-    });
-  }
-
-  return blocks;
-}
-
-/* =========================
-   QR rendering
-========================= */
-function chooseQrOptions(payload){
-  // For long multi-line bundle, lower ECC + big size improves scannability
-  const isBundle = payload.includes("\n") && payload.split("\n").some(x=>isNodeLink(x));
-  const len = payload.length;
-
-  let errorCorrectionLevel = "L"; // lowest ECC → max capacity
-  let width = 520;
-  let margin = 0;
-
-  if(isBundle){
-    width = 720;
-    margin = 0;
-    errorCorrectionLevel = "L";
-  }else{
-    if(len <= 180) { width = 360; margin = 1; errorCorrectionLevel = "M"; }
-    else if(len <= 500){ width = 420; margin = 1; errorCorrectionLevel = "M"; }
-    else { width = 520; margin = 0; errorCorrectionLevel = "L"; }
-  }
-
-  return { errorCorrectionLevel, width, margin };
-}
-
-async function renderQrToCanvas(canvas, payload){
-  const opt = chooseQrOptions(payload);
-  await QRCode.toCanvas(canvas, payload, opt);
-}
-
-/* =========================
-   UI render
-========================= */
-const elInput = document.getElementById("input");
-const elParse = document.getElementById("btnParse");
-const elClear = document.getElementById("btnClear");
-const elCopyAll = document.getElementById("btnCopyAll");
-const elNodeList = document.getElementById("nodeList");
-const elNodeCount = document.getElementById("nodeCount");
-const elStat = document.getElementById("stat");
-const elKpiText = document.getElementById("kpiText");
-const elKpiDot = document.querySelector("#kpi .dot");
-const elTabs = document.getElementById("tabs");
-const elOutput = document.getElementById("output");
-const elExportMode = document.getElementById("exportMode");
-
-let state = {
-  nodes: [],
-  subUrls: [],
-  activeTab: "shadowrocket",
-};
-
-function setStat(text, type){
-  elStat.textContent = text;
-  if(type==="ok") elStat.style.borderColor = "rgba(34,197,94,.55)";
-  else if(type==="warn") elStat.style.borderColor = "rgba(245,158,11,.55)";
-  else if(type==="bad") elStat.style.borderColor = "rgba(239,68,68,.55)";
-  else elStat.style.borderColor = "rgba(255,255,255,.14)";
-}
-
-function renderNodes(){
-  elNodeList.innerHTML = "";
-
-  elNodeCount.textContent = String(state.nodes.length);
-  elKpiText.textContent = `${state.nodes.length} nodes`;
-  elKpiDot.classList.remove("ok","warn","bad");
-
-  if(state.nodes.length > 0) elKpiDot.classList.add("ok");
-  else if(state.subUrls.length > 0) elKpiDot.classList.add("warn");
-  else elKpiDot.classList.add("bad");
-
-  if(state.nodes.length === 0){
-    const empty = document.createElement("div");
-    empty.className = "node";
-    empty.innerHTML = `
-      <div class="nodeTop">
-        <div class="nodeName">Nothing yet <span class="tag">paste nodes</span></div>
-      </div>
-      <div class="nodeBody">
-        <div class="kv"><div class="k">Tip</div><div class="v">Paste multiple links → we'll generate bundle + split QRs automatically.</div></div>
-      </div>
-    `;
-    elNodeList.appendChild(empty);
-    return;
-  }
-
-  state.nodes.forEach((uri, idx)=>{
-    const proto = guessProto(uri);
-    const { host, port } = guessHostPort(uri);
-    const name = displayNameForNode(uri, idx);
-
-    const card = document.createElement("div");
-    card.className = "node";
-    card.innerHTML = `
-      <div class="nodeTop">
-        <div class="nodeName">${escapeHtml(name)}
-          <span class="tag">${escapeHtml(proto)}</span>
-        </div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <button class="mini" data-copy="${encodeAttr(uri)}">Copy</button>
-        </div>
-      </div>
-      <div class="nodeBody">
-        <div class="kv"><div class="k">Host</div><div class="v">${escapeHtml(host || "-")}</div></div>
-        <div class="kv"><div class="k">Port</div><div class="v">${escapeHtml(port || "-")}</div></div>
-        <div class="kv" style="grid-column:1/-1;"><div class="k">URI</div><div class="v">${escapeHtml(uri)}</div></div>
-      </div>
-    `;
-    elNodeList.appendChild(card);
-  });
-
-  elNodeList.querySelectorAll("button[data-copy]").forEach(btn=>{
-    btn.addEventListener("click", async ()=>{
-      const val = btn.getAttribute("data-copy") || "";
-      await navigator.clipboard.writeText(val);
-      toast("Copied");
-    });
-  });
-}
-
-function renderTabs(){
-  elTabs.innerHTML = "";
-  for(const t of TABS){
-    const b = document.createElement("div");
-    b.className = "tab" + (state.activeTab === t.id ? " active" : "");
-    b.textContent = t.name;
-    b.addEventListener("click", ()=>{
-      state.activeTab = t.id;
-      renderAll();
-    });
-    elTabs.appendChild(b);
-  }
-
-  const active = TABS.find(x=>x.id === state.activeTab);
-  elExportMode.textContent = active ? active.name : "Export";
-}
-
-function makeBlock({title, subtitle, text, qrs}){
-  const block = document.createElement("div");
-  block.className = "block";
-
-  const head = document.createElement("div");
-  head.className = "blockHead";
-
-  const left = document.createElement("div");
-  left.className = "left";
-  left.innerHTML = `<span>${escapeHtml(title)}</span>${subtitle ? `<span class="pill">${escapeHtml(subtitle)}</span>` : ""}`;
-
-  const right = document.createElement("div");
-  right.className = "right";
-  const btnCopy = document.createElement("button");
-  btnCopy.className = "mini";
-  btnCopy.textContent = "Copy";
-  btnCopy.addEventListener("click", async ()=>{
-    await navigator.clipboard.writeText(text || "");
-    toast("Copied");
-  });
-
-  right.appendChild(btnCopy);
-  head.appendChild(left);
-  head.appendChild(right);
-  block.appendChild(head);
-
-  const pre = document.createElement("pre");
-  pre.textContent = text || "";
-  block.appendChild(pre);
-
-  if(qrs && qrs.length){
-    const qrGrid = document.createElement("div");
-    qrGrid.className = "qrGrid";
-
-    qrs.forEach((item)=>{
-      const box = document.createElement("div");
-      box.className = "qrItem";
-
-      const canvasWrap = document.createElement("div");
-      canvasWrap.className = "qrCanvas";
-      const canvas = document.createElement("canvas");
-      canvas.width = 320;
-      canvas.height = 320;
-      canvasWrap.appendChild(canvas);
-
-      const meta = document.createElement("div");
-      meta.className = "qrMeta";
-
-      const qt = document.createElement("div");
-      qt.className = "qrTitle";
-      qt.textContent = item.title || "QR";
-
-      const qd = document.createElement("div");
-      qd.className = "qrDesc";
-      qd.textContent = item.desc || "";
-
-      const btn = document.createElement("button");
-      btn.className = "mini";
-      btn.textContent = "Copy QR text";
-      btn.addEventListener("click", async ()=>{
-        await navigator.clipboard.writeText(item.payload || "");
-        toast("QR payload copied");
+    // ===== robust QR loader =====
+    async function loadScriptOnce(src){
+      return new Promise((resolve, reject)=>{
+        const exists = Array.from(document.scripts).some(s => s.src && s.src.includes(src));
+        if (exists) return resolve(true);
+        const s = document.createElement('script');
+        s.src = src;
+        s.async = true;
+        s.onload = () => resolve(true);
+        s.onerror = () => reject(new Error('script_load_failed'));
+        document.head.appendChild(s);
       });
+    }
 
-      meta.appendChild(qt);
-      meta.appendChild(qd);
-      meta.appendChild(btn);
+    async function ensureQRCodeLib(){
+      // Support both:
+      // 1) soldair/qrcode: window.QRCode.toDataURL / toCanvas
+      // 2) davidshimjs/qrcodejs: window.QRCode is a constructor with CorrectLevel
+      if (typeof window.QRCode !== 'undefined' && window.QRCode){
+        if (window.QRCode.toDataURL || window.QRCode.toCanvas) return true;
+        if (typeof window.QRCode === 'function' && window.QRCode.CorrectLevel) return true;
+      }
+      const candidates = [
+        'https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js',
+        'https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'
+      ];
+      for (const url of candidates){
+        try{
+          await loadScriptOnce(url);
+          await sleep(20);
+          if (typeof window.QRCode !== 'undefined' && window.QRCode){
+            if (window.QRCode.toDataURL || window.QRCode.toCanvas) return true;
+            if (typeof window.QRCode === 'function' && window.QRCode.CorrectLevel) return true;
+          }
+        }catch(e){
+          // try next
+        }
+      }
+      return false;
+    }
 
-      box.appendChild(canvasWrap);
-      box.appendChild(meta);
-      qrGrid.appendChild(box);
+    async function qrDataUrl(payload, opts = {}){
+      const ok = await ensureQRCodeLib();
+      if (!ok) throw new Error('QRCode library not available');
 
-      // render qr
-      renderQrToCanvas(canvas, item.payload || "")
-        .catch(()=>{/* ignore */});
+      const width = Number(opts.width || 320);
+      const margin = Number(opts.margin ?? 1);
+      const ecl = String(opts.errorCorrectionLevel || 'Q'); // 'L'|'M'|'Q'|'H'
+
+      // A) soldair/qrcode style
+      if (window.QRCode && (window.QRCode.toDataURL || window.QRCode.toCanvas)){
+        if (window.QRCode.toDataURL){
+          return await window.QRCode.toDataURL(payload, {
+            errorCorrectionLevel: ecl,
+            margin: margin,
+            width: width
+          });
+        }
+        const canvas = document.createElement('canvas');
+        await window.QRCode.toCanvas(canvas, payload, {
+          errorCorrectionLevel: ecl,
+          margin: margin,
+          width: width
+        });
+        return canvas.toDataURL('image/png');
+      }
+
+      // B) qrcodejs constructor style
+      if (typeof window.QRCode === 'function' && window.QRCode.CorrectLevel){
+        const tmp = document.createElement('div');
+        tmp.style.position = 'fixed';
+        tmp.style.left = '-99999px';
+        tmp.style.top = '0';
+        document.body.appendChild(tmp);
+        try{
+          const levelMap = {
+            L: window.QRCode.CorrectLevel.L,
+            M: window.QRCode.CorrectLevel.M,
+            Q: window.QRCode.CorrectLevel.Q,
+            H: window.QRCode.CorrectLevel.H
+          };
+          new window.QRCode(tmp, {
+            text: payload,
+            width: width,
+            height: width,
+            correctLevel: levelMap[ecl] || window.QRCode.CorrectLevel.Q
+          });
+          await sleep(10);
+          const canvas = tmp.querySelector('canvas');
+          if (canvas && canvas.toDataURL) return canvas.toDataURL('image/png');
+          const img = tmp.querySelector('img');
+          if (img && img.src) return img.src;
+          throw new Error('QR render failed');
+        }finally{
+          tmp.remove();
+        }
+      }
+
+      throw new Error('QRCode library not available');
+    }
+
+    // ===== parsing helpers =====
+    const isHttpUrl = (s) => /^https?:\/\/\S+$/i.test((s||"").trim());
+    const looksLikeJson = (s) => {
+      const t = (s||"").trim();
+      return (t.startsWith("{") && t.endsWith("}")) || (t.startsWith("[") && t.endsWith("]"));
+    };
+    const looksLikeBase64 = (s) => {
+      const t = (s||"").trim();
+      if (t.length < 16) return false;
+      if (/\s/.test(t)) return false;
+      return /^[A-Za-z0-9+/_-]+={0,2}$/.test(t);
+    };
+    const b64enc = (s) => btoa(unescape(encodeURIComponent(s)));
+    const b64dec = (s) => {
+      const t = s.replace(/-/g, "+").replace(/_/g, "/");
+      return decodeURIComponent(escape(atob(t)));
+    };
+    const uniq = (arr) => Array.from(new Set(arr.filter(Boolean)));
+
+    // ===== node naming (append IP/host suffix) =====
+    function hostOnlyFromHostPort(hp){
+      if (!hp) return '';
+      // strip brackets for IPv6
+      const x = String(hp).trim().replace(/^\[/,'').replace(/\]$/,'');
+      // keep host only (remove :port)
+      return x.split(':')[0];
+    }
+
+    function extractHostFromAtStyleUri(uri){
+      // For vless/trojan/tuic/hysteria2/ss etc: scheme://userinfo@host:port?...#name
+      try{
+        const u = String(uri || '').trim();
+        const at = u.indexOf('@');
+        if (at === -1) return '';
+        const after = u.slice(at + 1);
+        const end = (()=>{
+          const q = after.indexOf('?');
+          const h = after.indexOf('#');
+          if (q === -1 && h === -1) return after.length;
+          if (q === -1) return h;
+          if (h === -1) return q;
+          return Math.min(q, h);
+        })();
+        return after.slice(0, end);
+      }catch(e){
+        return '';
+      }
+    }
+
+    function tryAppendSuffixToHashName(uri, suffix){
+      const u = String(uri || '').trim();
+      if (!suffix) return u;
+      const hash = u.indexOf('#');
+      const base = (hash > -1) ? u.slice(0, hash) : u;
+      const nameRaw = (hash > -1) ? u.slice(hash + 1) : '';
+      let name = '';
+      try{ name = nameRaw ? decodeURIComponent(nameRaw) : ''; }catch(e){ name = nameRaw || ''; }
+      // If there is no name, keep it minimal and only add suffix as name.
+      const newName = name
+        ? (name.endsWith(suffix) ? name : (name + ' ' + suffix))
+        : suffix;
+      return base + '#' + encodeURIComponent(newName);
+    }
+
+    function tryAppendSuffixToVmess(uri, suffix){
+      const u = String(uri || '').trim();
+      if (!u.toLowerCase().startsWith('vmess://')) return u;
+      if (!suffix) return u;
+      const b64 = u.slice('vmess://'.length).trim();
+      try{
+        const jsonStr = b64dec(b64);
+        const obj = JSON.parse(jsonStr);
+        const ps = String(obj.ps || 'vmess');
+        obj.ps = ps.endsWith(suffix) ? ps : (ps + ' ' + suffix);
+        const outB64 = b64enc(JSON.stringify(obj));
+        return 'vmess://' + outB64;
+      }catch(e){
+        return u;
+      }
+    }
+
+    function addIpSuffixToNodeUri(uri){
+      const u = String(uri || '').trim();
+      if (!u) return u;
+      const scheme = (u.match(/^([a-z0-9]+):\/\//i)?.[1] || '').toLowerCase();
+
+      // vmess has name inside base64 JSON
+      if (scheme === 'vmess'){
+        // suffix from "add" field if possible
+        try{
+          const b64 = u.slice('vmess://'.length).trim();
+          const jsonStr = b64dec(b64);
+          const obj = JSON.parse(jsonStr);
+          const host = hostOnlyFromHostPort(obj.add || '');
+          const suffix = host ? ('·' + host) : '';
+          return tryAppendSuffixToVmess(u, suffix);
+        }catch(e){
+          return u;
+        }
+      }
+
+      // vless/tuic/hy2/ss/trojan etc: suffix from host after @
+      const hp = extractHostFromAtStyleUri(u);
+      const host = hostOnlyFromHostPort(hp);
+      const suffix = host ? ('·' + host) : '';
+      if (!suffix) return u;
+
+      // Most schemes support #name
+      return tryAppendSuffixToHashName(u, suffix);
+    }
+
+    function safeSplitLines(text){
+      return escapeNL(text).split("\n").map(x => x.trim()).filter(Boolean);
+    }
+
+    function extractUrisFromText(text){
+      const lines = safeSplitLines(text);
+      const uris = [];
+      for (const line of lines){
+        const l = line.trim();
+        if (/^(ss|ssr|vmess|vless|trojan|hysteria2|hy2|tuic|http|https):\/\//i.test(l)){
+          uris.push(l);
+          continue;
+        }
+        if (/^https?:\/\/\S+/i.test(l)) uris.push(l);
+      }
+      return uniq(uris);
+    }
+
+    function urlEncode(s){
+      return encodeURIComponent(s || '');
+    }
+
+    // ===== sing-box JSON to share URIs (best-effort) =====
+    function toVmessUri({tag, server, port, uuid, security='auto', wsPath='/', host='', tls=true, sni=''}) {
+      const obj = {
+        v: '2',
+        ps: tag || 'vmess',
+        add: server || '',
+        port: String(port || ''),
+        id: uuid || '',
+        aid: '0',
+        scy: security || 'auto',
+        net: 'ws',
+        type: 'none',
+        host: host || '',
+        path: wsPath || '/',
+        tls: tls ? 'tls' : ''
+      };
+      if (sni) obj.sni = sni;
+      const b64 = b64enc(JSON.stringify(obj));
+      return `vmess://${b64}`;
+    }
+
+    function toVlessRealityUri({tag, server, port, uuid, flow, sni, fp, pbk, sid}) {
+      const params = [];
+      params.push('encryption=none');
+      if (flow) params.push('flow=' + urlEncode(flow));
+      params.push('security=reality');
+      if (sni) params.push('sni=' + urlEncode(sni));
+      if (fp) params.push('fp=' + urlEncode(fp));
+      if (pbk) params.push('pbk=' + urlEncode(pbk));
+      if (sid) params.push('sid=' + urlEncode(sid));
+      params.push('type=tcp');
+      const q = params.join('&');
+      const name = urlEncode(tag || 'vless');
+      return `vless://${uuid}@${server}:${port}?${q}#${name}`;
+    }
+
+    function toHy2Uri({tag, server, port, password, sni, alpn}) {
+      const params = [];
+      if (sni) params.push('sni=' + urlEncode(sni));
+      if (alpn && alpn.length) params.push('alpn=' + urlEncode(alpn.join(',')));
+      const q = params.length ? ('?' + params.join('&')) : '';
+      const name = urlEncode(tag || 'hy2');
+      return `hysteria2://${urlEncode(password || '')}@${server}:${port}${q}#${name}`;
+    }
+
+    function toTuicUri({tag, server, port, uuid, password, cc, sni, alpn}) {
+      const params = [];
+      if (cc) params.push('congestion_control=' + urlEncode(cc));
+      if (sni) params.push('sni=' + urlEncode(sni));
+      if (alpn && alpn.length) params.push('alpn=' + urlEncode(alpn.join(',')));
+      const q = params.length ? ('?' + params.join('&')) : '';
+      const name = urlEncode(tag || 'tuic');
+      return `tuic://${uuid}:${urlEncode(password || '')}@${server}:${port}${q}#${name}`;
+    }
+
+    function singBoxOutboundsToShareUris(jsonObj){
+      const outbounds = Array.isArray(jsonObj?.outbounds) ? jsonObj.outbounds : [];
+      const uris = [];
+      for (const ob of outbounds){
+        if (!ob || typeof ob !== 'object') continue;
+        const type = (ob.type || '').toLowerCase();
+        const tag = ob.tag || type;
+        if (['selector','urltest','direct','block','dns'].includes(type)) continue;
+
+        if (type === 'vless'){
+          const server = ob.server;
+          const port = ob.server_port;
+          const uuid = ob.uuid;
+          const flow = ob.flow;
+          const tls = ob.tls || {};
+          const sni = tls.server_name || '';
+          const fp = (tls.utls && tls.utls.fingerprint) ? tls.utls.fingerprint : '';
+          const reality = tls.reality || {};
+          const pbk = reality.public_key || '';
+          const sid = reality.short_id || '';
+          if (server && port && uuid){
+            uris.push(toVlessRealityUri({tag, server, port, uuid, flow, sni, fp, pbk, sid}));
+          }
+          continue;
+        }
+
+        if (type === 'vmess'){
+          const server = ob.server;
+          const port = ob.server_port;
+          const uuid = ob.uuid;
+          const security = ob.security || 'auto';
+          const tls = ob.tls || {};
+          const sni = tls.server_name || '';
+          const transport = ob.transport || {};
+          const wsPath = transport.path || '/';
+          let host = '';
+          if (transport.headers && transport.headers.Host){
+            if (Array.isArray(transport.headers.Host) && transport.headers.Host[0]) host = transport.headers.Host[0];
+            else if (typeof transport.headers.Host === 'string') host = transport.headers.Host;
+          }
+          const tlsEnabled = !!tls.enabled;
+          if (server && port && uuid){
+            uris.push(toVmessUri({tag, server, port, uuid, security, wsPath, host, tls: tlsEnabled, sni}));
+          }
+          continue;
+        }
+
+        if (type === 'hysteria2'){
+          const server = ob.server;
+          const port = ob.server_port;
+          const password = ob.password;
+          const tls = ob.tls || {};
+          const sni = tls.server_name || '';
+          const alpn = tls.alpn || [];
+          if (server && port && password){
+            uris.push(toHy2Uri({tag, server, port, password, sni, alpn}));
+          }
+          continue;
+        }
+
+        if (type === 'tuic'){
+          const server = ob.server;
+          const port = ob.server_port;
+          const uuid = ob.uuid;
+          const password = ob.password;
+          const cc = ob.congestion_control || '';
+          const tls = ob.tls || {};
+          const sni = tls.server_name || '';
+          const alpn = tls.alpn || [];
+          if (server && port && uuid && password){
+            uris.push(toTuicUri({tag, server, port, uuid, password, cc, sni, alpn}));
+          }
+          continue;
+        }
+      }
+      return uniq(uris);
+    }
+
+    function parseSingBox(jsonObj){
+      const raw = JSON.stringify(jsonObj, null, 2);
+      const extracted = extractUrisFromText(raw);
+      const converted = singBoxOutboundsToShareUris(jsonObj);
+      const uris = uniq([ ...converted, ...extracted ]);
+      return { raw, uris };
+    }
+
+    // ===== platform outputs =====
+    function makeShadowrocketSub(subUrl){
+      return 'sub://' + b64enc(subUrl.trim());
+    }
+
+    function makeClashInstall(subUrl){
+      return 'clash://install-config?url=' + encodeURIComponent(subUrl.trim());
+    }
+
+    function makeSRInstall(subUrl){
+      return 'shadowrocket://add/sub?url=' + encodeURIComponent(subUrl.trim());
+    }
+
+    function makeAggregateSubFromNodes(nodeUris){
+      return 'sub://' + b64enc(nodeUris.join('\n'));
+    }
+
+    function makePlainTextBundleFromNodes(nodeUris){
+      // A multi-line plaintext bundle that many clients can auto-split into multiple protocol links.
+      return (Array.isArray(nodeUris) ? nodeUris : []).filter(Boolean).join('\n');
+    }
+
+    function buildClashMetaYaml(subUrl){
+      const u = (subUrl||'').trim();
+      return `# Clash Meta profile (generated)\n\nmixed-port: 7890\nallow-lan: true\nmode: rule\nlog-level: info\n\nproxy-providers:\n  sub:\n    type: http\n    url: ${u || "<SUBSCRIPTION_URL>"}\n    interval: 3600\n    path: ./providers/sub.yaml\n    health-check:\n      enable: true\n      url: http://www.gstatic.com/generate_204\n      interval: 300\n\nproxy-groups:\n  - name: PROXY\n    type: select\n    use:\n      - sub\n\nrules:\n  - MATCH,PROXY\n`;
+    }
+
+    async function fetchText(url){
+      const res = await fetch(url, { method: 'GET' });
+      const text = await res.text();
+      return { ok: res.ok, status: res.status, text };
+    }
+
+    function downloadText(filename, content){
+      const blob = new Blob([content], {type:'text/plain;charset=utf-8'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(()=>{
+        URL.revokeObjectURL(a.href);
+        a.remove();
+      }, 0);
+    }
+
+    function bindCopyButtons(){
+      document.querySelectorAll('[data-copy]').forEach(btn=>{
+        btn.onclick = async ()=>{
+          const sel = btn.getAttribute('data-copy');
+          const el = document.querySelector(sel);
+          const text = el ? el.textContent : '';
+          await navigator.clipboard.writeText(text);
+          const old = btn.textContent;
+          btn.textContent = 'Copied';
+          setTimeout(()=>btn.textContent=old, 900);
+        };
+      });
+    }
+
+    // ===== UI render =====
+    const TAB_DEFS = [
+      { key: 'universal', name: 'Universal' },
+      { key: 'shadowrocket', name: 'Shadowrocket' },
+      { key: 'clash', name: 'Clash Meta' },
+      { key: 'singbox', name: 'sing-box' }
+    ];
+
+    function renderTabs(activeKey){
+      const root = $('#tabs');
+      root.innerHTML = '';
+      for (const t of TAB_DEFS){
+        const el = document.createElement('div');
+        el.className = 'tab' + (t.key === activeKey ? ' active' : '');
+        el.textContent = t.name;
+        el.onclick = ()=>{
+          appState.activeTab = t.key;
+          renderAll();
+        };
+        root.appendChild(el);
+      }
+    }
+
+    function renderKpi({subUrls, nodeUris, sourceLabel}){
+      const kpi = $('#kpi');
+      kpi.innerHTML = '';
+      const chips = [
+        { label: 'Source', value: sourceLabel || 'Parsed' },
+        { label: 'Subscriptions', value: String(subUrls.length) },
+        { label: 'Nodes', value: String(nodeUris.length) }
+      ];
+      for (const c of chips){
+        const el = document.createElement('div');
+        el.className = 'chip';
+        el.innerHTML = `${c.label}: <b>${c.value}</b>`;
+        kpi.appendChild(el);
+      }
+    }
+
+    function nodeLabel(uri){
+      try{
+        const u = uri.trim();
+        const m = u.match(/^([a-z0-9]+):\/\//i);
+        const scheme = m ? m[1].toUpperCase() : 'NODE';
+        let host = '';
+        const at = u.indexOf('@');
+        const hash = u.indexOf('#');
+        const q = u.indexOf('?');
+        const end = (q > -1 ? q : (hash > -1 ? hash : u.length));
+        if (at > -1){
+          const sub = u.slice(at+1, end);
+          host = sub;
+        }
+        const name = (hash > -1) ? decodeURIComponent(u.slice(hash+1)) : '';
+        const title = name ? name : (host ? host : scheme);
+        return { title, scheme, meta: u.slice(0, 80) + (u.length > 80 ? '…' : '') };
+      }catch(e){
+        return { title: 'Node', scheme: 'NODE', meta: uri.slice(0, 80) + (uri.length > 80 ? '…' : '') };
+      }
+    }
+
+    function makeNodeQrItems(nodeUris, limit = 12){
+      const out = [];
+      const arr = Array.isArray(nodeUris) ? nodeUris : [];
+      for (let i = 0; i < Math.min(arr.length, limit); i++){
+        const u = arr[i];
+        const info = nodeLabel(u);
+        out.push({
+          title: `Node ${i+1}`,
+          subtitle: `${info.scheme} · ${info.title}`,
+          payload: u
+        });
+      }
+      if (arr.length > limit){
+        out.push({
+          title: `+${arr.length - limit} more`,
+          subtitle: 'Use the Nodes panel to browse and scan each node',
+          payload: ''
+        });
+      }
+      return out.filter(x => x.payload);
+    }
+
+    function renderNodeList(nodeUris){
+      const list = $('#nodeList');
+      const q = ($('#nodeSearch').value || '').trim().toLowerCase();
+      list.innerHTML = '';
+      const filtered = nodeUris
+        .map((u, idx)=>({u, idx, ...nodeLabel(u)}))
+        .filter(x => !q || x.title.toLowerCase().includes(q) || x.scheme.toLowerCase().includes(q) || x.u.toLowerCase().includes(q));
+
+      if (!filtered.length){
+        const empty = document.createElement('div');
+        empty.className = 'muted';
+        empty.style.padding = '8px 10px';
+        empty.textContent = 'No nodes';
+        list.appendChild(empty);
+        return;
+      }
+
+      for (const item of filtered){
+        const el = document.createElement('div');
+        const active = appState.selectedIndex === item.idx;
+        el.className = 'nitem' + (active ? ' active' : '');
+        el.innerHTML = `<div class="nname">${escapeHtml(item.title)}</div><div class="nmeta">${escapeHtml(item.scheme)} · ${escapeHtml(item.meta)}</div>`;
+        el.onclick = ()=>{
+          appState.selectedIndex = item.idx;
+          renderAll();
+        };
+        list.appendChild(el);
+      }
+    }
+
+    function escapeHtml(s){
+      return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+
+    function chooseQrOptions(payload){
+      const s = String(payload || '');
+      const len = s.length;
+
+      // Multi-node bundle QR (sub:// or multi-line plaintext) should still be scan-stable.
+      // Use lower ECL and larger width for scan stability.
+      const isAggregate = s.startsWith('sub://');
+      const isPlainBundle = s.includes('\n') && /^(ss|ssr|vmess|vless|trojan|hysteria2|hy2|tuic):\/\//im.test(s);
+
+      if ((isAggregate || isPlainBundle) && len > 900){
+        return {
+          width: 520,
+          margin: 0,
+          errorCorrectionLevel: 'L'
+        };
+      }
+
+      // default for normal node links / urls
+      return {
+        width: 320,
+        margin: 1,
+        errorCorrectionLevel: 'Q'
+      };
+    }
+
+    async function renderQrBoxes(rootEl, items){
+      rootEl.innerHTML = '';
+      for (const it of items){
+        const box = document.createElement('div');
+        box.className = 'qrbox';
+        const top = document.createElement('div');
+        top.className = 'qttl';
+        top.innerHTML = `<div>${escapeHtml(it.title)}<div class="muted" style="font-size:11px;opacity:.75">${escapeHtml(it.subtitle||'')}</div></div><button class="btn small">Copy</button>`;
+        box.appendChild(top);
+
+        const img = document.createElement('img');
+        img.className = 'qrimg';
+        img.alt = it.title;
+        box.appendChild(img);
+
+        const hint = document.createElement('div');
+        hint.className = 'qrhint';
+        hint.textContent = it.payload;
+        box.appendChild(hint);
+
+        rootEl.appendChild(box);
+
+        top.querySelector('button').onclick = async ()=>{
+          await navigator.clipboard.writeText(it.payload);
+          top.querySelector('button').textContent = 'Copied';
+          setTimeout(()=> top.querySelector('button').textContent='Copy', 900);
+        };
+
+        try{
+          const payload = String(it.payload || '');
+
+          // Hard upper bound to avoid QR lib crash / absurd density.
+          // QR v40 capacity in byte-mode is ~2953 bytes (ECL=L). We allow up to 2600 chars to be safe.
+          const MAX_SAFE = 2600;
+          if (payload.length > MAX_SAFE){
+            img.remove();
+            const pre = document.createElement('pre');
+            pre.style.color = 'rgba(255,255,255,.70)';
+            pre.style.margin = '0';
+            pre.style.padding = '10px 12px';
+            pre.textContent = `QR too long for a single code (${payload.length} chars). Please use a subscription URL or split nodes.`;
+            box.appendChild(pre);
+          }else{
+            const opts = chooseQrOptions(payload);
+            const url = await qrDataUrl(payload, opts);
+            img.src = url;
+          }
+        }catch(e){
+          img.remove();
+          const pre = document.createElement('pre');
+          pre.style.color = 'rgba(255,255,255,.70)';
+          pre.style.margin = '0';
+          pre.style.padding = '10px 12px';
+          pre.textContent = 'QR generation failed: ' + (e?.message || e);
+          box.appendChild(pre);
+        }
+      }
+    }
+
+    function renderPrimaryLinks(textLines){
+      $('#primaryLinks').textContent = textLines.join('\n');
+    }
+
+    function renderNodeLinksText(nodeUris){
+      $('#nodeLinks').textContent = nodeUris.length ? nodeUris.join('\n') : '(No node links detected)';
+    }
+
+    async function renderSelected(nodeUris){
+      const idx = appState.selectedIndex;
+      const uri = nodeUris[idx] || '';
+      $('#selectedText').textContent = uri || '(Select a node)';
+      $('#btnCopySelected').disabled = !uri;
+      $('#btnCopySelected').onclick = async ()=>{
+        if (!uri) return;
+        await navigator.clipboard.writeText(uri);
+        $('#btnCopySelected').textContent = 'Copied';
+        setTimeout(()=> $('#btnCopySelected').textContent='Copy', 900);
+      };
+
+      const items = uri
+        ? [{ title: 'Node QR', subtitle: 'Scan to import this node', payload: uri }]
+        : [];
+      await renderQrBoxes($('#selectedQr'), items);
+    }
+
+    // ===== app state =====
+    const appState = {
+      activeTab: 'universal',
+      sourceLabel: 'Idle',
+      subUrls: [],
+      nodeUris: [],
+      selectedIndex: 0,
+      clashYaml: ''
+    };
+
+    function normalizeInput(raw){
+      return (raw || '').trim();
+    }
+
+    async function parseInput(raw){
+      const input = normalizeInput(raw);
+      if (!input) return { sourceLabel: 'Idle', subUrls: [], nodeUris: [], clashYaml: buildClashMetaYaml('') };
+
+      const lines = safeSplitLines(input);
+      const urlsInText = lines.filter(l => /^https?:\/\//i.test(l));
+
+      let mergedText = input;
+      let sourceLabel = 'Parsed';
+      const subUrls = [];
+
+      if (isHttpUrl(input)){
+        sourceLabel = 'Fetched';
+        subUrls.push(input.trim());
+        try{
+          const f = await fetchText(input.trim());
+          if (f.ok){
+            mergedText = f.text;
+          }else{
+            sourceLabel = `Fetch failed HTTP ${f.status}`;
+            mergedText = input;
+          }
+        }catch(e){
+          sourceLabel = 'Fetch blocked';
+          mergedText = input;
+        }
+      } else if (urlsInText.length >= 2){
+        sourceLabel = 'Mixed URLs';
+        for (const u of urlsInText.slice(0, 8)) subUrls.push(u);
+        const fetched = [];
+        const toFetch = urlsInText.slice(0, 3);
+        for (const u of toFetch){
+          try{
+            const f = await fetchText(u);
+            if (f.ok) fetched.push(f.text);
+          }catch(e){}
+        }
+        if (fetched.length){
+          mergedText = fetched.join('\n\n') + '\n\n' + input;
+        }
+      }
+
+      let jsonObj = null;
+      if (looksLikeJson(mergedText)){
+        try{ jsonObj = JSON.parse(mergedText); } catch(e){ jsonObj = null; }
+      }
+
+      if (!jsonObj && looksLikeBase64(mergedText)){
+        try{
+          const decoded = b64dec(mergedText.trim());
+          if (decoded && decoded.length > 8){
+            mergedText = decoded;
+            sourceLabel = 'Base64 decoded';
+          }
+        }catch(e){}
+      }
+
+      let uris = [];
+      if (jsonObj){
+        sourceLabel = 'sing-box JSON';
+        const parsed = parseSingBox(jsonObj);
+        uris = parsed.uris;
+      } else {
+        uris = extractUrisFromText(mergedText);
+      }
+
+      const httpUrls = uris.filter(u => /^https?:\/\//i.test(u));
+      const nodeUrisRaw = uris.filter(u => /^(ss|ssr|vmess|vless|trojan|hysteria2|hy2|tuic):\/\//i.test(u));
+      const nodeUris = nodeUrisRaw.map(addIpSuffixToNodeUri);
+
+      const allSub = uniq([ ...subUrls, ...httpUrls ]);
+      const primarySubUrl = allSub[0] || '';
+      const clashYaml = buildClashMetaYaml(primarySubUrl);
+
+      return {
+        sourceLabel,
+        subUrls: allSub,
+        nodeUris,
+        clashYaml
+      };
+    }
+
+    function buildPrimaryForTab(tabKey, subUrls, nodeUris){
+      const lines = [];
+      const qrItems = [];
+
+      const primarySubUrl = subUrls[0] || '';
+      const isSingleNode = nodeUris.length === 1;
+      const isMultiNode = nodeUris.length >= 2;
+
+      if (tabKey === 'shadowrocket'){
+        if (isSingleNode){
+          lines.push('# Node');
+          lines.push(nodeUris[0]);
+          qrItems.push({ title: 'Node', subtitle: 'Scan to import this node', payload: nodeUris[0] });
+        } else if (isMultiNode){
+          // Primary QR should be ONE multi-node QR that imports multiple nodes.
+          // We generate a plaintext bundle (multi-line protocol links) so clients can auto-split.
+          // Individual node QRs already exist in the Nodes panel.
+          const bundle = makePlainTextBundleFromNodes(nodeUris);
+
+          lines.push('# Bundle (multi-node plaintext)');
+          lines.push(bundle);
+
+          // Optional: also keep subscription URL helpers if user provided URL
+          if (primarySubUrl){
+            lines.push('');
+            lines.push('# Subscription URL');
+            lines.push(primarySubUrl);
+            lines.push('');
+            lines.push('# Shadowrocket one-click');
+            lines.push(makeSRInstall(primarySubUrl));
+            lines.push('# Shadowrocket subscription (sub://)');
+            lines.push(makeShadowrocketSub(primarySubUrl));
+          }
+
+          // One QR only (bundle payload)
+          qrItems.push({ title: 'Bundle', subtitle: 'Multi-node import (plaintext bundle)', payload: bundle });
+        } else {
+          lines.push('# Paste a node link or subscription URL');
+        }
+        return { lines, qrItems };
+      }
+
+      if (tabKey === 'clash'){
+        if (primarySubUrl){
+          lines.push('# Subscription URL');
+          lines.push(primarySubUrl);
+          lines.push('');
+          lines.push('# Clash one-click');
+          lines.push(makeClashInstall(primarySubUrl));
+          qrItems.push({ title: 'Subscription URL', subtitle: 'Import all (URL)', payload: primarySubUrl });
+          qrItems.push({ title: 'One-click', subtitle: 'clash://install-config', payload: makeClashInstall(primarySubUrl) });
+        } else if (nodeUris.length){
+          lines.push('# Nodes detected');
+          lines.push('# Tip: Use YAML export below, or paste a subscription URL to enable provider mode.');
+        } else {
+          lines.push('# Paste a subscription URL');
+        }
+        return { lines, qrItems };
+      }
+
+      if (tabKey === 'singbox'){
+        if (primarySubUrl){
+          lines.push('# Subscription URL');
+          lines.push(primarySubUrl);
+          qrItems.push({ title: 'Subscription URL', subtitle: 'Use in sing-box tools', payload: primarySubUrl });
+        }
+        if (nodeUris.length){
+          lines.push('');
+          lines.push('# Nodes');
+          lines.push(nodeUris.join('\n'));
+          qrItems.push({ title: 'Bundle', subtitle: 'Multi-node import (plaintext bundle)', payload: makePlainTextBundleFromNodes(nodeUris) });
+        }
+        if (!primarySubUrl && !nodeUris.length){
+          lines.push('# Paste sing-box JSON / share links / subscription URL');
+        }
+        return { lines, qrItems };
+      }
+
+      // universal
+      if (isSingleNode){
+        lines.push('# Node');
+        lines.push(nodeUris[0]);
+        qrItems.push({ title: 'Node', subtitle: 'Scan to import', payload: nodeUris[0] });
+      } else if (isMultiNode){
+        if (primarySubUrl){
+          lines.push('# Subscription URL');
+          lines.push(primarySubUrl);
+          qrItems.push({ title: 'Subscription URL', subtitle: 'Import all (URL)', payload: primarySubUrl });
+        }
+
+        lines.push('');
+        lines.push('# Split node links');
+        lines.push(nodeUris.slice(0, 60).join('\n'));
+        qrItems.push({ title: 'Bundle', subtitle: 'Multi-node import (plaintext bundle)', payload: makePlainTextBundleFromNodes(nodeUris) });
+      } else if (primarySubUrl){
+        lines.push('# Subscription URL');
+        lines.push(primarySubUrl);
+        qrItems.push({ title: 'Subscription URL', subtitle: 'Import', payload: primarySubUrl });
+      } else {
+        lines.push('# Paste a subscription URL or node links');
+      }
+
+      return { lines, qrItems };
+    }
+
+    function buildExports(tabKey, subUrls, nodeUris, clashYaml){
+      const primarySubUrl = subUrls[0] || '';
+      const lines = [];
+
+      if (primarySubUrl){
+        lines.push('# Subscription URL');
+        lines.push(primarySubUrl);
+        lines.push('');
+      }
+
+      if (primarySubUrl){
+        lines.push('# Shadowrocket');
+        lines.push(makeSRInstall(primarySubUrl));
+        lines.push(makeShadowrocketSub(primarySubUrl));
+        lines.push('');
+        lines.push('# Clash');
+        lines.push(makeClashInstall(primarySubUrl));
+        lines.push('');
+      }
+
+      if (nodeUris.length >= 2){
+        lines.push('# Aggregate multi-node (sub://)');
+        lines.push(makeAggregateSubFromNodes(nodeUris));
+        lines.push('');
+      }
+
+      lines.push('# Clash Meta YAML: use Download YAML');
+
+      appState.clashYaml = clashYaml;
+      return lines;
+    }
+
+    async function renderAll(){
+      renderTabs(appState.activeTab);
+      renderKpi({ subUrls: appState.subUrls, nodeUris: appState.nodeUris, sourceLabel: appState.sourceLabel });
+
+      const p = buildPrimaryForTab(appState.activeTab, appState.subUrls, appState.nodeUris);
+      renderPrimaryLinks(p.lines);
+      await renderQrBoxes($('#primaryQr'), p.qrItems);
+
+      renderNodeLinksText(appState.nodeUris);
+      renderNodeList(appState.nodeUris);
+      await renderSelected(appState.nodeUris);
+
+      const ex = buildExports(appState.activeTab, appState.subUrls, appState.nodeUris, appState.clashYaml);
+      $('#exports').textContent = ex.join('\n');
+
+      const stateText = appState.sourceLabel === 'Idle'
+        ? 'Not parsed'
+        : `Ready · ${appState.subUrls.length} sub · ${appState.nodeUris.length} nodes`;
+
+      setPill($('#pillOut'), $('#outState'), appState.sourceLabel === 'Idle' ? '' : 'ok', stateText);
+
+      const bindYamlBtn = (id)=>{
+        const el = document.getElementById(id);
+        const btn = el;
+        if (!btn) return;
+        btn.onclick = ()=>{
+          const y = appState.clashYaml || buildClashMetaYaml(appState.subUrls[0] || '');
+          downloadText('clash-meta.yaml', y);
+        };
+      };
+      bindYamlBtn('btnDownloadClash');
+      bindYamlBtn('btnDownloadClash2');
+
+      $('#nodesBox').style.display = appState.nodeUris.length ? 'flex' : 'none';
+
+      if (appState.selectedIndex < 0) appState.selectedIndex = 0;
+      if (appState.selectedIndex >= appState.nodeUris.length) appState.selectedIndex = 0;
+    }
+
+    // ===== parse & bootstrap =====
+    let parseTimer = null;
+    async function parseAndUpdate(){
+      const raw = $('#quickInput').value;
+      if (!raw.trim()){
+        appState.sourceLabel = 'Idle';
+        appState.subUrls = [];
+        appState.nodeUris = [];
+        appState.clashYaml = buildClashMetaYaml('');
+        appState.selectedIndex = 0;
+        await renderAll();
+        return;
+      }
+
+      setPill($('#pillOut'), $('#outState'), 'warn', 'Parsing…');
+
+      const r = await parseInput(raw);
+      appState.sourceLabel = r.sourceLabel;
+      appState.subUrls = r.subUrls;
+      appState.nodeUris = r.nodeUris;
+      appState.clashYaml = r.clashYaml;
+      appState.selectedIndex = 0;
+
+      await renderAll();
+    }
+
+    $('#quickInput').addEventListener('input', ()=>{
+      if (parseTimer) clearTimeout(parseTimer);
+      parseTimer = setTimeout(()=> parseAndUpdate(), 60);
     });
 
-    block.appendChild(qrGrid);
-  }
-
-  return block;
-}
-
-function renderOutput(){
-  elOutput.innerHTML = "";
-
-  const nodes = state.nodes;
-  const subUrls = state.subUrls;
-
-  if(state.activeTab === "shadowrocket"){
-    const blocks = buildShadowrocketExport(nodes, subUrls);
-    blocks.forEach(b=>{
-      elOutput.appendChild(makeBlock(b));
+    $('#quickInput').addEventListener('keydown', (e)=>{
+      if (e.key === 'Enter'){
+        e.preventDefault();
+        parseAndUpdate();
+      }
     });
-    return;
-  }
 
-  if(state.activeTab === "clash"){
-    const text = buildClashYaml(nodes, subUrls);
-    elOutput.appendChild(makeBlock({
-      title:"Clash bundle",
-      subtitle:"raw list / subscription URLs",
-      text,
-      qrs: []
-    }));
-    return;
-  }
+    $('#quickInput').addEventListener('paste', ()=>{
+      if (parseTimer) clearTimeout(parseTimer);
+      setTimeout(()=> parseAndUpdate(), 0);
+    });
 
-  if(state.activeTab === "singbox"){
-    const text = buildSingBoxJson(nodes, subUrls);
-    elOutput.appendChild(makeBlock({
-      title:"sing-box bundle",
-      subtitle:"raw nodes for conversion",
-      text,
-      qrs: []
-    }));
-    return;
-  }
+    $('#nodeSearch').addEventListener('input', ()=>{
+      renderNodeList(appState.nodeUris);
+    });
 
-  if(state.activeTab === "plaintext"){
-    const text = buildPlainText(nodes, subUrls);
-    elOutput.appendChild(makeBlock({
-      title:"Plain Text",
-      subtitle:"copy/paste batch import",
-      text,
-      qrs: []
-    }));
-    return;
-  }
-}
+    $('#btnPaste').onclick = async ()=>{
+      try{
+        const t = await navigator.clipboard.readText();
+        $('#quickInput').value = t || '';
+        $('#quickInput').focus();
+        await parseAndUpdate();
+      }catch(e){
+        alert('Clipboard read blocked by browser permissions. Please paste manually.');
+      }
+    };
 
-function renderAll(){
-  renderTabs();
-  renderNodes();
-  renderOutput();
-}
+    bindCopyButtons();
 
-/* =========================
-   Actions
-========================= */
-function doParse(){
-  const raw = elInput.value;
-  const { nodes, subUrls } = parseMixedInput(raw);
-
-  state.nodes = nodes;
-  state.subUrls = subUrls;
-
-  if(nodes.length){
-    setStat(`OK • ${nodes.length} nodes`, "ok");
-  }else if(subUrls.length){
-    setStat(`URL only • ${subUrls.length}`, "warn");
-  }else{
-    setStat("empty / unknown", "bad");
-  }
-
-  renderAll();
-}
-
-let debounceTimer = null;
-function parseDebounced(){
-  clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(()=>doParse(), 220);
-}
-
-elInput.addEventListener("input", parseDebounced);
-
-elParse.addEventListener("click", ()=>{
-  doParse();
-  toast("Parsed");
-});
-
-elClear.addEventListener("click", ()=>{
-  elInput.value = "";
-  state.nodes = [];
-  state.subUrls = [];
-  setStat("cleared", "");
-  renderAll();
-  toast("Cleared");
-});
-
-elCopyAll.addEventListener("click", async ()=>{
-  const text = makePlainTextBundle(state.nodes);
-  await navigator.clipboard.writeText(text || "");
-  toast(text ? "Bundle copied" : "Nothing to copy");
-});
-
-/* =========================
-   HTML escaping
-========================= */
-function escapeHtml(s){
-  return (s||"").toString()
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-}
-function encodeAttr(s){
-  // for data-copy attribute
-  return (s||"").toString().replace(/"/g, "&quot;");
-}
-
-/* =========================
-   Init
-========================= */
-(function init(){
-  setStat("idle", "");
-  renderAll();
-})();
-</script>
+    (async ()=>{
+      renderTabs(appState.activeTab);
+      await parseAndUpdate();
+    })();
+  </script>
 </body>
 </html>
