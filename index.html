@@ -34,25 +34,27 @@
       overflow-x:hidden;
     }
     .wrap{max-width: 1480px;margin: 20px auto;padding: 0 16px 28px;}
-    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
     .brand{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--bd);border-radius:999px;background: rgba(255,255,255,.04);box-shadow: var(--shadow);user-select:none;}
     .dot{width:10px;height:10px;border-radius:99px;background: linear-gradient(135deg, rgba(120,80,255,.9), rgba(0,220,255,.9));box-shadow: 0 0 18px rgba(0,220,255,.35);}
     .brand b{letter-spacing:.5px}
     .brand span{opacity:.6;font-size:12px;margin-left:6px}
 
-    .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;align-items:center;}
     .quick{
       flex:1;
       display:flex;
-      align-items:center;
+      align-items:stretch;
       gap:10px;
       min-width: 280px;
+      max-width: 980px;
     }
     .quickInput{
       flex:1;
+      height: 44px;
       min-height: 44px;
-      max-height: 120px;
-      resize: vertical;
+      max-height: 44px;
+      resize: none;
       padding:10px 12px;
       border-radius: 14px;
       border:1px solid rgba(255,255,255,.10);
@@ -63,8 +65,10 @@
       line-height:1.35;
       font-family: var(--mono);
       box-shadow: 0 12px 30px rgba(0,0,0,.20);
+      overflow:hidden;
+      white-space: nowrap;
     }
-    .btn{appearance:none;border:1px solid var(--bd);background: rgba(255,255,255,.05);color:var(--txt);padding:10px 12px;border-radius: 12px;cursor:pointer;transition: .15s ease;box-shadow: 0 12px 30px rgba(0,0,0,.25);font-size:13px;}
+    .btn{appearance:none;border:1px solid var(--bd);background: rgba(255,255,255,.05);color:var(--txt);padding:10px 12px;border-radius: 14px;cursor:pointer;transition: .15s ease;box-shadow: 0 12px 30px rgba(0,0,0,.25);font-size:13px;height:44px;display:inline-flex;align-items:center;justify-content:center;}
     .btn:hover{transform:translateY(-1px); background: rgba(255,255,255,.08)}
     .btn:active{transform:translateY(0)}
     .btn.small{padding:7px 10px;font-size:12px;border-radius:11px}
@@ -119,13 +123,12 @@
     .seg .seg-hd .mini{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
     .seg pre{margin:0;padding:12px;white-space: pre-wrap;word-break: break-all;font-size:12px;line-height:1.35;color: rgba(255,255,255,.88);font-family: var(--mono);}
 
-    .twoCols{display:grid;grid-template-columns: 1fr 1fr;gap:12px;padding:12px;}
-    @media (max-width: 600px){.twoCols{grid-template-columns:1fr}}
+    .twoCols{display:grid;grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));gap:12px;padding:12px;}
 
     .qrbox{border:1px solid rgba(255,255,255,.08);background: rgba(0,0,0,.14);border-radius: 14px;padding: 10px;overflow:hidden;display:flex;flex-direction:column;gap:8px;}
     .qrbox .qttl{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted)}
-    .qrimg{width: 100%;max-width: 260px;border-radius: 12px;background: rgba(255,255,255,.92);padding: 8px;box-sizing:border-box;margin:auto;}
-    .qrhint{font-size:11px;color: rgba(255,255,255,.50);line-height:1.25;font-family: var(--mono);}
+    .qrimg{width: 100%;max-width: 320px;border-radius: 14px;background: rgba(255,255,255,.92);padding: 10px;box-sizing:border-box;margin:auto;}
+    .qrhint{font-size:11px;color: rgba(255,255,255,.50);line-height:1.25;font-family: var(--mono);max-height: 34px;overflow:hidden;text-overflow: ellipsis;}
 
     .split{display:grid;grid-template-columns: 280px 1fr;gap:12px;}
     @media (max-width: 1100px){.split{grid-template-columns:1fr}}
@@ -153,7 +156,7 @@
       outline:none;
       width: 150px;
     }
-    .nlist{padding:8px;display:flex;flex-direction:column;gap:8px;max-height: 420px;overflow:auto;}
+    .nlist{padding:10px;display:flex;flex-direction:column;gap:8px;max-height: 520px;overflow:auto;}
     .nitem{
       border:1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.04);
@@ -188,13 +191,8 @@
       </div>
 
       <div class="quick">
-        <button class="btn" id="btnPaste">Paste</button>
         <textarea class="quickInput" id="quickInput" spellcheck="false" placeholder="Paste URL / sing-box JSON / multi-line links / Base64"></textarea>
-      </div>
-
-      <div class="actions">
-        <button class="btn" id="btnClear">Clear</button>
-        <button class="btn" id="btnDemo">Demo</button>
+        <button class="btn" id="btnPaste">Paste</button>
       </div>
     </div>
 
@@ -1056,9 +1054,8 @@
       const ex = buildExports(appState.activeTab, appState.subUrls, appState.nodeUris, appState.clashYaml);
       renderExportsText(ex);
 
-      // pills
-      setPill($('#pillIn'), $('#inState'), appState.sourceLabel === 'Idle' ? '' : 'ok', appState.sourceLabel);
-      setPill($('#pillOut'), $('#outState'), 'ok', `Ready · ${appState.subUrls.length} sub · ${appState.nodeUris.length} nodes`);
+      // Only output pill exists in this UI
+      setPill($('#pillOut'), $('#outState'), appState.sourceLabel === 'Idle' ? '' : 'ok', `Ready · ${appState.subUrls.length} sub · ${appState.nodeUris.length} nodes`);
 
       // clash download
       $('#btnDownloadClash').onclick = ()=>{
@@ -1089,7 +1086,6 @@
         return;
       }
 
-      setPill($('#pillIn'), $('#inState'), 'warn', 'Detecting…');
       setPill($('#pillOut'), $('#outState'), 'warn', 'Parsing…');
 
       const r = await parseInput(raw);
@@ -1098,13 +1094,20 @@
       appState.nodeUris = r.nodeUris;
       appState.clashYaml = r.clashYaml;
       appState.selectedIndex = 0;
+      if (appState.nodeUris.length === 1) appState.selectedIndex = 0;
 
       await renderAll();
     }
 
     $('#quickInput').addEventListener('input', ()=>{
       if (parseTimer) clearTimeout(parseTimer);
-      parseTimer = setTimeout(()=> parseAndUpdate(), 80);
+      parseTimer = setTimeout(()=> parseAndUpdate(), 60);
+    });
+
+    // Immediate parse right after paste (no waiting)
+    $('#quickInput').addEventListener('paste', ()=>{
+      if (parseTimer) clearTimeout(parseTimer);
+      setTimeout(()=> parseAndUpdate(), 0);
     });
 
     $('#nodeSearch').addEventListener('input', ()=>{
@@ -1115,20 +1118,11 @@
       try{
         const t = await navigator.clipboard.readText();
         $('#quickInput').value = t || '';
-        parseAndUpdate();
+        $('#quickInput').focus();
+        await parseAndUpdate();
       }catch(e){
         alert('Clipboard read blocked by browser permissions. Please paste manually.');
       }
-    };
-
-    $('#btnClear').onclick = ()=>{
-      $('#quickInput').value = '';
-      parseAndUpdate();
-    };
-
-    $('#btnDemo').onclick = ()=>{
-      $('#quickInput').value = `https://example.com/sub.yaml\n\nvless://<UUID>@example.com:443?encryption=none&security=tls#demo\nvmess://BASE64...`;
-      parseAndUpdate();
     };
 
     // copy buttons
