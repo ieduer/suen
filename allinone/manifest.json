@@ -1,0 +1,27 @@
+{
+    "name": "BDFZ-SUEN Dashboard",
+    "short_name": "BDFZ-SUEN",
+    "description": "北大附中 孙玉磊 - Personal Dashboard",
+    "start_url": "/allinone/index.html",
+    "display": "standalone",
+    "background_color": "#e9edf3",
+    "theme_color": "#005f73",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/favicon-32x32.png",
+            "sizes": "32x32",
+            "type": "image/png"
+        },
+        {
+            "src": "/apple-touch-icon.png",
+            "sizes": "180x180",
+            "type": "image/png"
+        }
+    ],
+    "categories": [
+        "productivity",
+        "education"
+    ],
+    "lang": "zh-Hant"
+}
