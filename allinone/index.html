@@ -933,6 +933,71 @@
             }
         }
 
+        /* === CATEGORY TITLES === */
+        .nav-cat-title {
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--dark-text-color);
+            opacity: 0.55;
+            padding: 8px 0 4px;
+            user-select: none;
+        }
+
+        html.dark-mode .nav-cat-title,
+        body.dark-mode .nav-cat-title {
+            color: var(--text-color);
+            opacity: 0.5;
+        }
+
+        .nav-cat-title:first-child {
+            padding-top: 0;
+        }
+
+        /* === SEARCH FILTER === */
+        .nav-search-box {
+            width: 100%;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            border: 1px solid color-mix(in oklab, var(--neo-bg), #000 12%);
+            background: color-mix(in oklab, var(--neo-bg) 95%, white 5%);
+            color: var(--dark-text-color);
+            font-size: 0.9rem;
+            font-family: inherit;
+            outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease, var(--theme-transition);
+        }
+
+        .nav-search-box::placeholder {
+            color: var(--dark-text-color);
+            opacity: 0.45;
+        }
+
+        .nav-search-box:focus {
+            border-color: #0a9396;
+        }
+
+        html.dark-mode .nav-search-box,
+        body.dark-mode .nav-search-box {
+            border-color: color-mix(in oklab, var(--neo-bg), #fff 12%);
+            background: color-mix(in oklab, var(--neo-bg) 90%, #fff 3%);
+            color: var(--text-color);
+        }
+
+        html.dark-mode .nav-search-box::placeholder,
+        body.dark-mode .nav-search-box::placeholder {
+            color: var(--text-color);
+            opacity: 0.4;
+        }
+
+        .link-button.search-hidden,
+        .nav-cat-title.search-hidden {
+            display: none;
+        }
+
         /* === LINK BUTTONS === */
         .link-button {
             background: var(--primary-gradient);
@@ -1664,45 +1729,51 @@
         <!-- Left Column (Links) -->
         <nav class="column left-column neo-scope" aria-label="左側導航">
             <div class="side-scroll" aria-label="左側鏈接列表">
+                <div class="nav-cat-title">── AI 工具 ──</div>
                 <a href="https://gk.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer"
-                    aria-label="AI高考">AI 高考</a>
+                    aria-label="AI高考" data-search="ai高考 gk">AI 高考</a>
                 <a href="https://mx.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer"
-                    aria-label="AI默寫">AI 默寫</a>
+                    aria-label="AI默寫" data-search="ai默寫 mx">AI 默寫</a>
                 <a href="https://mf.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer"
-                    aria-label="訪問高考詩文">高考默寫</a>
+                    aria-label="訪問高考詩文" data-search="高考默寫 mf 詩文">高考默寫</a>
                 <a href="https://kz.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer"
-                    aria-label="AI論語">AI 論語</a>
+                    aria-label="AI論語" data-search="ai論語 kz 孔子">AI 論語</a>
                 <a href="https://hlm.bdfz.net" class="link-button side-link" target="_blank" rel="noopener noreferrer"
-                    aria-label="AI紅樓夢">AI 紅樓夢</a>
-                <a href="https://jks.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer" 
-                    aria-label="教材PDF">AI 語文教材</a>
+                    aria-label="AI紅樓夢" data-search="ai紅樓夢 hlm 红楼梦">AI 紅樓夢</a>
+                <a href="https://jks.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer"
+                    aria-label="教材PDF" data-search="ai語文教材 jks 教科书">AI 語文教材</a>
                 <a href="https://sun.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer"
-                    aria-label="全教材">AI 高中教材</a>               
-                    <a href="https://mark.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer"
-                    aria-label="閱卷">AI 閱卷</a>
+                    aria-label="全教材" data-search="ai高中教材 sun 全教材">AI 高中教材</a>
+                <a href="https://mark.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer"
+                    aria-label="閱卷" data-search="ai閱卷 mark 批改">AI 閱卷</a>
                 <a href="https://750.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer"
-                    aria-label="AI選校">AI 選校</a>
+                    aria-label="AI選校" data-search="ai選校 750 志愿">AI 選校</a>
+
+                <div class="nav-cat-title">── 社区 ──</div>
                 <a href="https://blog.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer"
-                    aria-label="你寫">表白</a>
+                    aria-label="你寫" data-search="表白 blog 你寫">表白</a>
                 <a href="https://forum.rdfzer.com" class="link-button side-link" target="_blank"
-                    rel="noopener noreferrer" aria-label="彣彰">彣彰</a>
+                    rel="noopener noreferrer" aria-label="彣彰" data-search="彣彰 forum 论坛">彣彰</a>
+
+                <div class="nav-cat-title">── 信息 ──</div>
                 <a href="https://bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer"
-                    aria-label="SUEN">BLOG</a>
+                    aria-label="SUEN" data-search="blog suen 博客">BLOG</a>
                 <a href="https://class.bdfz.net/" class="link-button side-link" target="_blank"
-                    rel="noopener noreferrer" aria-label="高中語文">課堂導航</a>
+                    rel="noopener noreferrer" aria-label="高中語文" data-search="課堂導航 class 语文">課堂導航</a>
                 <a href="https://seiue.bdfz.net/" class="link-button side-link" target="_blank"
-                    rel="noopener noreferrer" aria-label="50塊">希悅考勤</a>
+                    rel="noopener noreferrer" aria-label="50塊" data-search="希悅考勤 seiue 签到">希悅考勤</a>
                 <a href="https://xz.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer"
-                    aria-label="YT-DLP">下載萬物</a>
+                    aria-label="YT-DLP" data-search="下載萬物 xz download">下載萬物</a>
                 <a href="https://wx.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer"
-                    aria-label="FWechat">微信公號</a>
+                    aria-label="FWechat" data-search="微信公號 wx wechat">微信公號</a>
                 <a href="https://todo.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer"
-                    aria-label="To-Do">To-Do</a>
+                    aria-label="To-Do" data-search="todo 待办">To-Do</a>
             </div>
         </nav>
 
         <!-- Middle Countdown Column -->
         <main class="column countdown-container neo-scope" aria-label="時間與倒計時">
+            <input type="text" id="nav-search" class="nav-search-box" placeholder="搜索站點..." aria-label="搜索站點">
             <button id="theme-toggle-logo-button" class="theme-toggle-logo-button neo neo-round" aria-label="切換暗黑模式"
                 type="button">
                 <img src="https://img.bdfz.net/20250503003.webp" alt="Logo - 點擊切換主題" class="logo-img" loading="lazy">
@@ -1799,40 +1870,45 @@
         <!-- Right Column (Links) -->
         <nav class="column right-column neo-scope" aria-label="右側導航">
             <div class="side-scroll" aria-label="右側鏈接列表">
+                <div class="nav-cat-title">── 互動 ──</div>
                 <a href="https://home.bdfz.chat/" class="link-button side-link" target="_blank" rel="noopener noreferrer"
-                aria-label="bdfz.chat">bdfz.chat</a>
+                    aria-label="bdfz.chat" data-search="bdfz.chat 聊天">bdfz.chat</a>
                 <a href="https://tree.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer"
-                    aria-label="樹洞">樹洞</a>
+                    aria-label="樹洞" data-search="樹洞 tree 匿名">樹洞</a>
                 <a href="https://chat.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer"
-                    aria-label="Anon Hourly Chat">Anon Hourly Chat</a>
+                    aria-label="Anon Hourly Chat" data-search="anon hourly chat 匿名聊天">Anon Hourly Chat</a>
                 <a href="https://paper.bdfz.net/" class="link-button side-link" target="_blank"
-                    rel="noopener noreferrer" aria-label="試卷">試卷原圖</a>
+                    rel="noopener noreferrer" aria-label="試卷" data-search="試卷原圖 paper 考试">試卷原圖</a>
                 <a href="https://h.bdfz.net/" class="link-button side-link" target="_blank" rel="noopener noreferrer"
-                    aria-label="家長">家長</a>
+                    aria-label="家長" data-search="家長 parent">家長</a>
+
+                <div class="nav-cat-title">── AI 平台 ──</div>
                 <a href="https://openai.com/news/" class="link-button side-link" target="_blank"
-                    rel="noopener noreferrer" aria-label="OpenAI">OpenAI</a>
+                    rel="noopener noreferrer" aria-label="OpenAI" data-search="openai chatgpt">OpenAI</a>
                 <a href="https://aistudio.google.com/prompts/new_chat" class="link-button side-link" target="_blank"
-                    rel="noopener noreferrer" aria-label="Gemini">Gemini</a>
-                <a href="https://archive.org/" class="link-button side-link" target="_blank" rel="noopener noreferrer"
-                    aria-label="Internet Archive">Internet Archive</a>
+                    rel="noopener noreferrer" aria-label="Gemini" data-search="gemini google ai">Gemini</a>
                 <a href="https://notebooklm.google.com/" class="link-button side-link" target="_blank"
-                    rel="noopener noreferrer" aria-label="NotebookLM">NotebookLM</a>
+                    rel="noopener noreferrer" aria-label="NotebookLM" data-search="notebooklm google 笔记">NotebookLM</a>
+
+                <div class="nav-cat-title">── 外部資源 ──</div>
                 <a href="https://github.com/ieduer" class="link-button side-link" target="_blank"
-                    rel="noopener noreferrer" aria-label="GitHub-Suen">GitHub</a>
+                    rel="noopener noreferrer" aria-label="GitHub-Suen" data-search="github 代码">GitHub</a>
                 <a href="https://x.com/ieduer" class="link-button side-link" target="_blank" rel="noopener noreferrer"
-                    aria-label="X">X</a>
+                    aria-label="X" data-search="x twitter 推特">X</a>
                 <a href="https://chalk-c3.seiue.com/" class="link-button side-link" target="_blank"
-                    rel="noopener noreferrer" aria-label="希悦">希悦</a>
+                    rel="noopener noreferrer" aria-label="希悦" data-search="希悦 seiue 学习平台">希悦</a>
                 <a href="https://www.office.com/" class="link-button side-link" target="_blank"
-                    rel="noopener noreferrer" aria-label="M365">M365</a>
+                    rel="noopener noreferrer" aria-label="M365" data-search="m365 office microsoft">M365</a>
                 <a href="https://gk-stu.bjeea.cn/#/app/volunteer-coach/query" class="link-button side-link" target="_blank"
-                    rel="noopener noreferrer" aria-label="錄取">高校錄取</a>
+                    rel="noopener noreferrer" aria-label="錄取" data-search="高校錄取 志愿 bjeea">高校錄取</a>
                 <a href="https://ctext.org/zh" class="link-button side-link" target="_blank" rel="noopener noreferrer"
-                    aria-label="中國哲學書電子化計劃">中國哲學書電子化計劃</a>
+                    aria-label="中國哲學書電子化計劃" data-search="中國哲學書電子化計劃 ctext 古籍">中國哲學書電子化計劃</a>
                 <a href="https://www.duxiu.com/" class="link-button side-link" target="_blank" rel="noopener noreferrer"
-                    aria-label="讀秀">讀秀</a>
+                    aria-label="讀秀" data-search="讀秀 duxiu 图书">讀秀</a>
+                <a href="https://archive.org/" class="link-button side-link" target="_blank" rel="noopener noreferrer"
+                    aria-label="Internet Archive" data-search="internet archive 档案">Internet Archive</a>
                 <a href="https://www.yuque.com/r/organizations/bdfz/join?token=8jDK7qvJ741Gnw2p&source=org#"
-                    class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="語雀">語雀</a>
+                    class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="語雀" data-search="語雀 yuque 文档">語雀</a>
             </div>
         </nav>
     </div>
@@ -2641,8 +2717,47 @@
                 setTimeout(typeChar, 500);
             }
 
+            // === 9. Search Filter for Links ===
+            const searchInput = document.getElementById('nav-search');
+            if (searchInput) {
+                const allLinks = document.querySelectorAll('.side-link[data-search]');
+                const allCatTitles = document.querySelectorAll('.nav-cat-title');
+
+                searchInput.addEventListener('input', () => {
+                    const q = searchInput.value.trim().toLowerCase();
+
+                    if (!q) {
+                        allLinks.forEach(a => a.classList.remove('search-hidden'));
+                        allCatTitles.forEach(t => t.classList.remove('search-hidden'));
+                        return;
+                    }
+
+                    allLinks.forEach(a => {
+                        const text = (a.textContent + ' ' + (a.dataset.search || '')).toLowerCase();
+                        a.classList.toggle('search-hidden', !text.includes(q));
+                    });
+
+                    // Hide category titles if all links in their group are hidden
+                    allCatTitles.forEach(title => {
+                        let next = title.nextElementSibling;
+                        let hasVisible = false;
+                        while (next && !next.classList.contains('nav-cat-title')) {
+                            if (next.classList.contains('side-link') && !next.classList.contains('search-hidden')) {
+                                hasVisible = true;
+                                break;
+                            }
+                            next = next.nextElementSibling;
+                        }
+                        title.classList.toggle('search-hidden', !hasVisible);
+                    });
+                });
+            }
+
         });
     </script>
+
+    <!-- Shared Navigation Widget -->
+    <script src="https://nav.bdfz.net/bdfz-nav.js" async></script>
 </body>
 
 </html>
