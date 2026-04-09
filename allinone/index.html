@@ -33,6 +33,7 @@
     <link rel="preconnect" href="https://ipapi.co" crossorigin>
     <link rel="preconnect" href="https://get.geojs.io" crossorigin>
     <link rel="preload" href="../fonts/HuWenMingChaoTi.woff2" as="font" type="font/woff2" crossorigin>
+    <script defer src="https://my.bdfz.net/site-auth.js"></script>
 
     <title>BDFZ-SUEN</title>
 
@@ -2088,6 +2089,7 @@
         requestAnimationFrame(() => { loadVisitorInfo(); });
 
         document.addEventListener("DOMContentLoaded", function () {
+            window.BdfzIdentity?.mount({ siteKey: 'rdfzeri' });
             const gaokaoDisplay = document.querySelector('#gaokao-countdown .countdown-display');
             const humanTimeDisplay = document.getElementById('humanTime');
             const clockDisplay = document.getElementById('current-time-clock');
