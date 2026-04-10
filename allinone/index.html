@@ -1576,38 +1576,6 @@
             color: var(--text-color);
         }
 
-        /* === Sound Toggle === */
-        .sound-toggle {
-            position: fixed;
-            bottom: 16px;
-            right: 16px;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: var(--neo-bg);
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow:
-                4px 4px 8px var(--neo-dark),
-                -4px -4px 8px var(--neo-light);
-            z-index: 1000;
-            transition: transform 0.2s ease;
-            font-size: 1rem;
-        }
-
-        .sound-toggle:hover {
-            transform: scale(1.1);
-        }
-
-        .sound-toggle:active {
-            box-shadow:
-                inset 2px 2px 4px var(--neo-dark),
-                inset -2px -2px 4px var(--neo-light);
-        }
-
         /* === Uptime & Load Time === */
         .footer-stats {
             display: flex;
@@ -1852,9 +1820,6 @@
             <span class="link-preview-url" id="link-preview-url"></span>
         </div>
     </div>
-
-    <!-- Sound Toggle Button -->
-    <button class="sound-toggle" id="sound-toggle" title="Toggle Sound" aria-label="Toggle Sound">🔊</button>
 
     <script>
         // === PWA Service Worker Registration ===
@@ -2477,50 +2442,7 @@
             setInterval(updateUptime, 1000);
             updateUptime();
 
-            // === 5. Sound Feedback with Web Audio API ===
-            const soundToggle = document.getElementById('sound-toggle');
-            let soundEnabled = localStorage.getItem('soundEnabled') !== 'false';
-            let audioCtx = null;
-
-            function updateSoundIcon() {
-                if (soundToggle) {
-                    soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
-                }
-            }
-            updateSoundIcon();
-
-            function playClickSound() {
-                if (!soundEnabled) return;
-                try {
-                    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    const oscillator = audioCtx.createOscillator();
-                    const gainNode = audioCtx.createGain();
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioCtx.destination);
-                    oscillator.frequency.value = 800;
-                    oscillator.type = 'sine';
-                    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-                    oscillator.start(audioCtx.currentTime);
-                    oscillator.stop(audioCtx.currentTime + 0.05);
-                } catch (e) { }
-            }
-
-            if (soundToggle) {
-                soundToggle.addEventListener('click', () => {
-                    soundEnabled = !soundEnabled;
-                    localStorage.setItem('soundEnabled', soundEnabled);
-                    updateSoundIcon();
-                    playClickSound();
-                });
-            }
-
-            // Add click sound to all link buttons
-            document.querySelectorAll('.link-button').forEach(btn => {
-                btn.addEventListener('click', playClickSound);
-            });
-
-            // === 6. Link Preview Cards ===
+            // === 5. Link Preview Cards ===
             const previewCard = document.getElementById('link-preview-card');
             const previewFavicon = document.getElementById('link-preview-favicon');
             const previewTitle = document.getElementById('link-preview-title');
