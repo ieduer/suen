@@ -275,10 +275,6 @@
             background: var(--background-gradient);
             color: var(--text-color);
 
-            /* ✅ 用动态视口高度，避免移动端地址栏导致顶/底被吃掉 */
-            height: 100vh;
-            height: 100svh;
-            height: 100dvh;
             min-height: 100vh;
             min-height: 100svh;
             min-height: 100dvh;
@@ -289,7 +285,7 @@
             padding-bottom: calc(16px + env(safe-area-inset-bottom));
             padding-left: calc(16px + env(safe-area-inset-left));
 
-            overflow: hidden;
+            overflow-y: auto;
 
             display: flex;
             flex-direction: column;
@@ -322,13 +318,12 @@
 
             flex: 1 1 auto;
             min-height: 0;
-            height: 100%;
 
             display: grid;
             grid-template-columns:
                 minmax(240px, 1fr) minmax(360px, 520px) minmax(240px, 1fr);
             gap: 16px;
-            align-items: stretch;
+            align-items: start;
         }
 
         /* === HEIGHT-BASED FIT === */
@@ -475,11 +470,9 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
             transition: var(--theme-transition);
             min-width: 0;
-            height: 100%;
 
             display: flex;
             flex-direction: column;
-            overflow: hidden;
             min-height: 0;
         }
 
@@ -502,7 +495,6 @@
         .side-scroll {
             flex: 1;
             min-height: 0;
-            overflow: auto;
             display: flex;
             flex-direction: column;
             gap: 8px;
@@ -540,7 +532,6 @@
             background: var(--surface-main);
             align-items: center;
             justify-content: flex-start;
-            overflow: hidden;
             min-height: 0;
         }
 
@@ -552,7 +543,6 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            overflow: auto;
             padding-right: 4px;
         }
 
@@ -1472,37 +1462,7 @@
             line-height: 1.3em;
         }
 
-        /* === System Info Panel === */
-        .system-info-panel {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 8px;
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-            font-size: 0.7rem;
-        }
 
-        .sys-info-item {
-            padding: 3px 8px;
-            border-radius: 4px;
-            background: color-mix(in oklab, var(--neo-bg) 88%, #000 12%);
-            color: var(--dark-text-color);
-            border: 1px solid color-mix(in oklab, var(--neo-bg), #000 10%);
-            white-space: nowrap;
-        }
-
-        html.dark-mode .sys-info-item,
-        body.dark-mode .sys-info-item {
-            background: color-mix(in oklab, var(--neo-bg) 82%, #fff 5%);
-            color: var(--text-color);
-            border-color: color-mix(in oklab, var(--neo-bg), #fff 8%);
-        }
-
-        .sys-info-item .sys-label {
-            color: #9a7dff;
-            margin-right: 3px;
-        }
 
         /* === Drag and Drop === */
         .link-button.dragging {
@@ -1620,6 +1580,91 @@
                 transition: none;
             }
         }
+
+        /* === mx.bdfz.net visual refresh === */
+        :root {
+            --primary-gradient-light: linear-gradient(135deg, #617d7b, #789594, #b8cca7);
+            --secondary-gradient-light: linear-gradient(135deg, #b8cca7, #e8ede5);
+            --background-gradient-light:
+                linear-gradient(rgba(251, 250, 245, 0.84), rgba(251, 250, 245, 0.92)),
+                url('background-mx.jpg');
+            --text-color-light: #5d5551;
+            --dark-text-color-light: #5d5551;
+            --footer-link-color-light: #789594;
+            --footer-link-hover-light: #617d7b;
+            --button-text-color-light: #ffffff;
+            --neo-bg: #fbfaf5;
+            --neo-light: rgba(255, 255, 255, 0.78);
+            --neo-dark: rgba(93, 85, 81, 0.14);
+            --surface-main-light: rgba(255, 255, 255, 0.68);
+            --surface-left-light: rgba(255, 255, 255, 0.58);
+            --surface-right-light: rgba(255, 255, 255, 0.58);
+        }
+
+        html.dark-mode body,
+        body.dark-mode {
+            --primary-gradient: linear-gradient(135deg, #617d7b, #789594, #b8cca7);
+            --secondary-gradient: linear-gradient(135deg, #b8cca7, #e8ede5);
+            --background-gradient:
+                linear-gradient(rgba(24, 29, 31, 0.72), rgba(24, 29, 31, 0.82)),
+                url('background-mx.jpg');
+            --text-color: #e8ede5;
+            --dark-text-color: #d6d0ca;
+            --footer-link-color: #b8cca7;
+            --footer-link-hover: #e8ede5;
+            --button-text-color: #ffffff;
+            --neo-bg: #232725;
+            --neo-light: rgba(255, 255, 255, 0.07);
+            --neo-dark: rgba(0, 0, 0, 0.46);
+            --surface-main: rgba(35, 39, 37, 0.78);
+            --surface-left: rgba(35, 39, 37, 0.7);
+            --surface-right: rgba(35, 39, 37, 0.7);
+        }
+
+        body {
+            background: var(--background-gradient);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        #matrix-bg,
+        html.dark-mode #matrix-bg,
+        body.dark-mode #matrix-bg {
+            opacity: 0;
+        }
+
+        .column,
+        .countdown-item,
+        .footer,
+        .link-preview-card {
+            border: 1px solid rgba(150, 137, 126, 0.28);
+            box-shadow: 0 18px 60px rgba(93, 85, 81, 0.13);
+        }
+
+        .link-button {
+            background: #789594;
+            color: #ffffff;
+        }
+
+        .link-button:hover,
+        .link-button:focus,
+        .side-link:hover,
+        .side-link:focus {
+            background: #617d7b;
+            color: #ffffff;
+        }
+
+        .side-link {
+            background: rgba(255, 255, 255, 0.72);
+            color: var(--dark-text-color);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                background-attachment: scroll;
+            }
+        }
     </style>
 </head>
 
@@ -1637,7 +1682,7 @@
 
         <!-- Middle Countdown Column -->
         <main class="column countdown-container neo-scope" aria-label="時間與倒計時">
-            <button id="theme-toggle-logo-button" class="theme-toggle-logo-button neo neo-round" aria-label="切換暗黑模式"
+            <button id="theme-toggle-logo-button" class="theme-toggle-logo-button neo neo-round" aria-label="點擊切換色系"
                 type="button">
                 <img src="https://img.bdfz.net/20250503003.webp" alt="Logo - 點擊切換主題" class="logo-img" loading="lazy">
             </button>
@@ -1709,8 +1754,7 @@
                     <p id="footer-ip-city"></p>
                     <p id="footer-org-country"></p>
                 </div>
-                <!-- System Info Panel -->
-                <div class="system-info-panel" id="system-info-panel"></div>
+
                 <!-- Footer Stats: Load Time & Uptime -->
                 <div class="footer-stats">
                     <span title="Page Load Time"><span class="stat-icon">⚡</span><span id="load-time">--ms</span></span>
@@ -2019,13 +2063,286 @@
             const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
 
             const THEME_STORAGE_KEY = 'themePreference';
+            const SCHEME_STORAGE_KEY = 'colorScheme';
+
+            // === Color Scheme Definitions ===
+            const COLOR_SCHEMES = [
+                {
+                    name: 'sage',
+                    light: {
+                        '--primary-gradient': 'linear-gradient(135deg, #617d7b, #789594, #b8cca7)',
+                        '--secondary-gradient': 'linear-gradient(135deg, #b8cca7, #e8ede5)',
+                        '--text-color': '#5d5551',
+                        '--dark-text-color': '#5d5551',
+                        '--footer-link-color': '#789594',
+                        '--footer-link-hover': '#617d7b',
+                        '--button-text-color': '#ffffff',
+                        '--neo-bg': '#fbfaf5',
+                        '--neo-light': 'rgba(255, 255, 255, 0.78)',
+                        '--neo-dark': 'rgba(93, 85, 81, 0.14)',
+                        '--surface-main': 'rgba(255, 255, 255, 0.68)',
+                        '--surface-left': 'rgba(255, 255, 255, 0.58)',
+                        '--surface-right': 'rgba(255, 255, 255, 0.58)',
+                        '--btn-bg': '#789594',
+                        '--btn-hover': '#617d7b',
+                        '--side-link-bg': 'rgba(255, 255, 255, 0.72)',
+                    },
+                    dark: {
+                        '--primary-gradient': 'linear-gradient(135deg, #617d7b, #789594, #b8cca7)',
+                        '--secondary-gradient': 'linear-gradient(135deg, #b8cca7, #e8ede5)',
+                        '--text-color': '#e8ede5',
+                        '--dark-text-color': '#d6d0ca',
+                        '--footer-link-color': '#b8cca7',
+                        '--footer-link-hover': '#e8ede5',
+                        '--button-text-color': '#ffffff',
+                        '--neo-bg': '#232725',
+                        '--neo-light': 'rgba(255, 255, 255, 0.07)',
+                        '--neo-dark': 'rgba(0, 0, 0, 0.46)',
+                        '--surface-main': 'rgba(35, 39, 37, 0.78)',
+                        '--surface-left': 'rgba(35, 39, 37, 0.7)',
+                        '--surface-right': 'rgba(35, 39, 37, 0.7)',
+                        '--btn-bg': '#617d7b',
+                        '--btn-hover': '#789594',
+                        '--side-link-bg': 'rgba(35, 39, 37, 0.6)',
+                    }
+                },
+                {
+                    name: 'ocean',
+                    light: {
+                        '--primary-gradient': 'linear-gradient(135deg, #1a6b8a, #2196a4, #6dc8c8)',
+                        '--secondary-gradient': 'linear-gradient(135deg, #6dc8c8, #d4f1f4)',
+                        '--text-color': '#2c3e50',
+                        '--dark-text-color': '#2c3e50',
+                        '--footer-link-color': '#2196a4',
+                        '--footer-link-hover': '#1a6b8a',
+                        '--button-text-color': '#ffffff',
+                        '--neo-bg': '#f0f8fb',
+                        '--neo-light': 'rgba(255, 255, 255, 0.82)',
+                        '--neo-dark': 'rgba(44, 62, 80, 0.12)',
+                        '--surface-main': 'rgba(240, 248, 251, 0.72)',
+                        '--surface-left': 'rgba(240, 248, 251, 0.6)',
+                        '--surface-right': 'rgba(240, 248, 251, 0.6)',
+                        '--btn-bg': '#2196a4',
+                        '--btn-hover': '#1a6b8a',
+                        '--side-link-bg': 'rgba(255, 255, 255, 0.72)',
+                    },
+                    dark: {
+                        '--primary-gradient': 'linear-gradient(135deg, #1a6b8a, #2196a4, #6dc8c8)',
+                        '--secondary-gradient': 'linear-gradient(135deg, #6dc8c8, #d4f1f4)',
+                        '--text-color': '#d4f1f4',
+                        '--dark-text-color': '#a8d8dc',
+                        '--footer-link-color': '#6dc8c8',
+                        '--footer-link-hover': '#d4f1f4',
+                        '--button-text-color': '#ffffff',
+                        '--neo-bg': '#1a2632',
+                        '--neo-light': 'rgba(255, 255, 255, 0.06)',
+                        '--neo-dark': 'rgba(0, 0, 0, 0.50)',
+                        '--surface-main': 'rgba(26, 38, 50, 0.78)',
+                        '--surface-left': 'rgba(26, 38, 50, 0.7)',
+                        '--surface-right': 'rgba(26, 38, 50, 0.7)',
+                        '--btn-bg': '#1a6b8a',
+                        '--btn-hover': '#2196a4',
+                        '--side-link-bg': 'rgba(26, 38, 50, 0.6)',
+                    }
+                },
+                {
+                    name: 'purple',
+                    light: {
+                        '--primary-gradient': 'linear-gradient(135deg, #6c5ce7, #8b7cf6, #b8a9fa)',
+                        '--secondary-gradient': 'linear-gradient(135deg, #b8a9fa, #e8e0ff)',
+                        '--text-color': '#3d3557',
+                        '--dark-text-color': '#3d3557',
+                        '--footer-link-color': '#8b7cf6',
+                        '--footer-link-hover': '#6c5ce7',
+                        '--button-text-color': '#ffffff',
+                        '--neo-bg': '#f5f3ff',
+                        '--neo-light': 'rgba(255, 255, 255, 0.82)',
+                        '--neo-dark': 'rgba(61, 53, 87, 0.12)',
+                        '--surface-main': 'rgba(245, 243, 255, 0.72)',
+                        '--surface-left': 'rgba(245, 243, 255, 0.6)',
+                        '--surface-right': 'rgba(245, 243, 255, 0.6)',
+                        '--btn-bg': '#8b7cf6',
+                        '--btn-hover': '#6c5ce7',
+                        '--side-link-bg': 'rgba(255, 255, 255, 0.72)',
+                    },
+                    dark: {
+                        '--primary-gradient': 'linear-gradient(135deg, #6c5ce7, #8b7cf6, #b8a9fa)',
+                        '--secondary-gradient': 'linear-gradient(135deg, #b8a9fa, #e8e0ff)',
+                        '--text-color': '#e8e0ff',
+                        '--dark-text-color': '#c4b5fd',
+                        '--footer-link-color': '#b8a9fa',
+                        '--footer-link-hover': '#e8e0ff',
+                        '--button-text-color': '#ffffff',
+                        '--neo-bg': '#1e1a2e',
+                        '--neo-light': 'rgba(255, 255, 255, 0.06)',
+                        '--neo-dark': 'rgba(0, 0, 0, 0.50)',
+                        '--surface-main': 'rgba(30, 26, 46, 0.78)',
+                        '--surface-left': 'rgba(30, 26, 46, 0.7)',
+                        '--surface-right': 'rgba(30, 26, 46, 0.7)',
+                        '--btn-bg': '#6c5ce7',
+                        '--btn-hover': '#8b7cf6',
+                        '--side-link-bg': 'rgba(30, 26, 46, 0.6)',
+                    }
+                },
+                {
+                    name: 'rose',
+                    light: {
+                        '--primary-gradient': 'linear-gradient(135deg, #c0507e, #e06090, #f0a0b8)',
+                        '--secondary-gradient': 'linear-gradient(135deg, #f0a0b8, #fde8ef)',
+                        '--text-color': '#5a3044',
+                        '--dark-text-color': '#5a3044',
+                        '--footer-link-color': '#e06090',
+                        '--footer-link-hover': '#c0507e',
+                        '--button-text-color': '#ffffff',
+                        '--neo-bg': '#fdf5f7',
+                        '--neo-light': 'rgba(255, 255, 255, 0.82)',
+                        '--neo-dark': 'rgba(90, 48, 68, 0.10)',
+                        '--surface-main': 'rgba(253, 245, 247, 0.72)',
+                        '--surface-left': 'rgba(253, 245, 247, 0.6)',
+                        '--surface-right': 'rgba(253, 245, 247, 0.6)',
+                        '--btn-bg': '#e06090',
+                        '--btn-hover': '#c0507e',
+                        '--side-link-bg': 'rgba(255, 255, 255, 0.72)',
+                    },
+                    dark: {
+                        '--primary-gradient': 'linear-gradient(135deg, #c0507e, #e06090, #f0a0b8)',
+                        '--secondary-gradient': 'linear-gradient(135deg, #f0a0b8, #fde8ef)',
+                        '--text-color': '#fde8ef',
+                        '--dark-text-color': '#f0a0b8',
+                        '--footer-link-color': '#f0a0b8',
+                        '--footer-link-hover': '#fde8ef',
+                        '--button-text-color': '#ffffff',
+                        '--neo-bg': '#2a1a22',
+                        '--neo-light': 'rgba(255, 255, 255, 0.06)',
+                        '--neo-dark': 'rgba(0, 0, 0, 0.50)',
+                        '--surface-main': 'rgba(42, 26, 34, 0.78)',
+                        '--surface-left': 'rgba(42, 26, 34, 0.7)',
+                        '--surface-right': 'rgba(42, 26, 34, 0.7)',
+                        '--btn-bg': '#c0507e',
+                        '--btn-hover': '#e06090',
+                        '--side-link-bg': 'rgba(42, 26, 34, 0.6)',
+                    }
+                },
+                {
+                    name: 'amber',
+                    light: {
+                        '--primary-gradient': 'linear-gradient(135deg, #b8860b, #d4a030, #e8c868)',
+                        '--secondary-gradient': 'linear-gradient(135deg, #e8c868, #faf0d0)',
+                        '--text-color': '#4a3c1f',
+                        '--dark-text-color': '#4a3c1f',
+                        '--footer-link-color': '#d4a030',
+                        '--footer-link-hover': '#b8860b',
+                        '--button-text-color': '#ffffff',
+                        '--neo-bg': '#fdfaf0',
+                        '--neo-light': 'rgba(255, 255, 255, 0.82)',
+                        '--neo-dark': 'rgba(74, 60, 31, 0.10)',
+                        '--surface-main': 'rgba(253, 250, 240, 0.72)',
+                        '--surface-left': 'rgba(253, 250, 240, 0.6)',
+                        '--surface-right': 'rgba(253, 250, 240, 0.6)',
+                        '--btn-bg': '#d4a030',
+                        '--btn-hover': '#b8860b',
+                        '--side-link-bg': 'rgba(255, 255, 255, 0.72)',
+                    },
+                    dark: {
+                        '--primary-gradient': 'linear-gradient(135deg, #b8860b, #d4a030, #e8c868)',
+                        '--secondary-gradient': 'linear-gradient(135deg, #e8c868, #faf0d0)',
+                        '--text-color': '#faf0d0',
+                        '--dark-text-color': '#e8c868',
+                        '--footer-link-color': '#e8c868',
+                        '--footer-link-hover': '#faf0d0',
+                        '--button-text-color': '#ffffff',
+                        '--neo-bg': '#2a2518',
+                        '--neo-light': 'rgba(255, 255, 255, 0.06)',
+                        '--neo-dark': 'rgba(0, 0, 0, 0.50)',
+                        '--surface-main': 'rgba(42, 37, 24, 0.78)',
+                        '--surface-left': 'rgba(42, 37, 24, 0.7)',
+                        '--surface-right': 'rgba(42, 37, 24, 0.7)',
+                        '--btn-bg': '#b8860b',
+                        '--btn-hover': '#d4a030',
+                        '--side-link-bg': 'rgba(42, 37, 24, 0.6)',
+                    }
+                },
+                {
+                    name: 'slate',
+                    light: {
+                        '--primary-gradient': 'linear-gradient(135deg, #4a5568, #64748b, #94a3b8)',
+                        '--secondary-gradient': 'linear-gradient(135deg, #94a3b8, #e2e8f0)',
+                        '--text-color': '#334155',
+                        '--dark-text-color': '#334155',
+                        '--footer-link-color': '#64748b',
+                        '--footer-link-hover': '#4a5568',
+                        '--button-text-color': '#ffffff',
+                        '--neo-bg': '#f1f5f9',
+                        '--neo-light': 'rgba(255, 255, 255, 0.82)',
+                        '--neo-dark': 'rgba(51, 65, 85, 0.12)',
+                        '--surface-main': 'rgba(241, 245, 249, 0.72)',
+                        '--surface-left': 'rgba(241, 245, 249, 0.6)',
+                        '--surface-right': 'rgba(241, 245, 249, 0.6)',
+                        '--btn-bg': '#64748b',
+                        '--btn-hover': '#4a5568',
+                        '--side-link-bg': 'rgba(255, 255, 255, 0.72)',
+                    },
+                    dark: {
+                        '--primary-gradient': 'linear-gradient(135deg, #4a5568, #64748b, #94a3b8)',
+                        '--secondary-gradient': 'linear-gradient(135deg, #94a3b8, #e2e8f0)',
+                        '--text-color': '#e2e8f0',
+                        '--dark-text-color': '#94a3b8',
+                        '--footer-link-color': '#94a3b8',
+                        '--footer-link-hover': '#e2e8f0',
+                        '--button-text-color': '#ffffff',
+                        '--neo-bg': '#1e2028',
+                        '--neo-light': 'rgba(255, 255, 255, 0.06)',
+                        '--neo-dark': 'rgba(0, 0, 0, 0.50)',
+                        '--surface-main': 'rgba(30, 32, 40, 0.78)',
+                        '--surface-left': 'rgba(30, 32, 40, 0.7)',
+                        '--surface-right': 'rgba(30, 32, 40, 0.7)',
+                        '--btn-bg': '#4a5568',
+                        '--btn-hover': '#64748b',
+                        '--side-link-bg': 'rgba(30, 32, 40, 0.6)',
+                    }
+                }
+            ];
+
+            const SCHEME_NAMES = COLOR_SCHEMES.map(s => s.name);
+
+            function applyColorScheme(schemeName, isDark) {
+                const scheme = COLOR_SCHEMES.find(s => s.name === schemeName) || COLOR_SCHEMES[0];
+                const palette = isDark ? scheme.dark : scheme.light;
+                const body = document.body;
+
+                // Apply all CSS variables
+                for (const [prop, val] of Object.entries(palette)) {
+                    if (prop === '--btn-bg' || prop === '--btn-hover' || prop === '--side-link-bg') continue;
+                    body.style.setProperty(prop, val);
+                }
+
+                // Apply button colors via dynamic style
+                let dynStyle = document.getElementById('dynamic-scheme-style');
+                if (!dynStyle) {
+                    dynStyle = document.createElement('style');
+                    dynStyle.id = 'dynamic-scheme-style';
+                    document.head.appendChild(dynStyle);
+                }
+                dynStyle.textContent = `
+                    .link-button { background: ${palette['--btn-bg']} !important; color: ${palette['--button-text-color']} !important; }
+                    .link-button:hover, .link-button:focus { background: ${palette['--btn-hover']} !important; }
+                    .side-link { background: ${palette['--side-link-bg']} !important; color: ${palette['--dark-text-color']} !important; }
+                    .side-link:hover, .side-link:focus { background: ${palette['--btn-hover']} !important; color: ${palette['--button-text-color']} !important; }
+                `;
+            }
 
             function applyThemeVisuals(theme) {
                 const isDark = theme === 'dark';
                 rootEl.classList.toggle('dark-mode', isDark);
                 document.body.classList.toggle('dark-mode', isDark);
                 rootEl.style.colorScheme = isDark ? 'dark' : 'light';
-                if (themeToggleButton) themeToggleButton.setAttribute('aria-label', isDark ? '切換白天模式' : '切換暗黑模式');
+                if (themeToggleButton) themeToggleButton.setAttribute('aria-label', '點擊切換色系');
+
+                // Re-apply current color scheme with new dark/light mode
+                let currentScheme;
+                try { currentScheme = localStorage.getItem(SCHEME_STORAGE_KEY); } catch(_) {}
+                if (!currentScheme || !SCHEME_NAMES.includes(currentScheme)) currentScheme = SCHEME_NAMES[0];
+                applyColorScheme(currentScheme, isDark);
             }
 
             function getSystemThemePreference() {
@@ -2034,10 +2351,27 @@
             }
 
             function toggleTheme() {
+                // Cycle color scheme, not just dark/light
+                let currentScheme;
+                try { currentScheme = localStorage.getItem(SCHEME_STORAGE_KEY); } catch(_) {}
+                if (!currentScheme || !SCHEME_NAMES.includes(currentScheme)) currentScheme = SCHEME_NAMES[0];
+
+                const idx = SCHEME_NAMES.indexOf(currentScheme);
+                const nextIdx = (idx + 1) % SCHEME_NAMES.length;
+                const nextScheme = SCHEME_NAMES[nextIdx];
+
+                // If cycling back to first scheme, also toggle dark/light
+                if (nextIdx === 0) {
+                    const isDark = rootEl.classList.contains('dark-mode') || document.body.classList.contains('dark-mode');
+                    const newTheme = isDark ? 'light' : 'dark';
+                    try { localStorage.setItem(THEME_STORAGE_KEY, newTheme); } catch(e) {}
+                    applyThemeVisuals(newTheme);
+                }
+
+                try { localStorage.setItem(SCHEME_STORAGE_KEY, nextScheme); } catch(e) {}
+
                 const isDark = rootEl.classList.contains('dark-mode') || document.body.classList.contains('dark-mode');
-                const newTheme = isDark ? 'light' : 'dark';
-                applyThemeVisuals(newTheme);
-                try { localStorage.setItem(THEME_STORAGE_KEY, newTheme); } catch (e) { console.error("Could not save theme preference:", e); }
+                applyColorScheme(nextScheme, isDark);
             }
 
             const unixValueEl = document.getElementById('unix-value');
@@ -2296,45 +2630,7 @@
                 setTimeout(triggerGlitch, 3000);
             }
 
-            // === 2. System Info Panel ===
-            const sysPanel = document.getElementById('system-info-panel');
-            if (sysPanel) {
-                const ua = navigator.userAgent;
-                let os = 'Unknown OS';
-                let browser = 'Unknown Browser';
 
-                // Detect OS
-                if (ua.includes('Win')) os = 'Windows';
-                else if (ua.includes('Mac')) os = 'macOS';
-                else if (ua.includes('Linux')) os = 'Linux';
-                else if (ua.includes('Android')) os = 'Android';
-                else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
-
-                // Detect Browser
-                if (ua.includes('Firefox/')) browser = 'Firefox';
-                else if (ua.includes('Edg/')) browser = 'Edge';
-                else if (ua.includes('Chrome/')) browser = 'Chrome';
-                else if (ua.includes('Safari/') && !ua.includes('Chrome')) browser = 'Safari';
-
-                let html = `
-                    <span class="sys-info-item"><span class="sys-label">OS:</span>${os}</span>
-                    <span class="sys-info-item"><span class="sys-label">Browser:</span>${browser}</span>
-                `;
-
-                // Battery API (if supported)
-                if (navigator.getBattery) {
-                    navigator.getBattery().then(battery => {
-                        const level = Math.round(battery.level * 100);
-                        const charging = battery.charging ? '⚡' : '';
-                        const batteryEl = document.createElement('span');
-                        batteryEl.className = 'sys-info-item';
-                        batteryEl.innerHTML = `<span class="sys-label">Battery:</span>${level}%${charging}`;
-                        sysPanel.appendChild(batteryEl);
-                    }).catch(() => { });
-                }
-
-                sysPanel.innerHTML = html;
-            }
 
             // === 3. Page Load Time ===
             const loadTimeEl = document.getElementById('load-time');
@@ -2377,7 +2673,7 @@
                 { label: 'AI 高考', href: 'https://gk.bdfz.net', aria: 'AI高考' },
                 { label: 'AI 默寫', href: 'https://mx.bdfz.net', aria: 'AI默寫' },
                 { label: '高考默寫', href: 'https://mf.bdfz.net', aria: '訪問高考詩文' },
-                { label: 'AI文言', href: 'https://wy.bdfz.net/', aria: 'AI文言' },
+                { label: 'AI 字詞', href: 'https://wy.bdfz.net/', aria: 'AI 字詞' },
                 { label: 'AI 論語', href: 'https://kz.bdfz.net', aria: 'AI論語' },
                 { label: 'AI 紅樓夢', href: 'https://hlm.bdfz.net', aria: 'AI紅樓夢' },
                 { label: 'AI 高中教材', href: 'https://sun.bdfz.net/', aria: '全教材' },
@@ -2396,7 +2692,7 @@
                 { label: 'bdfz.chat', href: 'https://home.bdfz.chat/', aria: 'bdfz.chat' },
                 { label: '樹洞', href: 'https://tree.bdfz.net/', aria: '樹洞' },
                 { label: 'Anon Hourly Chat', href: 'https://chat.bdfz.net/', aria: 'Anon Hourly Chat' },
-                { label: '試卷原圖', href: 'https://paper.bdfz.net/', aria: '試卷' },
+                { label: '教材PDF', href: 'https://jc.bdfz.net/', aria: '教材PDF' },
                 { label: '家長', href: 'https://h.bdfz.net/', aria: '家長' },
                 { label: 'OpenAI', href: 'https://openai.com/news/', aria: 'OpenAI' },
                 { label: 'Gemini', href: 'https://aistudio.google.com/prompts/new_chat', aria: 'Gemini' },
