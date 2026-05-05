@@ -316,8 +316,7 @@
             width: 100%;
             max-width: 1400px;
 
-            flex: 1 1 auto;
-            min-height: 0;
+            flex: 0 1 auto;
 
             display: grid;
             grid-template-columns:
@@ -1559,9 +1558,7 @@
             gap: 4px;
         }
 
-        .footer-stats .stat-icon {
-            font-size: 0.8rem;
-        }
+
 
         @media (prefers-reduced-motion: reduce) {
 
@@ -1581,7 +1578,7 @@
             }
         }
 
-        /* === mx.bdfz.net visual refresh === */
+        /* === Claude Monet Impressionist Visual Refresh === */
         :root {
             --primary-gradient-light: linear-gradient(135deg, #617d7b, #789594, #b8cca7);
             --secondary-gradient-light: linear-gradient(135deg, #b8cca7, #e8ede5);
@@ -1599,6 +1596,10 @@
             --surface-main-light: rgba(255, 255, 255, 0.68);
             --surface-left-light: rgba(255, 255, 255, 0.58);
             --surface-right-light: rgba(255, 255, 255, 0.58);
+            --monet-lily: #c5a3c2;
+            --monet-water: #7ea8be;
+            --monet-sky: #d4c9a8;
+            --monet-leaf: #8da67e;
         }
 
         html.dark-mode body,
@@ -1619,6 +1620,10 @@
             --surface-main: rgba(35, 39, 37, 0.78);
             --surface-left: rgba(35, 39, 37, 0.7);
             --surface-right: rgba(35, 39, 37, 0.7);
+            --monet-lily: #9b7d98;
+            --monet-water: #5c8498;
+            --monet-sky: #a89e82;
+            --monet-leaf: #6b8060;
         }
 
         body {
@@ -1634,12 +1639,33 @@
             opacity: 0;
         }
 
+        /* Monet: soft watercolor borders & dreamy shadows */
         .column,
         .countdown-item,
         .footer,
         .link-preview-card {
-            border: 1px solid rgba(150, 137, 126, 0.28);
-            box-shadow: 0 18px 60px rgba(93, 85, 81, 0.13);
+            border: 1px solid rgba(150, 137, 126, 0.22);
+            box-shadow:
+                0 8px 32px rgba(126, 168, 190, 0.10),
+                0 2px 12px rgba(197, 163, 194, 0.08);
+        }
+
+        /* Monet: painterly column tops — soft color washes */
+        .left-column {
+            border-top: 3px solid var(--monet-water);
+        }
+        .countdown-container {
+            border-top: 3px solid var(--monet-lily);
+        }
+        .right-column {
+            border-top: 3px solid var(--monet-leaf);
+        }
+
+        /* Monet: impressionist hover glow on columns */
+        .column:hover {
+            box-shadow:
+                0 12px 40px rgba(126, 168, 190, 0.16),
+                0 4px 16px rgba(197, 163, 194, 0.12);
         }
 
         .link-button {
@@ -1659,6 +1685,47 @@
             background: rgba(255, 255, 255, 0.72);
             color: var(--dark-text-color);
         }
+
+        /* Monet: countdown items with soft watercolor accents */
+        .countdown-item {
+            position: relative;
+        }
+        .countdown-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg,
+                var(--monet-water),
+                var(--monet-lily),
+                var(--monet-sky),
+                var(--monet-leaf));
+            border-radius: 15px 15px 0 0;
+            opacity: 0.5;
+        }
+
+        /* Monet: dreamy footer accent */
+        .footer {
+            border-top: 2px solid transparent;
+            border-image: linear-gradient(90deg,
+                var(--monet-leaf),
+                var(--monet-water),
+                var(--monet-lily)) 1;
+            border-image-slice: 1;
+        }
+
+        /* Monet: logo soft glow */
+        .theme-toggle-logo-button:hover .logo-img {
+            box-shadow: 0 0 20px rgba(197, 163, 194, 0.35),
+                        0 0 40px rgba(126, 168, 190, 0.15);
+        }
+
+        /* Monet: progress bars with impressionist palette */
+        .progress-day { --hud-accent: var(--monet-water); }
+        .progress-week { --hud-accent: var(--monet-sky); }
+        .progress-year { --hud-accent: var(--monet-lily); }
 
         @media (max-width: 768px) {
             body {
@@ -1757,8 +1824,8 @@
 
                 <!-- Footer Stats: Load Time & Uptime -->
                 <div class="footer-stats">
-                    <span title="Page Load Time"><span class="stat-icon">⚡</span><span id="load-time">--ms</span></span>
-                    <span title="Session Duration"><span class="stat-icon">⏱</span><span id="uptime">0s</span></span>
+                    <span title="Page Load Time">⚡ <span id="load-time">--ms</span></span>
+                    <span title="Session Duration">⏱ <span id="uptime">0s</span></span>
                 </div>
             </footer>
 
@@ -2712,7 +2779,7 @@
                 const leftList = document.getElementById('left-link-list');
                 const rightList = document.getElementById('right-link-list');
                 if (!leftList || !rightList) return;
-                const pivot = Math.ceil(portalLinks.length / 2);
+                const pivot = Math.floor(portalLinks.length / 2);
                 const buildLinksHtml = (items) => items.map((item) => `
                     <a href="${item.href}" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="${item.aria}">${item.label}</a>
                 `).join('');
