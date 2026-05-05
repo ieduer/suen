@@ -275,10 +275,6 @@
             background: var(--background-gradient);
             color: var(--text-color);
 
-            min-height: 100vh;
-            min-height: 100svh;
-            min-height: 100dvh;
-
             /* ✅ 安全区适配（iOS 刘海/底部手势条） */
             padding-top: calc(16px + env(safe-area-inset-top));
             padding-right: calc(16px + env(safe-area-inset-right));
@@ -1535,30 +1531,6 @@
             color: var(--text-color);
         }
 
-        /* === Uptime & Load Time === */
-        .footer-stats {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 8px;
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-            font-size: 0.7rem;
-            color: var(--dark-text-color);
-            opacity: 0.8;
-        }
-
-        html.dark-mode .footer-stats,
-        body.dark-mode .footer-stats {
-            color: var(--text-color);
-        }
-
-        .footer-stats span {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-
 
         @media (prefers-reduced-motion: reduce) {
 
@@ -1822,11 +1794,7 @@
                     <p id="footer-org-country"></p>
                 </div>
 
-                <!-- Footer Stats: Load Time & Uptime -->
-                <div class="footer-stats">
-                    <span title="Page Load Time">⚡ <span id="load-time">--ms</span></span>
-                    <span title="Session Duration">⏱ <span id="uptime">0s</span></span>
-                </div>
+
             </footer>
 
             <!-- JSON Modal -->
@@ -2699,41 +2667,7 @@
 
 
 
-            // === 3. Page Load Time ===
-            const loadTimeEl = document.getElementById('load-time');
-            if (loadTimeEl) {
-                window.addEventListener('load', () => {
-                    setTimeout(() => {
-                        const perf = performance.getEntriesByType('navigation')[0];
-                        if (perf) {
-                            const loadTime = Math.round(perf.loadEventEnd - perf.startTime);
-                            loadTimeEl.textContent = `${loadTime}ms`;
-                        } else {
-                            loadTimeEl.textContent = `${Math.round(performance.now())}ms`;
-                        }
-                    }, 0);
-                });
-            }
 
-            // === 4. Uptime Timer ===
-            const uptimeEl = document.getElementById('uptime');
-            const sessionStart = Date.now();
-            function updateUptime() {
-                if (!uptimeEl) return;
-                const elapsed = Math.floor((Date.now() - sessionStart) / 1000);
-                const h = Math.floor(elapsed / 3600);
-                const m = Math.floor((elapsed % 3600) / 60);
-                const s = elapsed % 60;
-                if (h > 0) {
-                    uptimeEl.textContent = `${h}h ${m}m ${s}s`;
-                } else if (m > 0) {
-                    uptimeEl.textContent = `${m}m ${s}s`;
-                } else {
-                    uptimeEl.textContent = `${s}s`;
-                }
-            }
-            setInterval(updateUptime, 1000);
-            updateUptime();
 
             // === 5. Portal Link Source ===
             const portalLinks = [
