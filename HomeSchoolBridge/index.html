@@ -1,639 +1,596 @@
 <!DOCTYPE html>
-<html lang="zh-CN"> <!-- More specific language code -->
+<html lang="zh-CN">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="北大附中 孙玉磊 導師 語文 - 家校沟通与学习建议"> <!-- Enhanced description -->
-    <!-- <meta name="keywords" content="北大附中, 孙玉磊, 導師，語文, 成绩, 职业"> Keywords meta tag is largely ignored -->
-    <meta name="robots" content="index, follow"> <!-- Standard robots meta -->
-
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="家校谈 - 北大附中 孙玉磊">
+    <meta name="description" content="北大附中家校谈：成绩、日常、职业规划与语文学习建议">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="家校谈 - 北大附中">
     <meta property="og:description" content="关于成绩、日常、职业规划及学习资源的相关探讨">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="https://img.bdfz.net/20250503004.webp"> <!-- OG image -->
-
-    <!-- Favicon / Icons -->
-    <link rel="icon" href="https://img.bdfz.net/20250503004.webp" type="image/jpeg"> <!-- Provided icon -->
-    <!-- Recommended: Add standard favicons in root directory -->
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-
+    <meta property="og:url" content="https://h.bdfz.net/">
+    <meta property="og:image" content="https://h.bdfz.net/background.jpeg">
+    <link rel="canonical" href="https://h.bdfz.net/">
+    <link rel="icon" href="https://img.bdfz.net/20250503004.webp" type="image/jpeg">
     <title>家校谈</title>
-
-
     <style>
-        /* === Font Loading === */
-        /* Removed incorrect @font-face for FangZhengKaiTi */
-
         @font-face {
-            font-family: 'HuWenMingChaoTi';
-            /* IMPORTANT: Verify this path ('../fonts/') is correct relative to THIS HTML file's location. */
-            src: url('../fonts/HuWenMingChaoTi.woff2') format('woff2');
-            font-weight: normal;
+            font-family: "HuWenMingChao";
+            src:
+                url("https://mx.bdfz.net/data/fonts/HuWenMingChaoTi.woff2") format("woff2"),
+                url("https://mx.bdfz.net/data/fonts/HuWenMingChaoTi.woff") format("woff");
             font-style: normal;
+            font-weight: 400;
             font-display: swap;
-            /* Good for performance */
         }
 
-        /* === End Font Loading === */
-
-        /* Global Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* ── Monet Palette ── */
+        :root {
+            --monet-sky: #d4dfe8;
+            --monet-water: #8aacc8;
+            --monet-lily: #c9a7c7;
+            --monet-leaf: #8db580;
+            --monet-gold: #d4b87a;
+            --monet-rose: #d4a09a;
+            --monet-cream: #f5f0e8;
+            --monet-linen: #eee8dc;
+            --monet-stone: #b8b0a2;
+            --monet-ink: #4a4640;
+            --monet-ink-soft: #6e665c;
+            --monet-ink-faint: #8a8278;
+            --monet-dawn: rgba(212, 223, 232, 0.35);
+            --monet-mist: rgba(138, 172, 200, 0.18);
+            --monet-veil: rgba(245, 240, 232, 0.82);
+            --monet-glass: rgba(245, 240, 232, 0.58);
+            --radius: 14px;
+            --shadow-soft: 0 8px 40px rgba(74, 70, 64, 0.08), 0 2px 12px rgba(74, 70, 64, 0.05);
+            --shadow-lift: 0 12px 48px rgba(74, 70, 64, 0.12), 0 4px 16px rgba(74, 70, 64, 0.06);
         }
 
-        /* Body Styling */
+        * { box-sizing: border-box; }
+
+        html {
+            min-height: 100%;
+            background: var(--monet-cream);
+            color: var(--monet-ink);
+            font-family: "HuWenMingChao", "Noto Serif SC", "Songti SC", serif;
+            scroll-behavior: smooth;
+        }
+
         body {
-            /* Updated font stack */
-            font-family: 'HuWenMingChaoTi', serif;
-            background-color: #e0f2f1;
-            /* Light teal background */
-            color: #004d40;
-            /* Dark teal text */
-            line-height: 1.8;
-            text-align: center;
-            font-size: 20px;
-            /* Base font size (larger for readability) */
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            /* Ensure footer stays at bottom */
+            margin: 0;
+            line-height: 1.85;
+            background:
+                radial-gradient(ellipse 120% 80% at 20% 10%, rgba(201, 167, 199, 0.14) 0%, transparent 50%),
+                radial-gradient(ellipse 100% 70% at 80% 30%, rgba(138, 172, 200, 0.12) 0%, transparent 50%),
+                linear-gradient(170deg, rgba(245, 240, 232, 0.88) 0%, rgba(238, 232, 220, 0.78) 40%, rgba(232, 224, 212, 0.72) 100%),
+                url("./monet-bg.jpeg");
+            background-attachment: fixed;
+            background-position: center center;
+            background-size: cover;
         }
 
-        /* Headings */
-        h1,
-        h2 {
-            /* Updated font stack */
-            font-family: 'HuWenMingChaoTi', 'Noto Serif SC', serif;
+        /* ── Impressionist canvas texture ── */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            opacity: 0.5;
+            z-index: 0;
         }
+
+        /* ── Floating light spots (Monet's dappled sunlight) ── */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(circle 180px at 15% 25%, rgba(212, 184, 122, 0.10) 0%, transparent 100%),
+                radial-gradient(circle 220px at 75% 15%, rgba(138, 172, 200, 0.08) 0%, transparent 100%),
+                radial-gradient(circle 160px at 60% 80%, rgba(201, 167, 199, 0.07) 0%, transparent 100%),
+                radial-gradient(circle 140px at 30% 70%, rgba(141, 181, 128, 0.06) 0%, transparent 100%);
+            z-index: 0;
+            animation: shimmer 12s ease-in-out infinite alternate;
+        }
+
+        @keyframes shimmer {
+            0% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        a {
+            color: var(--monet-water);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(138, 172, 200, 0.30);
+            transition: color 220ms ease, border-color 220ms ease, background 220ms ease;
+        }
+
+        a:hover {
+            color: var(--monet-ink);
+            border-bottom-color: var(--monet-ink-soft);
+        }
+
+        /* ── Layout ── */
+        .page {
+            position: relative;
+            z-index: 1;
+            width: min(1100px, calc(100% - 40px));
+            margin: 0 auto;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 28px 0 14px;
+            color: var(--monet-ink-faint);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 11px;
+            letter-spacing: 0.20em;
+            text-transform: uppercase;
+        }
+
+        /* ── Hero ── */
+        .hero {
+            display: block;
+            padding: 36px 0 40px;
+        }
+
+        .hero-kicker,
+        .section-kicker {
+            margin: 0;
+            color: var(--monet-water);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 11px;
+            letter-spacing: 0.20em;
+            text-transform: uppercase;
+        }
+
+        h1, h2, h3, p { margin-top: 0; }
 
         h1 {
-            font-size: 4em;
-            color: #00695c;
-            /* Medium teal */
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-            margin: 0;
-            /* Reset margin if needed */
-        }
-
-        h2 {
-            font-size: 2.4em;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            display: inline-block;
-            /* Prevent border spanning full width */
-            border-bottom-width: 2px;
-            border-bottom-style: solid;
-        }
-
-        /* Specific Section Heading Colors & Borders */
-        #section1 h2 {
-            color: #d32f2f;
-            border-bottom-color: #d32f2f;
-        }
-
-        /* Red */
-        #section2 h2 {
-            color: #1976d2;
-            border-bottom-color: #1976d2;
-        }
-
-        /* Blue */
-        #section3 h2 {
-            color: #388e3c;
-            border-bottom-color: #388e3c;
-        }
-
-        /* Green */
-        #section4 h2 {
-            color: #ffa000;
-            border-bottom-color: #ffa000;
-        }
-
-        /* Amber */
-        #section5 h2 {
-            color: #7b1fa2;
-            border-bottom-color: #7b1fa2;
-        }
-
-        /* Purple */
-
-        /* Paragraph Styling */
-        p {
-            margin-bottom: 20px;
-            font-size: 1.25em;
-            font-weight: normal;
-        }
-
-        /* Highlighted Text */
-        .highlight {
-            font-size: 1.4em;
-            font-weight: bold;
-            color: #00695c;
-            /* Match H1 color */
-        }
-
-        /* Main Container */
-        .container {
-            flex: 1;
-            /* Allows footer to be pushed down */
+            margin: 14px 0 18px;
+            color: var(--monet-ink);
+            font-size: clamp(60px, 13vw, 148px);
+            font-weight: 400;
+            line-height: 0.96;
             display: flex;
-            flex-direction: column;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            gap: 30px;
-            /* Space between header/sections/footer */
+            align-items: flex-end;
+            gap: 20px;
+            /* Monet-style soft text shadow */
+            text-shadow: 0 2px 20px rgba(138, 172, 200, 0.15);
         }
 
-        /* Section Styling */
+        .hero-copy {
+            max-width: 680px;
+            margin: 0;
+            color: var(--monet-ink-soft);
+            font-size: clamp(21px, 2.8vw, 32px);
+            line-height: 1.5;
+        }
+
+        .hero-actions,
+        .link-row,
+        .score-links,
+        .site-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .hero-actions { margin-top: 32px; }
+
+        /* ── Buttons ── */
+        .button-link {
+            min-height: 46px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(138, 172, 200, 0.25);
+            border-radius: var(--radius);
+            padding: 10px 18px;
+            background: var(--monet-veil);
+            color: var(--monet-ink);
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(12px);
+            transition: all 250ms ease;
+        }
+
+        .button-link:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lift);
+            background: rgba(245, 240, 232, 0.92);
+        }
+
+        .button-link.primary {
+            background: linear-gradient(135deg, var(--monet-water), #7b9db8);
+            border-color: transparent;
+            color: var(--monet-cream);
+            box-shadow: 0 4px 20px rgba(138, 172, 200, 0.25);
+        }
+
+        .button-link.primary:hover {
+            box-shadow: 0 6px 28px rgba(138, 172, 200, 0.35);
+        }
+
+        /* ── QR Code ── */
+        .qr {
+            flex-shrink: 0;
+            width: clamp(50px, 7.5vw, 84px);
+            margin: 0;
+            padding: 6px;
+            border: 1px solid rgba(138, 172, 200, 0.20);
+            border-radius: 10px;
+            background: rgba(245, 240, 232, 0.90);
+            box-shadow: 0 4px 18px rgba(74, 70, 64, 0.08);
+            margin-bottom: 6px;
+        }
+
+        .qr img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        /* ── Overview bar ── */
+        .overview {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            border-radius: var(--radius);
+            background: var(--monet-glass);
+            backdrop-filter: blur(16px);
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(138, 172, 200, 0.15);
+            overflow: hidden;
+        }
+
+        .overview div {
+            min-height: 128px;
+            padding: 24px;
+            border-right: 1px solid rgba(138, 172, 200, 0.12);
+            transition: background 300ms ease;
+        }
+
+        .overview div:hover {
+            background: rgba(138, 172, 200, 0.06);
+        }
+
+        .overview div:last-child { border-right: 0; }
+
+        .overview dt {
+            color: var(--monet-ink-faint);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 11px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        .overview dd {
+            margin: 16px 0 0;
+            color: var(--monet-ink);
+            font-size: 24px;
+            line-height: 1.5;
+        }
+
+        /* ── Sections ── */
+        .sections {
+            display: grid;
+            gap: 16px;
+            padding: 40px 0 28px;
+        }
+
         section {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(138, 172, 200, 0.15);
+            border-radius: var(--radius);
+            background:
+                linear-gradient(160deg, rgba(245, 240, 232, 0.88) 0%, rgba(238, 232, 220, 0.72) 100%);
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(18px);
+            padding: clamp(22px, 4vw, 40px);
+            transition: transform 350ms ease, box-shadow 350ms ease;
+            position: relative;
+            overflow: hidden;
         }
 
         section:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+            box-shadow: var(--shadow-lift);
         }
 
-        /* Link Container Styling (Section 4 & 5) */
-        .link-container {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 30px 0;
-            flex-wrap: wrap;
-            /* Allow buttons to wrap */
+        /* Monet color accents per section */
+        section:nth-child(1)::before,
+        section:nth-child(2)::before,
+        section:nth-child(3)::before,
+        section:nth-child(4)::before,
+        section:nth-child(5)::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: var(--radius) var(--radius) 0 0;
         }
 
-        /* Score Links Styling */
-        .score-links {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 16px;
-            margin: 20px 0 10px;
+        section:nth-child(1)::before {
+            background: linear-gradient(90deg, var(--monet-water), var(--monet-sky));
         }
 
-        .score-links a {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8px 16px;
-            border-radius: 999px;
-            border: 1px solid #00695c;
-            background-color: #ffffff;
-            text-decoration: none;
-            font-size: 0.95em;
-            white-space: nowrap;
+        section:nth-child(2)::before {
+            background: linear-gradient(90deg, var(--monet-lily), var(--monet-rose));
         }
 
-        .score-links a:hover {
-            background-color: #00695c;
-            color: #e0f2f1;
+        section:nth-child(3)::before {
+            background: linear-gradient(90deg, var(--monet-leaf), var(--monet-water));
         }
 
-        /* General Link Button Styling */
-        .link-button {
-            display: inline-flex;
-            /* Good for aligning text */
-            align-items: center;
-            justify-content: center;
-            padding: 10px 20px;
-            /* Base padding */
-            text-decoration: none;
-            border-radius: 8px;
-            /* Slightly more rounded */
-            transition: all 0.3s ease;
-            font-size: 1.1em;
-            font-weight: bold;
-            min-width: 120px;
-            text-align: center;
-            white-space: nowrap;
-            user-select: none;
-            /* Prevent text selection */
-            cursor: pointer;
-            border: 2px solid transparent;
-            /* Base border */
+        section:nth-child(4)::before {
+            background: linear-gradient(90deg, var(--monet-gold), var(--monet-rose));
         }
 
-        /* Section 4 Specific Button Styles */
-        #section4 .link-button {
-            background-color: #e0f2f1;
-            color: #004d40;
-            padding: 15px 30px;
-            border-color: #ffa000;
-            /* Use border-color */
-            font-size: 1.2em;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        section:nth-child(5)::before {
+            background: linear-gradient(90deg, var(--monet-rose), var(--monet-lily));
         }
 
-        #section4 .link-button:hover {
-            background-color: #ffa000;
-            border-color: #ffa000;
-            color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        section h2 {
+            margin: 10px 0 16px;
+            color: var(--monet-ink);
+            font-size: clamp(28px, 3.8vw, 44px);
+            font-weight: 400;
+            line-height: 1.2;
         }
 
-        /* Section 5 Specific Button Styles */
-        #section5 .link-container {
-            gap: 20px;
-            /* Smaller gap for these buttons */
+        section p {
+            margin-bottom: 14px;
+            font-size: clamp(17px, 1.9vw, 21px);
+            color: var(--monet-ink-soft);
         }
 
-        #section5 .link-button {
-            background-color: #e0f2f1;
-            color: #004d40;
-            padding: 10px 30px;
-            border-color: #004d40;
-            /* Use border-color */
-            font-size: 1.1em;
-            font-weight: normal;
-            /* Normal weight */
+        strong, b {
+            color: var(--monet-ink);
+            font-weight: 400;
         }
 
-        #section5 .link-button:hover {
-            background-color: #004d40;
-            border-color: #004d40;
-            color: #e0f2f1;
+        /* ── Link pills ── */
+        .score-links { margin: 16px 0; }
+
+        .score-links a,
+        .site-links a,
+        .link-row a {
+            border: 1px solid rgba(138, 172, 200, 0.20);
+            border-radius: 10px;
+            padding: 9px 14px;
+            background: var(--monet-glass);
+            backdrop-filter: blur(8px);
+            transition: all 220ms ease;
         }
 
-        /* General Link Styling */
-        a {
-            color: #00695c;
-            /* Match H1 color */
-            text-decoration: underline;
-            transition: color 0.3s ease;
+        .score-links a:hover,
+        .site-links a:hover,
+        .link-row a:hover {
+            background: rgba(138, 172, 200, 0.12);
+            border-color: rgba(138, 172, 200, 0.35);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(138, 172, 200, 0.12);
         }
 
-        a:hover {
-            color: #004d40;
-            /* Darker teal on hover */
+        /* ── Image block ── */
+        .image-block {
+            margin-top: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(138, 172, 200, 0.15);
+            border-radius: var(--radius);
+            background: var(--monet-glass);
+            box-shadow: var(--shadow-soft);
         }
 
-        /* Ensure buttons don't inherit underline */
-        .link-button,
-        .link-button:hover {
-            text-decoration: none;
-        }
-
-        /* Header Layout */
-        header {
-            margin-bottom: 40px;
-            padding-top: 20px;
-            /* Add some space above */
-        }
-
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-            /* Allow wrapping if needed */
-        }
-
-        .qr-code {
-            max-width: 120px;
-            padding: 8px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .qr-code img {
+        .image-block img {
+            display: block;
             width: 100%;
             height: auto;
-            display: block;
-            /* Remove extra space below image */
         }
 
-        .qr-code:hover {
-            transform: scale(1.05);
-        }
-
-        /* Footer Styling - Using footer tag */
+        /* ── Footer ── */
         footer {
-            /* Changed from .footer */
-            margin-top: auto;
-            /* Pushes footer to bottom if content is short */
-            padding: 20px 0;
-            border-top: 1px solid #b2dfdb;
-            /* Lighter teal border */
-            font-size: 1em;
-            color: #00695c;
-            /* Match H1/link color */
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 24px 0 36px;
+            border-top: 1px solid rgba(138, 172, 200, 0.15);
+            color: var(--monet-ink-faint);
+            font-size: 14px;
         }
 
-        footer p {
-            margin-bottom: 0;
-            /* Remove default p margin in footer */
-        }
-
-        footer a {
-            font-weight: bold;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
+        /* ── Responsive ── */
+        @media (max-width: 760px) {
             body {
-                font-size: 17px;
-                /* Slightly smaller base font, still clear */
+                background-attachment: scroll;
+                background:
+                    linear-gradient(180deg, rgba(245, 240, 232, 0.93) 0%, rgba(238, 232, 220, 0.86) 50%, rgba(232, 224, 212, 0.80) 100%),
+                    url("./monet-bg.jpeg");
+                background-position: center top;
+                background-size: cover;
             }
 
-            h1 {
-                font-size: 3em;
-                /* Adjusted H1 size */
+            .page { width: min(100% - 24px, 1100px); }
+
+            .topbar {
+                padding-top: 16px;
+                font-size: 10px;
+                letter-spacing: 0.14em;
             }
 
-            h2 {
-                font-size: 2em;
-                /* Adjusted H2 size */
+            .hero { padding: 20px 0 24px; }
+
+            h1 { gap: 12px; }
+
+            .qr {
+                width: 46px;
+                padding: 4px;
+                margin-bottom: 4px;
             }
 
-            p {
-                font-size: 1.15em;
+            .overview { grid-template-columns: 1fr; border-radius: var(--radius); }
+
+            .overview div {
+                border-right: 0;
+                border-bottom: 1px solid rgba(138, 172, 200, 0.12);
+                min-height: auto;
+                padding: 18px 20px;
             }
 
-            .highlight {
-                font-size: 1.25em;
-            }
+            .overview div:last-child { border-bottom: 0; }
 
-            .container {
-                padding: 15px;
-                gap: 20px;
-                /* Reduced gap */
-            }
-
-            section {
-                padding: 20px;
-                border-radius: 10px;
-                /* Slightly smaller radius */
-            }
-
-            header {
-                margin-bottom: 20px;
-            }
-
-            .header-content {
+            .score-links,
+            .site-links,
+            .link-row,
+            .hero-actions {
                 flex-direction: column;
-                gap: 15px;
             }
 
-            .qr-code {
-                max-width: 100px;
+            .button-link,
+            .score-links a,
+            .site-links a,
+            .link-row a {
+                width: 100%;
             }
 
-            .link-container {
-                gap: 15px;
-                margin: 20px 0;
-            }
-
-            #section4 .link-container {
-                flex-direction: column;
-                align-items: center;
-                /* Center buttons when stacked */
-            }
-
-            .link-button {
-                width: 90%;
-                max-width: 300px;
-                /* Limit max width */
-                padding: 12px 20px;
-                font-size: 1em;
-            }
-
-            #section4 .link-button {
-                font-size: 1.1em;
-                /* Keep section 4 buttons slightly larger */
-            }
-
-            .score-links a {
-                font-size: 1em;
-                padding: 10px 14px;
-            }
-
-            .score-links {
-                gap: 10px;
-            }
-
-            .score-links {
-                margin: 15px 0 8px;
-            }
-
-            .score-links a {
-                min-width: 120px;
-            }
-
-            .score-links {
-                flex-direction: column;
-                align-items: center;
-            }
+            footer { flex-direction: column; }
         }
 
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 2.2em;
-            }
-
-            h2 {
-                font-size: 1.6em;
-            }
-
-            p {
-                font-size: 1em;
-            }
-
-            .link-button {
-                width: 95%;
-                max-width: none;
-                /* Remove max-width on very small screens */
-            }
-        }
-
-        /* Print Styles */
         @media print {
-            body {
-                background-color: white;
-                color: black;
-                font-size: 12pt;
-                /* Set base print size */
-                line-height: 1.4;
-            }
+            body { background: white; color: black; }
 
-            header,
-            footer,
-            .qr-code {
+            body::before,
+            body::after,
+            .topbar,
+            .qr,
+            .hero-actions,
+            footer {
                 display: none;
-                /* Hide header, footer, QR code when printing */
             }
 
-            .container {
-                max-width: 100%;
-                padding: 0;
-                gap: 15px;
-            }
+            .hero { min-height: auto; padding: 0 0 12px; }
 
             section {
-                box-shadow: none;
-                border: 1px solid #ccc;
-                /* Simple border for print */
-                border-radius: 0;
-                padding: 15px;
                 break-inside: avoid;
-                /* Try to prevent sections breaking across pages */
-                margin-bottom: 15px;
+                box-shadow: none;
+                border-color: #aaa;
+                background: white;
             }
-
-            h1,
-            h2 {
-                text-shadow: none;
-                color: black;
-            }
-
-            h2 {
-                border-bottom: 1px solid #000;
-                font-size: 1.8em;
-            }
-
-            p {
-                font-size: 1.1em;
-                margin-bottom: 10px;
-            }
-
-            .highlight {
-                color: black;
-                font-weight: bold;
-            }
-
-            a {
-                color: black;
-                text-decoration: underline;
-            }
-
-            .link-container {
-                display: none;
-            }
-
-            /* Hide buttons in print */
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <header>
-            <div class="header-content">
-                <h1>家校谈</h1>
-                <div class="qr-code">
-                    <!-- Added alt text -->
-                    <img src="https://img.bdfz.net/20250430001.webp" alt="QR Code for related content" width="400"
-                        height="400" />
-                </div>
-            </div>
+    <div class="page">
+        <header class="hero">
+            <p class="hero-kicker">home school bridge</p>
+            <h1>家校谈<figure class="qr" aria-label="相关内容二维码"><img src="https://img.bdfz.net/20250430001.webp" alt="相关内容二维码" width="600" height="600"></figure></h1>
+            <p class="hero-copy">成绩、方向、日常⋯⋯</p>
         </header>
 
-        <section id="section1">
-            <h2>1. 成绩</h2>
-            <!-- Added rel attribute -->
-            <p>排位：究诘数字背后的真实意义。</p>
-            <p>意义：真真不大。本班/标准分/海淀/北京。排名的真实意义，只是昨日我与今日我。</p>
-            <p> 🔻 </p>
-            <div class="score-links">
-                <a href="https://www.bjeea.cn/uploads/soft/250625/172-2506250Q456.pdf" target="_blank"
-                    rel="noopener noreferrer">北京市一分档2025</a>
-                <a href="https://www.bjeea.cn/html/gkgz/fujian/2024/0625/85432.html" target="_blank"
-                    rel="noopener noreferrer">北京市一分档2024</a>
+        <dl class="overview">
+            <div>
+                <dt>成绩</dt>
+                <dd>换算排名数字为排位，从位置看方向。</dd>
             </div>
-            <div class="score-links">
-                <a href="https://www.bjeea.cn/uploads/soft/250720/178-250H0201058.pdf" target="_blank"
-                    rel="noopener noreferrer">北京市2025年高招本科普通批录取投档线</a>
-                <a href="https://www.bjeea.cn/html/gkgz/tzgg/2024/0720/85632.html" target="_blank"
-                    rel="noopener noreferrer">北京市2024年高招本科普通批录取投档线</a>
+            <div>
+                <dt>方向</dt>
+                <dd>以退为进，不做什么，不上哪所学校。</dd>
             </div>
-            <p><b>如果一直不知道自己想去哪儿/要去哪儿/能去哪儿，一分档的意义是什么？</b></p>
-            <p><b>把成绩輸入 | <a href="https://750.bdfz.net" target="_blank">AI报考</a> |，看正在哪里，又想去哪里。</b></p>
-        </section>
-
-        <section id="section2">
-            <h2>2. 日常</h2>
-            <p>不及：有些事只能家人说，有些事最好师者说。情绪、感情、张弛度。</p>
-            <p>平衡：关心成绩更关心情绪，从考生到学生到人生，不同性格不同谈法。</p>
-            <p>有过：关心具体学科实不必，过犹不及。有问题孩子找学科教师，听结果分析。看方向不抢方向盘。</p>
-            <p> ❇️ </p>
-            <p>元培vs行知？</p>
-            <p>承认差距，寻求可能。如果小学四年级水准可以在高二逆袭，什么是真不可能？</p>
-            <p>关于手机：不用行不行？那家长在怎么用手机？老师在怎么用？孩子/学生……</p>
-        </section>
-
-        <section id="section3">
-            <h2>3. 进退</h2>
-            <p>好高中好大学就好工作之路，不再通畅。有考研规划者，大学其实不再极端重要，莫焦虑。</p>
-            <p>AI海啸之下，万物基于AI。</p>
-            <p>正确的给压力姿势，是选校和职业。</p>
-            <p> 🔹 </p>
-            <p>还没想？还没想清？</p>
-            <p>没有方向的动力，可以走多远？</p>
-            <p>所以，以退为进，要做的职业？要学的专业？要去打大学？要考的分数？</p>
-            <p>去看看那所学校，先。</p>
-        </section>
-
-        <section id="section4">
-            <h2>4. 语文</h2>
-
-            <div class="link-container">
-                <a href="https://bdfz.net/posts/rgk/" class="link-button" target="_blank"
-                    rel="noopener noreferrer">真的分数</a>
-                <a href="https://bdfz.net/posts/sc/" class="link-button" target="_blank"
-                    rel="noopener noreferrer">诗词指北</a>
-                <a href="https://bdfz.net/posts/ten/" class="link-button" target="_blank"
-                    rel="noopener noreferrer">幽微写作</a>
-                <a href="https://bdfz.net/posts/fx/" class="link-button" target="_blank"
-                    rel="noopener noreferrer">考前复习</a>
+            <div>
+                <dt>日常</dt>
+                <dd>用 AI 关心成绩，人类关心情绪、节奏和边界。</dd>
             </div>
+        </dl>
 
-            <div style="margin-top: 16px;">
-                <img src="https://img.bdfz.net/20251118001.webp" alt="AI" width="3680" height="2280"
-                    style="max-width: 100%; height: auto; border-radius: 8px;" />
-            </div>
-        </section>
+        <main class="sections">
+            <section id="section1">
+                <p class="section-kicker">01 / score</p>
+                <h2>成绩</h2>
+                <p>排位：借力 AI 究诘数字背后的真实意义。</p>
+                <p>意义：标准分、北京排名的真实意义，昨日我与今日我，需要考到的学校和分数。</p>
+                <div class="score-links">
+                    <a href="https://www.bjeea.cn/uploads/soft/250625/172-2506250Q456.pdf" target="_blank" rel="noopener noreferrer">北京市一分档 2025</a>
+                    <a href="https://www.bjeea.cn/html/gkgz/fujian/2024/0625/85432.html" target="_blank" rel="noopener noreferrer">北京市一分档 2024</a>
+                </div>
+                <div class="score-links">
+                    <a href="https://www.bjeea.cn/uploads/soft/250720/178-250H0201058.pdf" target="_blank" rel="noopener noreferrer">北京市 2025 年高招本科普通批录取投档线</a>
+                    <a href="https://www.bjeea.cn/html/gkgz/tzgg/2024/0720/85632.html" target="_blank" rel="noopener noreferrer">北京市 2024 年高招本科普通批录取投档线</a>
+                </div>
+                <p><b>想去哪儿、要去哪儿、能去哪儿，一分档的意义。</b></p>
+                <p><b>把成绩输入 <a href="https://750.bdfz.net" target="_blank" rel="noopener noreferrer">AI 报考</a>，看正在哪里，又想去哪里。</b></p>
+            </section>
 
-        <section id="section5">
-            <h2>5. 可行</h2>
-            <p><a href="https://class.bdfz.net/" class="link-button" target="_blank"
-                    rel="noopener noreferrer">真题王道：海淀或本校日常成题考题并无意义。</a> </p>
-            <p>真读书难：分享有意义且有意思文字即是语文。</p>
-            <!-- Added rel attribute -->
-            <p><a href="https://pkuschool.yuque.com/qrvbic/books?#" target="_blank"
-                    rel="noopener noreferrer">《唐诗鉴赏辞典》《唐宋词鉴赏辞典》。</a></p>
-            <p>习字：5分？不止。在没有书法课的时候要自己来。</p>
-            <p> ✳️ </p>
-            <p> | <a href="https://gk.bdfz.net" target="_blank">AI高考</a> 🦁 | <a href="https://hlm.bdfz.net"
-                    target="_blank">AI红楼</a> 🐌 | <a href="https://kz.bdfz.net" target="_blank">AI论语</a> 🦅 | <a
-                    href="https://mf.bdfz.net" target="_blank">默写篇目</a> 🦉 | <a href="https://mx.bdfz.net"
-                    target="_blank">默写满分</a> 🪲 | <a href="https://jc.bdfz.net" target="_blank">AI课文</a> 🐯 | <a
-                    href="https://class.bdfz.net" target="_blank">答疑</a> 🐠 | </p>
-        </section>
+            <section id="section2">
+                <p class="section-kicker">02 / direction</p>
+                <h2>进退</h2>
+                <p>做什么不确定是吧？考哪所学校也不确定是吧？</p>
+                <p>不做什么呢？</p>
+                <p>不考哪所学校呢？</p>
+                <div class="link-row">
+                    <a href="https://path.bdfz.net/" target="_blank" rel="noopener noreferrer">减法人生</a>
+                    <a href="https://nope.bdfz.net/" target="_blank" rel="noopener noreferrer">不考的学校</a>
+                </div>
+            </section>
 
-        <!-- Changed div to footer -->
+            <section id="section3">
+                <p class="section-kicker">03 / daily</p>
+                <h2>日常</h2>
+                <p>不及：有些事只能家人说，有些事最好师者说。情绪、感情、张弛度。</p>
+                <p>平衡：关心成绩更关心情绪，从考生到学生到人生，不同性格不同谈法。</p>
+                <p>有过：关心具体学科实不必，过犹不及。有问题孩子找学科教师，听结果分析。看方向不抢方向盘。</p>
+                <p>关于手机：不用行不行？那家长在怎么用手机？老师在怎么用？孩子、学生又在怎么用？</p>
+            </section>
+
+            <section id="section4">
+                <p class="section-kicker">04 / chinese</p>
+                <h2>语文</h2>
+                <div class="link-row">
+                    <a href="https://bdfz.net/posts/rgk/" target="_blank" rel="noopener noreferrer">真的分数</a>
+                    <a href="https://bdfz.net/posts/sc/" target="_blank" rel="noopener noreferrer">诗词指北</a>
+                    <a href="https://bdfz.net/posts/ten/" target="_blank" rel="noopener noreferrer">幽微写作</a>
+                    <a href="https://bdfz.net/posts/fx/" target="_blank" rel="noopener noreferrer">考前复习</a>
+                </div>
+                <div class="image-block">
+                    <img src="https://img.bdfz.net/20251118001.webp" alt="AI 与语文学习" width="3680" height="2280" loading="lazy">
+                </div>
+            </section>
+
+            <section id="section5">
+                <p class="section-kicker">05 / workable</p>
+                <h2>實作</h2>
+                <p><a href="https://class.bdfz.net/" target="_blank" rel="noopener noreferrer">真题王道：海淀或本校日常成题考题并无意义。</a></p>
+                <p>真读书难：分享有意义且有意思文字即是语文。</p>
+                <p><a href="https://pkuschool.yuque.com/qrvbic/books?#" target="_blank" rel="noopener noreferrer">《唐诗鉴赏辞典》《唐宋词鉴赏辞典》。</a></p>
+                <p>习字：5 分？不止。在没有书法课的时候要自己来。</p>
+                <div class="site-links">
+                    <a href="https://gk.bdfz.net" target="_blank" rel="noopener noreferrer">AI 高考</a>
+                    <a href="https://hlm.bdfz.net" target="_blank" rel="noopener noreferrer">AI 红楼</a>
+                    <a href="https://kz.bdfz.net" target="_blank" rel="noopener noreferrer">AI 论语</a>
+                    <a href="https://mf.bdfz.net" target="_blank" rel="noopener noreferrer">默写篇目</a>
+                    <a href="https://mx.bdfz.net" target="_blank" rel="noopener noreferrer">默写满分</a>
+                    <a href="https://jc.bdfz.net" target="_blank" rel="noopener noreferrer">AI 课文</a>
+                    <a href="https://class.bdfz.net" target="_blank" rel="noopener noreferrer">答疑</a>
+                </div>
+            </section>
+        </main>
+
         <footer>
-            <!-- Added rel attribute -->
-            <p>© 2025 <a href="mailto:daoshi@i.pkuschool.edu.cn" target="_blank" rel="noopener noreferrer">SUEN</a> |
-                北大附中</p>
+            <span>© 2026 <a href="mailto:daoshi@i.pkuschool.edu.cn" rel="noopener noreferrer">SUEN</a></span>
+            <span>北大附中</span>
         </footer>
     </div>
+
     <script src="https://my.bdfz.net/site-auth.js"></script>
     <script>
         window.BdfzIdentity?.mount({ siteKey: 'h' });
