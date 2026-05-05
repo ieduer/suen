@@ -275,13 +275,16 @@
             background: var(--background-gradient);
             color: var(--text-color);
 
+            height: 100vh;
+            height: 100dvh;
+
             /* ✅ 安全区适配（iOS 刘海/底部手势条） */
             padding-top: calc(8px + env(safe-area-inset-top));
             padding-right: calc(10px + env(safe-area-inset-right));
             padding-bottom: calc(8px + env(safe-area-inset-bottom));
             padding-left: calc(10px + env(safe-area-inset-left));
 
-            overflow-y: auto;
+            overflow: hidden;
 
             display: flex;
             flex-direction: column;
@@ -312,7 +315,8 @@
             width: 100%;
             max-width: 1400px;
 
-            flex: 0 1 auto;
+            flex: 1 1 0;
+            min-height: 0;
 
             display: grid;
             grid-template-columns:
@@ -468,6 +472,7 @@
 
             display: flex;
             flex-direction: column;
+            overflow: hidden;
             min-height: 0;
         }
 
@@ -490,6 +495,7 @@
         .side-scroll {
             flex: 1;
             min-height: 0;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 8px;
@@ -538,6 +544,7 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
+            overflow-y: auto;
             padding-right: 4px;
         }
 
