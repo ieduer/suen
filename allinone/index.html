@@ -20,10 +20,8 @@
     <meta name="theme-color" content="#1e222a" media="(prefers-color-scheme: dark)">
 
     <!-- Favicon / Icons -->
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" href="https://img.bdfz.net/20250503004.webp" type="image/webp">
+    <link rel="apple-touch-icon" href="https://img.bdfz.net/20250503004.webp">
     <link rel="manifest" href="/allinone/manifest.json">
 
     <!-- Performance hints -->
@@ -1472,68 +1470,6 @@
             background: color-mix(in oklab, var(--panel-surface) 85%, #00d084 15%);
         }
 
-        /* === Link Preview Card === */
-        .link-preview-card {
-            position: fixed;
-            z-index: 9998;
-            padding: 10px 14px;
-            background: var(--neo-bg);
-            border-radius: 10px;
-            box-shadow:
-                8px 8px 16px var(--neo-dark),
-                -8px -8px 16px var(--neo-light);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            max-width: 280px;
-            pointer-events: none;
-            opacity: 0;
-            transform: translateY(8px);
-            transition: opacity 0.2s ease, transform 0.2s ease;
-        }
-
-        .link-preview-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .link-preview-favicon {
-            width: 24px;
-            height: 24px;
-            border-radius: 4px;
-            flex-shrink: 0;
-        }
-
-        .link-preview-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            overflow: hidden;
-        }
-
-        .link-preview-title {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--dark-text-color);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .link-preview-url {
-            font-size: 0.7rem;
-            color: #888;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        html.dark-mode .link-preview-title,
-        body.dark-mode .link-preview-title {
-            color: var(--text-color);
-        }
-
-
         @media (prefers-reduced-motion: reduce) {
 
             .glitch-text::before,
@@ -1616,8 +1552,7 @@
         /* Monet: soft watercolor borders & dreamy shadows */
         .column,
         .countdown-item,
-        .footer,
-        .link-preview-card {
+        .footer {
             border: 1px solid rgba(150, 137, 126, 0.22);
             box-shadow:
                 0 8px 32px rgba(126, 168, 190, 0.10),
@@ -1725,7 +1660,7 @@
         <main class="column countdown-container neo-scope" aria-label="時間與倒計時">
             <button id="theme-toggle-logo-button" class="theme-toggle-logo-button neo neo-round" aria-label="點擊切換色系"
                 type="button">
-                <img src="https://img.bdfz.net/20250503003.webp" alt="Logo - 點擊切換主題" class="logo-img" loading="lazy">
+                <img src="/avatar.jpeg" alt="Logo - 點擊切換主題" class="logo-img" loading="lazy">
             </button>
 
             <!-- ✅ 滚动内容区（倒计时/进度条都在这里滚动） -->
@@ -1822,15 +1757,6 @@
             本頁需要啟用 JavaScript 以顯示倒計時與進度條。
         </div>
     </noscript>
-
-    <!-- Link Preview Card -->
-    <div class="link-preview-card" id="link-preview-card">
-        <img class="link-preview-favicon" id="link-preview-favicon" src="" alt="">
-        <div class="link-preview-info">
-            <span class="link-preview-title" id="link-preview-title"></span>
-            <span class="link-preview-url" id="link-preview-url"></span>
-        </div>
-    </div>
 
     <script>
         // === PWA Service Worker Registration ===
@@ -2687,10 +2613,11 @@
                 { label: '不想考的', href: 'https://nope.bdfz.net/', aria: '不想考的' },
                 { label: '彣彰', href: 'https://forum.rdfzer.com', aria: '彣彰' },
                 { label: 'BLOG', href: 'https://bdfz.net/', aria: 'SUEN' },
-                { label: '課堂導航', href: 'https://class.bdfz.net/', aria: '高中語文' },
+                { label: '義戰論語', href: 'https://ly.bdfz.net/', aria: '義戰論語' },
                 { label: '希悅考勤', href: 'https://seiue.bdfz.net/', aria: '50塊' },
                 { label: '下載萬物', href: 'https://xz.bdfz.net/', aria: 'YT-DLP' },
                 { label: '微信公號', href: 'https://wx.bdfz.net/', aria: 'FWechat' },
+                { label: '人籟', href: 'https://voice.bdfz.net/', aria: '人籟' },
                 { label: '心證場', href: 'https://arena.bdfz.net/', aria: '心證場' },
                 { label: 'bdfz.chat', href: 'https://home.bdfz.chat/', aria: 'bdfz.chat' },
                 { label: '樹洞', href: 'https://tree.bdfz.net/', aria: '樹洞' },
@@ -2703,12 +2630,12 @@
                 { label: 'NotebookLM', href: 'https://notebooklm.google.com/', aria: 'NotebookLM' },
                 { label: 'GitHub', href: 'https://github.com/ieduer', aria: 'GitHub-Suen' },
                 { label: 'X', href: 'https://x.com/ieduer', aria: 'X' },
-                { label: '希悦', href: 'https://chalk-c3.seiue.com/', aria: '希悦' },
+                { label: '高考報考', href: 'https://gk.rdfzer.com/', aria: '高考報考' },
                 { label: 'M365', href: 'https://www.office.com/', aria: 'M365' },
-                { label: '高校錄取', href: 'https://gk-stu.bjeea.cn/#/app/volunteer-coach/query', aria: '錄取' },
+                { label: 'AI 作文', href: 'https://zw.bdfz.net/', aria: 'AI 作文' },
                 { label: '語文課', href: 'https://yw.bdfz.net/', aria: '語文課' },
                 { label: '讀秀', href: 'https://www.duxiu.com/', aria: '讀秀' },
-                { label: '語雀', href: 'https://www.yuque.com/r/organizations/bdfz/join?token=8jDK7qvJ741Gnw2p&source=org#', aria: '語雀' }
+                { label: '校曆', href: 'https://cal.bdfz.net/', aria: '校曆' }
             ];
 
             function renderPortalColumns() {
@@ -2725,45 +2652,7 @@
 
             renderPortalColumns();
 
-            // === 6. Link Preview Cards ===
-            const previewCard = document.getElementById('link-preview-card');
-            const previewFavicon = document.getElementById('link-preview-favicon');
-            const previewTitle = document.getElementById('link-preview-title');
-            const previewUrl = document.getElementById('link-preview-url');
-            let previewTimeout = null;
-
-            function showPreview(e, link) {
-                if (!previewCard || !link.href) return;
-                try {
-                    const url = new URL(link.href);
-                    const domain = url.hostname;
-                    previewFavicon.src = `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${encodeURIComponent(link.href)}&size=32`;
-                    previewTitle.textContent = link.textContent || domain;
-                    previewUrl.textContent = domain;
-
-                    const rect = link.getBoundingClientRect();
-                    previewCard.style.left = `${rect.left}px`;
-                    previewCard.style.top = `${rect.bottom + 8}px`;
-
-                    previewCard.classList.add('visible');
-                } catch (err) { }
-            }
-
-            function hidePreview() {
-                if (previewCard) previewCard.classList.remove('visible');
-            }
-
-            document.querySelectorAll('.side-scroll .link-button').forEach(link => {
-                link.addEventListener('mouseenter', (e) => {
-                    previewTimeout = setTimeout(() => showPreview(e, link), 400);
-                });
-                link.addEventListener('mouseleave', () => {
-                    clearTimeout(previewTimeout);
-                    hidePreview();
-                });
-            });
-
-            // === 7. Drag and Drop Link Sorting ===
+            // === 6. Drag and Drop Link Sorting ===
             function initDragSort(container, storageKey) {
                 const scroll = container.querySelector('.side-scroll');
                 if (!scroll) return;
