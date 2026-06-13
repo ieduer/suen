@@ -142,6 +142,10 @@
             line-height: 0.98;
             letter-spacing: 0.02em;
             text-shadow: 0 2px 24px rgba(124, 158, 189, 0.12);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
         .hero-sub {
@@ -162,9 +166,7 @@
 
         /* ── QR stamp (clickable) ── */
         .qr-stamp {
-            position: absolute;
-            top: 64px;
-            right: 0;
+            position: relative;
             display: inline-flex;
             flex-direction: column;
             align-items: center;
@@ -461,24 +463,12 @@
                 padding: 28px 0 8px;
             }
 
-            .qr-stamp {
-                position: static;
-                align-self: flex-start;
-                margin-top: 22px;
-                transform: rotate(-2deg);
-            }
-
             .qr-stamp img {
                 width: 84px;
             }
 
             .hero-prose {
                 max-width: 100%;
-            }
-
-            .pill-row a {
-                width: 100%;
-                justify-content: flex-start;
             }
 
             footer {
@@ -521,13 +511,15 @@
         </div>
 
         <header class="hero">
-            <h1>家校谈</h1>
+            <h1>
+                家校谈
+                <button type="button" class="qr-stamp" id="qrTrigger" aria-label="点击放大二维码">
+                    <img src="https://img.bdfz.net/20250430001.webp" alt="家校谈相关二维码" width="600" height="600">
+                    <span class="qr-caption">扫码 · 分享</span>
+                </button>
+            </h1>
             <p class="hero-sub">成绩、方向、日常⋯⋯</p>
-            <p class="hero-prose">把成绩换成排位，从位置看见方向；以退为进，知所不为；用 AI 关心成绩，把情绪、节奏与边界，留给人。</p>
-            <button type="button" class="qr-stamp" id="qrTrigger" aria-label="点击放大二维码">
-                <img src="https://img.bdfz.net/20250430001.webp" alt="家校谈相关二维码" width="600" height="600">
-                <span class="qr-caption">扫码 · 分享</span>
-            </button>
+            <p class="hero-prose">换成绩为排位，从位置见方向；以退为进，知所不为；以 AI 护成绩，把情绪、节奏与边界留给人。</p>
         </header>
 
         <main class="chapters">
@@ -550,10 +542,10 @@
             <section id="section2">
                 <h2>进退</h2>
                 <p>做什么不确定是吧？考哪所学校也不确定是吧？</p>
-                <p>不做什么呢？</p>
+                <p>不做什么职业呢？</p>
                 <p>不考哪所学校呢？</p>
                 <div class="pill-row">
-                    <a href="https://path.bdfz.net/" target="_blank" rel="noopener noreferrer">减法人生</a>
+                    <a href="https://path.bdfz.net/" target="_blank" rel="noopener noreferrer">不做的事情</a>
                     <a href="https://nope.bdfz.net/" target="_blank" rel="noopener noreferrer">不考的学校</a>
                 </div>
             </section>
@@ -569,19 +561,20 @@
             <section id="section4">
                 <h2>语文</h2>
                 <div class="pill-row">
+                    <a href="https://forum.rdfzer.com/t/13009/7" target="_blank" rel="noopener noreferrer">能拿分否</a>
                     <a href="https://bdfz.net/posts/rgk/" target="_blank" rel="noopener noreferrer">真的分数</a>
                     <a href="https://bdfz.net/posts/sc/" target="_blank" rel="noopener noreferrer">诗词指北</a>
                     <a href="https://bdfz.net/posts/ten/" target="_blank" rel="noopener noreferrer">幽微写作</a>
                     <a href="https://bdfz.net/posts/fx/" target="_blank" rel="noopener noreferrer">考前复习</a>
                 </div>
                 <figure class="image-block">
-                    <img src="https://img.bdfz.net/20251118001.webp" alt="AI 与语文学习" width="3680" height="2280" loading="lazy">
+                    <img src="https://img.bdfz.net/20260507001.webp" alt="高考语文" width="3680" height="2280" loading="lazy">
                 </figure>
             </section>
 
             <section id="section5">
                 <h2>实作</h2>
-                <p><a href="https://class.bdfz.net/" target="_blank" rel="noopener noreferrer">真题王道：海淀或本校日常成题考题并无意义。</a></p>
+                <p><a href="https://gk.bdfz.net" target="_blank" rel="noopener noreferrer">真题王道：海淀或本校日常成题考题并无意义。</a></p>
                 <p>真读书难：分享有意义且有意思文字即是语文。</p>
                 <p><a href="https://pkuschool.yuque.com/qrvbic/books?#" target="_blank" rel="noopener noreferrer">《唐诗鉴赏辞典》《唐宋词鉴赏辞典》。</a></p>
                 <p>习字：5 分？不止。在没有书法课的时候要自己来。</p>
@@ -592,7 +585,9 @@
                     <a href="https://mf.bdfz.net" target="_blank" rel="noopener noreferrer">默写篇目</a>
                     <a href="https://mx.bdfz.net" target="_blank" rel="noopener noreferrer">默写满分</a>
                     <a href="https://jc.bdfz.net" target="_blank" rel="noopener noreferrer">AI 课文</a>
-                    <a href="https://class.bdfz.net" target="_blank" rel="noopener noreferrer">答疑</a>
+                    <a href="https://wygame.bdfz.net/" target="_blank" rel="noopener noreferrer">文言字词</a>
+                    <a href="https://sun.bdfz.net/" target="_blank" rel="noopener noreferrer">高中教材</a>   
+                    <a href="https://jc.bdfz.net/" target="_blank" rel="noopener noreferrer">教材 PDF</a>   
                 </div>
             </section>
         </main>

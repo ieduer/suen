@@ -657,44 +657,6 @@
             opacity: 0.9;
         }
 
-        /* === Unix & Binary Clock === */
-        .geek-time-row {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            margin-top: 8px;
-            flex-wrap: wrap;
-        }
-
-        .geek-time-item {
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-            font-size: 0.75rem;
-            padding: 4px 10px;
-            border-radius: 6px;
-            background: color-mix(in oklab, var(--neo-bg) 85%, #000 15%);
-            color: var(--dark-text-color);
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-            border: 1px solid color-mix(in oklab, var(--neo-bg), #000 12%);
-        }
-
-        html.dark-mode .geek-time-item,
-        body.dark-mode .geek-time-item {
-            background: color-mix(in oklab, var(--neo-bg) 80%, #fff 5%);
-            color: var(--text-color);
-            border-color: color-mix(in oklab, var(--neo-bg), #fff 10%);
-        }
-
-        .geek-time-item .label {
-            color: #00d084;
-            margin-right: 4px;
-        }
-
-        html.dark-mode .geek-time-item .label,
-        body.dark-mode .geek-time-item .label {
-            color: #5eead4;
-        }
-
         /* === PROGRESS BARS (GEEK/HUD) === */
         .progress-item .countdown-display {
             display: none;
@@ -1670,18 +1632,10 @@
                         <span id="current-time-clock">--:--:--</span>
                         <span id="current-date-gregorian">----年--月--日 ---</span>
                     </div>
-                    <div class="geek-time-row">
-                        <span class="geek-time-item" id="unix-timestamp" title="Unix Timestamp">
-                            <span class="label">UNIX:</span><span id="unix-value">0000000000</span>
-                        </span>
-                        <span class="geek-time-item" id="binary-clock" title="Binary Clock (HH:MM:SS)">
-                            <span class="label">BIN:</span><span id="binary-value">000000:000000:000000</span>
-                        </span>
-                    </div>
                 </section>
 
-                <section id="gaokao-countdown" class="countdown-item neo neo-gradient" aria-label="2026高考倒計時">
-                    <h2 class="countdown-title">2026高考倒計時</h2>
+                <section id="gaokao-countdown" class="countdown-item neo neo-gradient" aria-label="2027高考倒計時">
+                    <h2 class="countdown-title">2027高考倒計時</h2>
                     <div class="countdown-display" aria-live="polite">計算中...</div>
                 </section>
 
@@ -1992,6 +1946,8 @@
 
         document.addEventListener("DOMContentLoaded", function () {
             window.BdfzIdentity?.mount({ siteKey: 'rdfzeri' });
+            const gaokaoSection = document.getElementById('gaokao-countdown');
+            const gaokaoTitle = document.querySelector('#gaokao-countdown .countdown-title');
             const gaokaoDisplay = document.querySelector('#gaokao-countdown .countdown-display');
             const humanTimeDisplay = document.getElementById('humanTime');
             const clockDisplay = document.getElementById('current-time-clock');
@@ -2019,11 +1975,20 @@
             const MS_IN_YEAR_APPROX = 365.25 * MS_IN_DAY;
             const MS_IN_TEN_THOUSAND_YEARS = 10000 * MS_IN_YEAR_APPROX;
 
-            const GAOKAO_TARGET_TIME = new Date('2026-06-07T09:00:00').getTime();
+            const GAOKAO_START_MONTH = 6;
+            const GAOKAO_START_DAY = 7;
+            const GAOKAO_START_HOUR = 9;
+            const GAOKAO_END_MONTH = 6;
+            const GAOKAO_END_DAY = 10;
+            const GAOKAO_END_HOUR = 18;
             const HUMAN_ORIGIN_APPROX_MS = Date.now() - (300000 * MS_IN_YEAR_APPROX);
 
             const TIME_OPTIONS = { hour12: false };
             const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+            const BEIJING_YEAR_FORMATTER = new Intl.DateTimeFormat('en-US', {
+                timeZone: 'Asia/Shanghai',
+                year: 'numeric'
+            });
 
             const THEME_STORAGE_KEY = 'themePreference';
             const SCHEME_STORAGE_KEY = 'colorScheme';
@@ -2337,29 +2302,9 @@
                 applyColorScheme(nextScheme, isDark);
             }
 
-            const unixValueEl = document.getElementById('unix-value');
-            const binaryValueEl = document.getElementById('binary-value');
-
-            function toBinary(n, bits) {
-                return n.toString(2).padStart(bits, '0');
-            }
-
             function updateClockAndDate(now) {
                 if (clockDisplay) clockDisplay.textContent = now.toLocaleTimeString('zh-CN', TIME_OPTIONS);
                 if (gregorianDateDisplay) gregorianDateDisplay.textContent = now.toLocaleDateString('zh-CN', DATE_OPTIONS);
-
-                // Unix timestamp
-                if (unixValueEl) {
-                    unixValueEl.textContent = Math.floor(now.getTime() / 1000);
-                }
-
-                // Binary clock
-                if (binaryValueEl) {
-                    const h = now.getHours();
-                    const m = now.getMinutes();
-                    const s = now.getSeconds();
-                    binaryValueEl.textContent = `${toBinary(h, 6)}:${toBinary(m, 6)}:${toBinary(s, 6)}`;
-                }
             }
 
             function updateSingleCountdown(targetTime, nowTime, display, endMessage) {
@@ -2374,6 +2319,57 @@
                 const minutes = Math.floor((timeLeft % MS_IN_HOUR) / MS_IN_MINUTE);
                 const seconds = Math.floor((timeLeft % MS_IN_MINUTE) / MS_IN_SECOND);
                 display.innerHTML = `${days}天 ${hours}小時 ${minutes}分鐘 ${seconds}秒`;
+            }
+
+            function getBeijingYear(now) {
+                return Number(BEIJING_YEAR_FORMATTER.format(now));
+            }
+
+            function getBeijingTimestamp(year, month, day, hour) {
+                const mm = String(month).padStart(2, '0');
+                const dd = String(day).padStart(2, '0');
+                const hh = String(hour).padStart(2, '0');
+                return new Date(`${year}-${mm}-${dd}T${hh}:00:00+08:00`).getTime();
+            }
+
+            function getGaokaoWindow(year) {
+                return {
+                    year,
+                    startTime: getBeijingTimestamp(year, GAOKAO_START_MONTH, GAOKAO_START_DAY, GAOKAO_START_HOUR),
+                    endTime: getBeijingTimestamp(year, GAOKAO_END_MONTH, GAOKAO_END_DAY, GAOKAO_END_HOUR)
+                };
+            }
+
+            function getCurrentGaokaoTarget(now) {
+                const nowTime = now.getTime();
+                const beijingYear = getBeijingYear(now);
+                const currentWindow = getGaokaoWindow(beijingYear);
+
+                if (nowTime > currentWindow.endTime) {
+                    return { ...getGaokaoWindow(beijingYear + 1), inProgress: false };
+                }
+
+                if (nowTime >= currentWindow.startTime) {
+                    return { ...currentWindow, inProgress: true };
+                }
+
+                return { ...currentWindow, inProgress: false };
+            }
+
+            function updateGaokaoCountdown(now, display) {
+                if (!display) return;
+                const target = getCurrentGaokaoTarget(now);
+                const title = `${target.year}高考倒計時`;
+
+                if (gaokaoTitle) gaokaoTitle.textContent = title;
+                if (gaokaoSection) gaokaoSection.setAttribute('aria-label', title);
+
+                if (target.inProgress) {
+                    display.textContent = `${target.year}高考進行中`;
+                    return;
+                }
+
+                updateSingleCountdown(target.startTime, now.getTime(), display, `${target.year}高考已開始！`);
             }
 
             function updateHumanTimer(nowTime, display) {
@@ -2461,7 +2457,7 @@
                 const nowTime = now.getTime();
 
                 updateClockAndDate(now);
-                updateSingleCountdown(GAOKAO_TARGET_TIME, nowTime, gaokaoDisplay, "高考已開始！");
+                updateGaokaoCountdown(now, gaokaoDisplay);
                 updateHumanTimer(nowTime, humanTimeDisplay);
 
                 updateProgressBar(now, dayProgressFill, dayProgressText, 'day', dayProgressTitle);
@@ -2602,7 +2598,7 @@
                 { label: 'AI 高考', href: 'https://gk.bdfz.net', aria: 'AI高考' },
                 { label: 'AI 默寫', href: 'https://mx.bdfz.net', aria: 'AI默寫' },
                 { label: '高考默寫', href: 'https://mf.bdfz.net', aria: '訪問高考詩文' },
-                { label: 'AI 字詞', href: 'https://wy.bdfz.net/', aria: 'AI 字詞' },
+                { label: 'AI 字詞', href: 'https://wygame.bdfz.net/', aria: 'AI 字詞' },
                 { label: 'AI 論語', href: 'https://kz.bdfz.net', aria: 'AI論語' },
                 { label: 'AI 紅樓夢', href: 'https://hlm.bdfz.net', aria: 'AI紅樓夢' },
                 { label: 'AI 高中教材', href: 'https://sun.bdfz.net/', aria: '全教材' },
@@ -2619,7 +2615,7 @@
                 { label: '微信公號', href: 'https://wx.bdfz.net/', aria: 'FWechat' },
                 { label: '人籟', href: 'https://voice.bdfz.net/', aria: '人籟' },
                 { label: '心證場', href: 'https://arena.bdfz.net/', aria: '心證場' },
-                { label: 'bdfz.chat', href: 'https://home.bdfz.chat/', aria: 'bdfz.chat' },
+                { label: 'AI Gaokao English', href: 'https://yd.bdfz.net/', aria: 'AI Gaokao English' },
                 { label: '樹洞', href: 'https://tree.bdfz.net/', aria: '樹洞' },
                 { label: 'Anon Hourly Chat', href: 'https://chat.bdfz.net/', aria: 'Anon Hourly Chat' },
                 { label: '教材PDF', href: 'https://jc.bdfz.net/', aria: '教材PDF' },
