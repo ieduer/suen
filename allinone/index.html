@@ -1714,17 +1714,151 @@
             --monet-leaf: #6b8060;
         }
 
+        /* Background imagery is handled by the crossfading #bg-rotator below */
         body {
-            background: var(--background-gradient);
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            background: var(--neo-bg);
         }
 
         #matrix-bg,
         html.dark-mode #matrix-bg,
         body.dark-mode #matrix-bg {
             opacity: 0;
+        }
+
+        /* === Impressionist background rotator (crossfade carousel) === */
+        :root {
+            --bg-overlay-grad: linear-gradient(rgba(251, 250, 245, 0.82), rgba(251, 250, 245, 0.90));
+        }
+
+        html.dark-mode body,
+        body.dark-mode {
+            --bg-overlay-grad: linear-gradient(rgba(24, 29, 31, 0.74), rgba(24, 29, 31, 0.84));
+        }
+
+        #bg-rotator {
+            position: fixed;
+            inset: 0;
+            z-index: -3;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        #bg-rotator .bg-layer {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transform: scale(1.04);
+            transition: opacity 1.8s ease-in-out;
+            will-change: opacity;
+        }
+
+        #bg-rotator .bg-layer.is-active {
+            opacity: 1;
+        }
+
+        #bg-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            pointer-events: none;
+            background: var(--bg-overlay-grad);
+            transition: background 0.3s ease;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #bg-rotator .bg-layer {
+                transition: none;
+            }
+        }
+
+        /* === Right column (launcher): each area its own Impressionist colour === */
+        .launcher {
+            position: relative;
+        }
+
+        /* painterly multi-hue accent bar along the top of the right column */
+        .launcher::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg,
+                    var(--monet-water),
+                    var(--monet-leaf),
+                    var(--monet-lily),
+                    #c9a96a,
+                    #cc8a6f,
+                    #8c93c0);
+            border-radius: 15px 15px 0 0;
+            opacity: 0.85;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .launcher .nav-search:focus {
+            border-color: var(--monet-water);
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.06),
+                inset -2px -2px 5px rgba(255, 255, 255, 0.5),
+                0 0 0 2px color-mix(in oklab, var(--monet-water) 45%, transparent);
+        }
+
+        /* Each nav-group is a softly tinted card keyed to one Impressionist hue.
+           Palette drawn from the rotating Monet paintings. */
+        .launcher .nav-group {
+            --g: var(--monet-water);
+            position: relative;
+            padding: 10px 12px 12px;
+            border-radius: 13px;
+            border: 1px solid color-mix(in oklab, var(--g) 32%, transparent);
+            border-left: 3px solid color-mix(in oklab, var(--g) 72%, transparent);
+            background: color-mix(in oklab, var(--g) 9%, transparent);
+        }
+
+        .launcher .nav-group[data-group="drill"]     { --g: #7ea8be; } /* water blue */
+        .launcher .nav-group[data-group="ref"]        { --g: #8da67e; } /* leaf green */
+        .launcher .nav-group[data-group="community"]  { --g: #c5a3c2; } /* lily lavender */
+        .launcher .nav-group[data-group="reading"]    { --g: #c9a96a; } /* haystack gold */
+        .launcher .nav-group[data-group="tools"]      { --g: #cc8a6f; } /* poppy terracotta */
+        .launcher .nav-group[data-group="external"]   { --g: #8c93c0; } /* periwinkle */
+
+        html.dark-mode .launcher .nav-group,
+        body.dark-mode .launcher .nav-group {
+            background: color-mix(in oklab, var(--g) 14%, transparent);
+            border-color: color-mix(in oklab, var(--g) 38%, transparent);
+        }
+
+        .launcher .nav-group-head {
+            color: color-mix(in oklab, var(--g) 72%, var(--dark-text-color));
+        }
+
+        .launcher .nav-group-head .rule {
+            background: linear-gradient(90deg,
+                    color-mix(in oklab, var(--g), transparent 30%),
+                    color-mix(in oklab, var(--g), transparent 85%));
+        }
+
+        .launcher .nav-group-head .count {
+            color: var(--g);
+            opacity: 0.95;
+        }
+
+        /* links inside a group adopt that group's hue on hover/focus */
+        .launcher .nav-group .side-link:hover,
+        .launcher .nav-group .side-link:focus {
+            background: color-mix(in oklab, var(--g) 26%, var(--panel-surface));
+            border-color: color-mix(in oklab, var(--g) 60%, transparent);
+            color: var(--dark-text-color);
+        }
+
+        html.dark-mode .launcher .nav-group .side-link:hover,
+        html.dark-mode .launcher .nav-group .side-link:focus,
+        body.dark-mode .launcher .nav-group .side-link:hover,
+        body.dark-mode .launcher .nav-group .side-link:focus {
+            color: var(--text-color);
         }
 
         /* Monet: soft watercolor borders & dreamy shadows */
@@ -1823,6 +1957,13 @@
 </head>
 
 <body>
+    <!-- Impressionist background rotator (crossfading Monet paintings) -->
+    <div id="bg-rotator" aria-hidden="true">
+        <div class="bg-layer"></div>
+        <div class="bg-layer"></div>
+    </div>
+    <div id="bg-overlay" aria-hidden="true"></div>
+
     <!-- Matrix Background Canvas -->
     <canvas id="matrix-bg" aria-hidden="true"></canvas>
     <a class="skip-link" href="#main">跳到主內容</a>
@@ -2874,6 +3015,7 @@
                         { label: '人籟', href: 'https://voice.bdfz.net/', aria: '人籟 朗讀' },
                         { label: '希悅考勤', href: 'https://seiue.bdfz.net/', aria: '希悅考勤' },
                         { label: '老己', href: 'https://my.bdfz.net/', aria: '老己 用戶中心' },
+                        { label: '觀照', href: 'https://pulse.bdfz.net/', aria: '使用情況觀測站' },
                         { label: '不想做的', href: 'https://path.bdfz.net/', aria: '不想做的' },
                         { label: '不想考的', href: 'https://nope.bdfz.net/', aria: '不想考的' }
                     ]
@@ -2979,6 +3121,54 @@
             }
 
         });
+    </script>
+
+    <!-- === Impressionist background rotator === -->
+    <script>
+        (function bgRotator() {
+            const IMAGES = ['bg/p1.jpg', 'bg/p2.jpg', 'bg/p3.jpg', 'bg/p4.jpg', 'bg/p5.jpg'];
+            const INTERVAL = 11000; // ms between crossfades
+            const rot = document.getElementById('bg-rotator');
+            if (!rot) return;
+            const layers = rot.querySelectorAll('.bg-layer');
+            if (layers.length < 2) return;
+
+            // Fisher–Yates shuffle so the order differs between visits
+            const order = IMAGES.slice();
+            for (let i = order.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [order[i], order[j]] = [order[j], order[i]];
+            }
+
+            let pos = 0;        // index into `order`
+            let active = 0;     // which layer is currently shown
+
+            layers[0].style.backgroundImage = `url('${order[0]}')`;
+            layers[0].classList.add('is-active');
+
+            const reduce = window.matchMedia &&
+                window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduce || order.length < 2) return; // keep a single static painting
+
+            function advance() {
+                if (document.hidden) return; // don't churn while tab is in background
+                const nextIdx = (pos + 1) % order.length;
+                const src = order[nextIdx];
+                const incoming = layers[1 - active];
+                const pre = new Image();
+                pre.onload = () => {
+                    incoming.style.backgroundImage = `url('${src}')`;
+                    incoming.classList.add('is-active');
+                    layers[active].classList.remove('is-active');
+                    active = 1 - active;
+                    pos = nextIdx;
+                };
+                pre.onerror = () => { pos = nextIdx; }; // skip a broken image gracefully
+                pre.src = src;
+            }
+
+            setInterval(advance, INTERVAL);
+        })();
     </script>
 </body>
 
