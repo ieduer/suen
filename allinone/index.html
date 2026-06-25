@@ -309,7 +309,7 @@
         }
 
         .container {
-            /* ✅ 用 Grid 固定三栏：不会因为宽度临界而“自动换行截断” */
+            /* 兩區：左為儀表盤窄欄，右為統一檢索式啟動器 */
             width: 100%;
             max-width: 1400px;
 
@@ -317,9 +317,8 @@
             min-height: 0;
 
             display: grid;
-            grid-template-columns:
-                minmax(240px, 1fr) minmax(360px, 520px) minmax(240px, 1fr);
-            gap: 12px;
+            grid-template-columns: minmax(300px, 340px) minmax(0, 1fr);
+            gap: 14px;
             align-items: stretch;
         }
 
@@ -1135,6 +1134,213 @@
             color: #888;
         }
 
+        /* === Categorized launcher (redesign) === */
+        .launcher {
+            background: var(--surface-main);
+            --panel-surface: color-mix(in oklab, var(--neo-bg) 90%, #e9d8a6 10%);
+        }
+
+        html.dark-mode .launcher,
+        body.dark-mode .launcher {
+            --panel-surface: color-mix(in oklab, var(--neo-bg) 88%, #597085 12%);
+        }
+
+        .launcher-scroll {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            padding-right: 4px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(120, 120, 120, 0.35) transparent;
+        }
+
+        .launcher-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .launcher-scroll::-webkit-scrollbar-thumb {
+            background: rgba(120, 120, 120, 0.35);
+            border-radius: 10px;
+        }
+
+        .launcher-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .launcher .side-link {
+            background:
+                linear-gradient(0deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 12%),
+                linear-gradient(180deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0) 14%),
+                color-mix(in oklab, var(--panel-surface) 92%, white 8%);
+            color: var(--dark-text-color);
+            box-shadow: none;
+            border: 1px solid color-mix(in oklab, var(--panel-surface), #000 12%);
+        }
+
+        html.dark-mode .launcher .side-link,
+        body.dark-mode .launcher .side-link {
+            background:
+                linear-gradient(0deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0) 12%),
+                linear-gradient(180deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0) 16%),
+                color-mix(in oklab, var(--panel-surface) 85%, black 15%);
+            color: var(--text-color);
+            border-color: color-mix(in oklab, var(--panel-surface), #fff 10%);
+        }
+
+        .launcher .side-link:hover,
+        .launcher .side-link:focus {
+            background: linear-gradient(145deg,
+                    color-mix(in oklab, var(--panel-surface) 80%, white 20%),
+                    color-mix(in oklab, var(--panel-surface) 88%, black 12%));
+            box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.05), inset -1px -1px 2px rgba(255, 255, 255, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .nav-search-wrap {
+            position: relative;
+            flex: 0 0 auto;
+            margin-bottom: 12px;
+        }
+
+        .nav-search {
+            width: 100%;
+            padding: 9px 30px 9px 32px;
+            border-radius: 12px;
+            border: 1px solid color-mix(in oklab, var(--panel-surface), #000 14%);
+            background: color-mix(in oklab, var(--panel-surface) 92%, white 8%);
+            color: var(--dark-text-color);
+            font-family: inherit;
+            font-size: 0.92rem;
+            outline: none;
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.06), inset -2px -2px 5px rgba(255, 255, 255, 0.5);
+            transition: var(--theme-transition);
+        }
+
+        html.dark-mode .nav-search,
+        body.dark-mode .nav-search {
+            border-color: color-mix(in oklab, var(--panel-surface), #fff 12%);
+            box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.45), inset -2px -2px 6px rgba(255, 255, 255, 0.04);
+        }
+
+        .nav-search::placeholder {
+            color: color-mix(in oklab, var(--dark-text-color), transparent 50%);
+        }
+
+        .nav-search:focus {
+            border-color: var(--footer-link-hover);
+        }
+
+        .nav-search-icon {
+            position: absolute;
+            left: 11px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 15px;
+            height: 15px;
+            opacity: 0.5;
+            pointer-events: none;
+            color: var(--dark-text-color);
+        }
+
+        .nav-search-clear {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border: none;
+            background: transparent;
+            color: var(--dark-text-color);
+            opacity: 0;
+            cursor: pointer;
+            font-size: 1.1rem;
+            line-height: 1;
+            border-radius: 50%;
+            transition: opacity 0.15s ease, background 0.15s ease;
+        }
+
+        .nav-search-wrap.has-text .nav-search-clear {
+            opacity: 0.6;
+        }
+
+        .nav-search-clear:hover {
+            opacity: 1;
+            background: color-mix(in oklab, var(--panel-surface), #000 8%);
+        }
+
+        .nav-group {
+            margin-bottom: 14px;
+        }
+
+        .nav-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .nav-group-head {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 2px 2px 8px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.03em;
+            color: color-mix(in oklab, var(--dark-text-color), transparent 22%);
+        }
+
+        .nav-group-head .rule {
+            flex: 1;
+            height: 1px;
+            background: color-mix(in oklab, var(--dark-text-color), transparent 82%);
+        }
+
+        .nav-group-head .count {
+            font-size: 0.72rem;
+            font-weight: 700;
+            opacity: 0.65;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+            gap: 8px;
+        }
+
+        .link-grid .side-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px 10px;
+            font-size: 0.95rem;
+            border-radius: 11px;
+            min-height: 42px;
+            line-height: 1.2;
+        }
+
+        .nav-group.is-hidden,
+        .side-link.is-hidden {
+            display: none;
+        }
+
+        .nav-empty {
+            display: none;
+            padding: 18px 8px;
+            text-align: center;
+            font-size: 0.88rem;
+            color: color-mix(in oklab, var(--dark-text-color), transparent 38%);
+        }
+
+        @media (max-width: 600px) {
+            .link-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
         /* === RESPONSIVE DESIGN === */
         @media (max-width: 1000px) {
             body {
@@ -1176,6 +1382,16 @@
             .center-scroll {
                 overflow: visible;
                 padding-right: 0;
+            }
+
+            .launcher-scroll {
+                overflow: visible;
+                padding-right: 0;
+            }
+
+            /* On stacked screens, surface the search + launcher first */
+            .launcher {
+                order: -1;
             }
         }
 
@@ -1613,13 +1829,8 @@
 
     <div class="container" id="main">
 
-        <!-- Left Column (Links) -->
-        <nav class="column left-column neo-scope" aria-label="左側導航">
-            <div class="side-scroll" id="left-link-list" aria-label="左側鏈接列表"></div>
-        </nav>
-
-        <!-- Middle Countdown Column -->
-        <main class="column countdown-container neo-scope" aria-label="時間與倒計時">
+        <!-- Dashboard rail (clock / countdown / progress / footer) -->
+        <aside class="column countdown-container neo-scope" aria-label="時間與倒計時">
             <button id="theme-toggle-logo-button" class="theme-toggle-logo-button neo neo-round" aria-label="點擊切換色系"
                 type="button">
                 <img src="/avatar.jpeg" alt="Logo - 點擊切換主題" class="logo-img" loading="lazy">
@@ -1698,12 +1909,22 @@
                     <pre class="json-modal-content" id="json-modal-content"></pre>
                 </div>
             </div>
-        </main>
+        </aside>
 
-        <!-- Right Column (Links) -->
-        <nav class="column right-column neo-scope" aria-label="右側導航">
-            <div class="side-scroll" id="right-link-list" aria-label="右側鏈接列表"></div>
-        </nav>
+        <!-- Unified launcher: one search + one categorized grid -->
+        <main class="column launcher neo-scope" id="launcher" aria-label="站點導航">
+            <div class="nav-search-wrap" id="nav-search-wrap">
+                <svg class="nav-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="search" class="nav-search" id="nav-search" placeholder="鍵入以尋徑，或按 / 聚焦…"
+                    aria-label="搜尋全部站點" autocomplete="off" spellcheck="false">
+                <button type="button" class="nav-search-clear" id="nav-search-clear" aria-label="清除搜尋">×</button>
+            </div>
+            <div class="launcher-scroll" id="link-list" aria-label="站點列表"></div>
+        </main>
     </div>
 
     <noscript>
@@ -2593,128 +2814,152 @@
 
 
 
-            // === 5. Portal Link Source ===
-            const portalLinks = [
-                { label: 'AI 高考', href: 'https://gk.bdfz.net', aria: 'AI高考' },
-                { label: 'AI 默寫', href: 'https://mx.bdfz.net', aria: 'AI默寫' },
-                { label: '高考默寫', href: 'https://mf.bdfz.net', aria: '訪問高考詩文' },
-                { label: 'AI 字詞', href: 'https://wygame.bdfz.net/', aria: 'AI 字詞' },
-                { label: 'AI 論語', href: 'https://kz.bdfz.net', aria: 'AI論語' },
-                { label: 'AI 紅樓夢', href: 'https://hlm.bdfz.net', aria: 'AI紅樓夢' },
-                { label: 'AI 高中教材', href: 'https://sun.bdfz.net/', aria: '全教材' },
-                { label: 'AI 閱卷', href: 'https://mark.bdfz.net/', aria: '閱卷' },
-                { label: 'AI 選校', href: 'https://750.bdfz.net/', aria: 'AI選校' },
-                { label: '老己', href: 'https://my.bdfz.net/', aria: '老己' },
-                { label: '不想做的', href: 'https://path.bdfz.net/', aria: '不想做的' },
-                { label: '不想考的', href: 'https://nope.bdfz.net/', aria: '不想考的' },
-                { label: '彣彰', href: 'https://forum.rdfzer.com', aria: '彣彰' },
-                { label: 'BLOG', href: 'https://bdfz.net/', aria: 'SUEN' },
-                { label: '義戰論語', href: 'https://ly.bdfz.net/', aria: '義戰論語' },
-                { label: '希悅考勤', href: 'https://seiue.bdfz.net/', aria: '50塊' },
-                { label: '下載萬物', href: 'https://xz.bdfz.net/', aria: 'YT-DLP' },
-                { label: '微信公號', href: 'https://wx.bdfz.net/', aria: 'FWechat' },
-                { label: '人籟', href: 'https://voice.bdfz.net/', aria: '人籟' },
-                { label: '心證場', href: 'https://arena.bdfz.net/', aria: '心證場' },
-                { label: 'AI Gaokao English', href: 'https://yd.bdfz.net/', aria: 'AI Gaokao English' },
-                { label: '樹洞', href: 'https://tree.bdfz.net/', aria: '樹洞' },
-                { label: 'Anon Hourly Chat', href: 'https://chat.bdfz.net/', aria: 'Anon Hourly Chat' },
-                { label: '教材PDF', href: 'https://jc.bdfz.net/', aria: '教材PDF' },
-                { label: '家長', href: 'https://h.bdfz.net/', aria: '家長' },
-                { label: 'OpenAI', href: 'https://openai.com/news/', aria: 'OpenAI' },
-                { label: 'Gemini', href: 'https://aistudio.google.com/prompts/new_chat', aria: 'Gemini' },
-                { label: 'Claude', href: 'https://claude.ai/', aria: 'Claude' },
-                { label: 'NotebookLM', href: 'https://notebooklm.google.com/', aria: 'NotebookLM' },
-                { label: 'GitHub', href: 'https://github.com/ieduer', aria: 'GitHub-Suen' },
-                { label: 'X', href: 'https://x.com/ieduer', aria: 'X' },
-                { label: '高考報考', href: 'https://gk.rdfzer.com/', aria: '高考報考' },
-                { label: 'M365', href: 'https://www.office.com/', aria: 'M365' },
-                { label: 'AI 作文', href: 'https://zw.bdfz.net/', aria: 'AI 作文' },
-                { label: '語文課', href: 'https://yw.bdfz.net/', aria: '語文課' },
-                { label: '讀秀', href: 'https://www.duxiu.com/', aria: '讀秀' },
-                { label: '校曆', href: 'https://cal.bdfz.net/', aria: '校曆' }
+            // === 5. Portal Link Source (categorized) ===
+            // 每站一筆，按用途歸入語意分組；左欄重備考、右欄重社群器用。
+            // 調整歸類只需移動條目或改 side 欄；渲染與搜尋自動跟隨。
+            const portalGroups = [
+                {
+                    id: 'drill', side: 'left', label: '操練 · 答題',
+                    links: [
+                        { label: 'AI 高考', href: 'https://gk.bdfz.net', aria: 'AI 高考' },
+                        { label: 'AI 默寫', href: 'https://mx.bdfz.net', aria: 'AI 默寫' },
+                        { label: '高考默寫', href: 'https://mf.bdfz.net', aria: '高考詩文默寫' },
+                        { label: 'AI 字詞', href: 'https://wygame.bdfz.net/', aria: 'AI 字詞' },
+                        { label: 'AI 論語', href: 'https://kz.bdfz.net', aria: 'AI 論語' },
+                        { label: '義戰論語', href: 'https://ly.bdfz.net/', aria: '義戰論語' },
+                        { label: 'AI 非連', href: 'https://flx.bdfz.net/', aria: 'AI 非連續性文本' },
+                        { label: 'AI 閱卷', href: 'https://mark.bdfz.net/', aria: 'AI 閱卷' },
+                        { label: 'AI 作文', href: 'https://zw.bdfz.net/', aria: 'AI 作文' },
+                        { label: 'AI 英語', href: 'https://yd.bdfz.net/', aria: 'AI Gaokao English 高考英語閱讀' },
+                        { label: 'AI 中考', href: 'https://zk.bdfz.net/', aria: 'AI 中考' }
+                    ]
+                },
+                {
+                    id: 'ref', side: 'left', label: '資料 · 課程',
+                    links: [
+                        { label: '高考真題', href: 'https://gks.bdfz.net/', aria: '高考真題' },
+                        { label: '高考報考', href: 'https://gk.rdfzer.com/', aria: '高考報考' },
+                        { label: 'AI 選校', href: 'https://750.bdfz.net/', aria: 'AI 選校' },
+                        { label: '語文術語', href: 'https://sy.bdfz.net/', aria: '語文術語圖譜' },
+                        { label: '詩境', href: 'https://shi.bdfz.net/', aria: '古詩詞鑑賞' },
+                        { label: '語文課', href: 'https://yw.bdfz.net/', aria: '語文課文' },
+                        { label: 'AI 教材', href: 'https://sun.bdfz.net/', aria: 'AI 高中教材' },
+                        { label: '教材PDF', href: 'https://jc.bdfz.net/', aria: '教材 PDF' },
+                        { label: '校曆', href: 'https://cal.bdfz.net/', aria: '校曆' }
+                    ]
+                },
+                {
+                    id: 'community', side: 'right', label: '社群 · 抒寫',
+                    links: [
+                        { label: '彣彰', href: 'https://forum.rdfzer.com', aria: '彣彰論壇' },
+                        { label: '樹洞', href: 'https://tree.bdfz.net/', aria: '匿名樹洞' },
+                        { label: '時聊', href: 'https://chat.bdfz.net/', aria: 'Anon Hourly Chat 匿名整點聊天' },
+                        { label: '心證場', href: 'https://arena.bdfz.net/', aria: '心證場' },
+                        { label: '家長', href: 'https://h.bdfz.net/', aria: '家長' },
+                        { label: 'BLOG', href: 'https://bdfz.net/', aria: 'SUEN 博客' }
+                    ]
+                },
+                {
+                    id: 'reading', side: 'right', label: '披覽 · 共讀',
+                    links: [
+                        { label: '共讀', href: 'https://coread.bdfz.net/', aria: '共讀書架 · 中國人的氣質 · 吶喊 · 邊城 · 論語' },
+                        { label: '九百個月', href: 'https://900.bdfz.net/', aria: '九百個月 向死而生' }
+                    ]
+                },
+                {
+                    id: 'tools', side: 'right', label: '器用 · 雜務',
+                    links: [
+                        { label: '下載萬物', href: 'https://xz.bdfz.net/', aria: '下載萬物 YT-DLP' },
+                        { label: '微信公號', href: 'https://wx.bdfz.net/', aria: '微信公號存檔' },
+                        { label: '人籟', href: 'https://voice.bdfz.net/', aria: '人籟 朗讀' },
+                        { label: '希悅考勤', href: 'https://seiue.bdfz.net/', aria: '希悅考勤' },
+                        { label: '老己', href: 'https://my.bdfz.net/', aria: '老己 用戶中心' },
+                        { label: '不想做的', href: 'https://path.bdfz.net/', aria: '不想做的' },
+                        { label: '不想考的', href: 'https://nope.bdfz.net/', aria: '不想考的' }
+                    ]
+                },
+                {
+                    id: 'external', side: 'right', label: '外物',
+                    links: [
+                        { label: 'OpenAI', href: 'https://openai.com/news/', aria: 'OpenAI' },
+                        { label: 'Claude', href: 'https://claude.ai/', aria: 'Claude' },
+                        { label: 'NotebookLM', href: 'https://notebooklm.google.com/', aria: 'NotebookLM' }
+                    ]
+                }
             ];
 
+            const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => (
+                { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+            ));
+
+            function buildPill(item) {
+                const hay = (item.label + ' ' + item.aria + ' ' + item.href).toLowerCase();
+                return `<a href="${escapeHtml(item.href)}" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(item.aria)}" data-search="${escapeHtml(hay)}">${escapeHtml(item.label)}</a>`;
+            }
+
+            function buildGroup(g) {
+                return `<section class="nav-group" data-group="${g.id}">
+                    <h2 class="nav-group-head"><span class="label">${escapeHtml(g.label)}</span><span class="rule" aria-hidden="true"></span><span class="count">${g.links.length}</span></h2>
+                    <div class="link-grid">${g.links.map(buildPill).join('')}</div>
+                </section>`;
+            }
+
             function renderPortalColumns() {
-                const leftList = document.getElementById('left-link-list');
-                const rightList = document.getElementById('right-link-list');
-                if (!leftList || !rightList) return;
-                const pivot = Math.floor(portalLinks.length / 2);
-                const buildLinksHtml = (items) => items.map((item) => `
-                    <a href="${item.href}" class="link-button side-link" target="_blank" rel="noopener noreferrer" aria-label="${item.aria}">${item.label}</a>
-                `).join('');
-                leftList.innerHTML = buildLinksHtml(portalLinks.slice(0, pivot));
-                rightList.innerHTML = buildLinksHtml(portalLinks.slice(pivot));
+                const list = document.getElementById('link-list');
+                if (!list) return;
+                list.innerHTML = portalGroups.map(buildGroup).join('')
+                    + '<p class="nav-empty">無此徑</p>';
             }
 
             renderPortalColumns();
 
-            // === 6. Drag and Drop Link Sorting ===
-            function initDragSort(container, storageKey) {
-                const scroll = container.querySelector('.side-scroll');
-                if (!scroll) return;
+            // === 6. Instant search / filter across every site ===
+            const navSearch = document.getElementById('nav-search');
+            const navSearchWrap = document.getElementById('nav-search-wrap');
+            const navSearchClear = document.getElementById('nav-search-clear');
 
-                // Load saved order
-                const savedOrder = localStorage.getItem(storageKey);
-                if (savedOrder) {
-                    try {
-                        const order = JSON.parse(savedOrder);
-                        const links = Array.from(scroll.querySelectorAll('.link-button'));
-                        const linkMap = {};
-                        links.forEach(link => { linkMap[link.href] = link; });
-                        order.forEach(href => {
-                            if (linkMap[href]) scroll.appendChild(linkMap[href]);
+            function applyFilter(raw) {
+                const q = (raw || '').trim().toLowerCase();
+                if (navSearchWrap) navSearchWrap.classList.toggle('has-text', q.length > 0);
+                document.querySelectorAll('.launcher-scroll').forEach((scroll) => {
+                    let anyVisible = false;
+                    scroll.querySelectorAll('.nav-group').forEach((group) => {
+                        let groupVisible = false;
+                        group.querySelectorAll('.side-link').forEach((a) => {
+                            const match = !q || (a.dataset.search || '').includes(q);
+                            a.classList.toggle('is-hidden', !match);
+                            if (match) groupVisible = true;
                         });
-                    } catch (e) { }
-                }
-
-                // Make links draggable
-                scroll.querySelectorAll('.link-button').forEach(link => {
-                    link.draggable = true;
-
-                    link.addEventListener('dragstart', (e) => {
-                        link.classList.add('dragging');
-                        e.dataTransfer.effectAllowed = 'move';
-                        e.dataTransfer.setData('text/plain', link.href);
+                        group.classList.toggle('is-hidden', !groupVisible);
+                        if (groupVisible) anyVisible = true;
                     });
-
-                    link.addEventListener('dragend', () => {
-                        link.classList.remove('dragging');
-                        document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
-                        // Save new order
-                        const newOrder = Array.from(scroll.querySelectorAll('.link-button')).map(l => l.href);
-                        localStorage.setItem(storageKey, JSON.stringify(newOrder));
-                    });
-
-                    link.addEventListener('dragover', (e) => {
-                        e.preventDefault();
-                        const dragging = scroll.querySelector('.dragging');
-                        if (dragging && dragging !== link) {
-                            link.classList.add('drag-over');
-                            const rect = link.getBoundingClientRect();
-                            const midY = rect.top + rect.height / 2;
-                            if (e.clientY < midY) {
-                                scroll.insertBefore(dragging, link);
-                            } else {
-                                scroll.insertBefore(dragging, link.nextSibling);
-                            }
-                        }
-                    });
-
-                    link.addEventListener('dragleave', () => {
-                        link.classList.remove('drag-over');
-                    });
-
-                    link.addEventListener('drop', (e) => {
-                        e.preventDefault();
-                        link.classList.remove('drag-over');
-                    });
+                    const empty = scroll.querySelector('.nav-empty');
+                    if (empty) empty.style.display = (q && !anyVisible) ? 'block' : 'none';
                 });
             }
 
-            const leftCol = document.querySelector('.left-column');
-            const rightCol = document.querySelector('.right-column');
-            if (leftCol) initDragSort(leftCol, 'leftLinksOrder');
-            if (rightCol) initDragSort(rightCol, 'rightLinksOrder');
+            if (navSearch) {
+                navSearch.addEventListener('input', (e) => applyFilter(e.target.value));
+            }
+            if (navSearchClear) {
+                navSearchClear.addEventListener('click', () => {
+                    if (!navSearch) return;
+                    navSearch.value = '';
+                    applyFilter('');
+                    navSearch.focus();
+                });
+            }
+            document.addEventListener('keydown', (e) => {
+                const tag = (document.activeElement && document.activeElement.tagName) || '';
+                if (e.key === '/' && navSearch && document.activeElement !== navSearch && !/^(INPUT|TEXTAREA)$/.test(tag)) {
+                    e.preventDefault();
+                    navSearch.focus();
+                } else if (e.key === 'Escape' && document.activeElement === navSearch) {
+                    navSearch.value = '';
+                    applyFilter('');
+                    navSearch.blur();
+                }
+            });
 
             // === 8. Typewriter Effect for Title ===
             const humanTitle = document.querySelector('#human-timer .countdown-title');
