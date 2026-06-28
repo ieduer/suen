@@ -14,6 +14,12 @@ echo "Copying to allinone..."
 mkdir -p allinone/fonts
 cp -r fonts allinone/
 
+echo "Preparing allinone nested PWA paths..."
+mkdir -p allinone/allinone
+cp allinone/index.html allinone/allinone/index.html
+cp allinone/manifest.json allinone/allinone/manifest.json
+cp allinone/sw.js allinone/allinone/sw.js
+
 # 複製到 blogs (如果 blogs 項目需要)
 echo "Copying to blogs..."
 mkdir -p blogs/fonts

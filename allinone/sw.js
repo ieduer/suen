@@ -1,5 +1,5 @@
 // BDFZ-SUEN Service Worker for PWA Support
-const CACHE_NAME = 'bdfz-suen-v5';
+const CACHE_NAME = 'bdfz-suen-v10';
 const ASSETS_TO_CACHE = [
     '/allinone/index.html',
     '/favicon.ico',
