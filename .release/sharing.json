@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "targets": [
+    {
+      "schema_version": 1,
+      "target": "sharing",
+      "repository": "https://github.com/ieduer/suen",
+      "branch": "main",
+      "origin": "https://sharing-ed5.pages.dev",
+      "baseline_commit": "933ba1a96b24478446af60a8c98eb64e82860818",
+      "output": "sharing",
+      "stage_tracked_static": false,
+      "build_command": "bash build.sh && cp \"colleague sharing/index.html\" sharing/index.html",
+      "required_paths": [
+        "colleague sharing/index.html",
+        "build.sh",
+        "fonts/HuWenMingChaoTi.woff2"
+      ],
+      "required_artifacts": [
+        "index.html",
+        "fonts/HuWenMingChaoTi.woff2"
+      ],
+      "checks": [],
+      "bootstrap": {
+        "deployment_id": "75872b54-7ad8-4eef-ba53-7254e26c7df0",
+        "fingerprints": [
+          {
+            "path": "/fonts/HuWenMingChaoTi.woff2",
+            "artifact": "fonts/HuWenMingChaoTi.woff2",
+            "sha256": "51be3c8048e75a18dc46429aa148b6c0cf3094cbcbe2cfc884a815a16673f61e"
+          }
+        ]
+      }
+    }
+  ]
+}
