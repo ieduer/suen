@@ -1,0 +1,40 @@
+{
+  "at": "2026-09-20T06:00:02.449Z",
+  "scope": "release-channel control acceptance; project product/data acceptance remains distinct",
+  "repository": "ieduer/suen",
+  "branch": "main",
+  "targets": [
+    {
+      "target": "sharing",
+      "mode": "guarded_automatic",
+      "deployment": "476d1fd3-ee5c-4306-a9cd-9e429fcf64cb",
+      "source_commit": "01fe8fd6a132fdafa5e4d6cdc6405c51ec9abed9",
+      "artifacts": 3,
+      "policy_file": ".release/sharing.json"
+    },
+    {
+      "target": "sub",
+      "mode": "guarded_automatic",
+      "deployment": "fa276460-1310-4688-a784-8bbd36807498",
+      "source_commit": "01fe8fd6a132fdafa5e4d6cdc6405c51ec9abed9",
+      "artifacts": 32,
+      "policy_file": ".release/policies.json"
+    },
+    {
+      "target": "blogs",
+      "mode": "guarded_automatic",
+      "deployment": "7e69d978-2056-4738-85c9-5358bbdaa364",
+      "source_commit": "01fe8fd6a132fdafa5e4d6cdc6405c51ec9abed9",
+      "artifacts": 5,
+      "policy_file": ".release/policies.json"
+    },
+    {
+      "target": "school-links",
+      "mode": "guarded_automatic",
+      "deployment": "252905de-6bba-4799-9582-65ca9bbcc5b8",
+      "source_commit": "01fe8fd6a132fdafa5e4d6cdc6405c51ec9abed9",
+      "artifacts": 3,
+      "policy_file": ".release/policies.json"
+    }
+  ]
+}
