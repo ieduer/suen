@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "guard_source": "ieduer/cf-ops-scripts@6aef139c359a50c38b5ac3d2522a481540a3daab",
+  "targets": [
+    {
+      "schema_version": 1,
+      "target": "sub",
+      "repository": "https://github.com/ieduer/suen",
+      "branch": "main",
+      "origin": "https://sub-2fm.pages.dev",
+      "baseline_commit": "933ba1a96b24478446af60a8c98eb64e82860818",
+      "source_root": "",
+      "output": ".release-output/sub",
+      "stage_tracked_static": true,
+      "build_command": "",
+      "required_paths": [
+        "index.html"
+      ],
+      "required_artifacts": [
+        "index.html"
+      ],
+      "checks": [],
+      "bootstrap": {
+        "deployment_id": "e84216ae-4ab0-4c6e-9378-03434d5a0a82",
+        "fingerprints": [
+          {
+            "path": "/",
+            "artifact": "index.html",
+            "sha256": "9003e05dd5bd9d85c2a0b87a523b3d59544b54d4e7935ee014738e0c2d77ddde"
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": 1,
+      "target": "school-links",
+      "repository": "https://github.com/ieduer/suen",
+      "branch": "main",
+      "origin": "https://school-links-3am.pages.dev",
+      "baseline_commit": "933ba1a96b24478446af60a8c98eb64e82860818",
+      "source_root": "",
+      "output": "school-links",
+      "stage_tracked_static": false,
+      "build_command": "bash build.sh",
+      "required_paths": [
+        "index.html"
+      ],
+      "required_artifacts": [
+        "index.html"
+      ],
+      "checks": [],
+      "bootstrap": {
+        "deployment_id": "b8ef84a6-7759-4b8e-afa8-a0bb531fe4f2",
+        "fingerprints": [
+          {
+            "path": "/",
+            "artifact": "index.html",
+            "sha256": "f8e27553df9fec4c5116278faa3b9c22d2179e40c94c5a86fc050b8a2147b9c0"
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": 1,
+      "target": "blogs",
+      "repository": "https://github.com/ieduer/suen",
+      "branch": "main",
+      "origin": "https://blogs-8en.pages.dev",
+      "baseline_commit": "933ba1a96b24478446af60a8c98eb64e82860818",
+      "source_root": "",
+      "output": "blogs",
+      "stage_tracked_static": false,
+      "build_command": "bash build.sh",
+      "required_paths": [
+        "index.html"
+      ],
+      "required_artifacts": [
+        "index.html"
+      ],
+      "checks": [],
+      "bootstrap": {
+        "deployment_id": "b4d54890-f031-4177-a573-77f2e27f398c",
+        "fingerprints": [
+          {
+            "path": "/",
+            "artifact": "index.html",
+            "sha256": "f5e5df5dcb1278d91dce5ce0bdf764ecbd57d891887f24abdb03ab35c7df53fb"
+          }
+        ]
+      }
+    }
+  ]
+}
