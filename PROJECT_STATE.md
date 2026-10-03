@@ -1,3 +1,24 @@
+## Accepted frontend release — 2026-10-02 PDT / 2026-10-03 UTC
+
+Canonical source is GitHub `ieduer/suen`, branch `main`. The local `/Users/ylsuen/CF/suen` compatibility path is historical archive, not a publishing checkout. Accepted runtime source is `e373bbbc40fa5a5ffcc7ac790b60f242f5d2facd`; later documentation commits do not change the runtime acceptance.
+
+Sub2QR at https://t.bdfzer.com now encodes arbitrary links and text, with at most 40 batch entries and PNG/SVG/text exports. Existing subscription, node URI, sing-box, Shadowrocket and Clash tools remain. QR content is processed locally with UTF-8 ECI 26 and vendored MIT Nayuki 1.8.0. Subscription fetching occurs only after an explicit user action, with a 1 MB limit, 10-second timeout and no credentials/referrer or automatic storage.
+
+NOW at https://bdfzer.com keeps the present-moment reminder with a Chinese classical book page, existing HuWenMingChao font, real local clock, calm/awake text modes, phrase switching and freeze/resume. Both frontends use paper #fffdf6, ink #1b1720, mango #fadc5e/#e8c53f and iris #a67eb7/#3a2a45; reduced motion and narrow screens are supported. Module tags explicitly use data-cfasync=false, and QR submit stays disabled until initialization; no global Rocket Loader setting changed.
+
+| Pages target | Accepted deployment | Effective UTC |
+| --- | --- | --- |
+| sub | 26545095-bf99-4755-acd7-879feac2c80b | 2026-10-03T00:33:11.49826Z |
+| blogs | c874e8f3-f38a-4aff-8efb-9aa2eccc3e21 | 2026-10-03T00:32:50.725463Z |
+| sharing | 4e7385b4-f15c-463d-bed6-a402ab2ae055 | 2026-10-03T00:33:28.825331Z |
+| school-links | 100d3693-1218-4e30-8cea-70fa94fb5d0f | 2026-10-03T00:32:30.062598Z |
+
+The unchanged sharing and school-links outputs advanced source provenance through the same registered publisher; no new products were registered. All 52 assets, configurations and source identities were verified. Four functional tests, eight independent QR decodes, actual browser exports, mobile overflow checks and production clock/QR interaction passed. [Single private operations report](/Users/ylsuen/CF/reports/operations/status-three-20261002/REPORT.md) binds the exact evidence and baseline.
+
+Public records: [Sub2QR](https://status.bdfz.net/?update=20261002-sub-universal-qr&revision=2) and [NOW](https://status.bdfz.net/?update=20261002-now-classical&revision=2). Revision 1 remains immutable; revision 2 corrects publication time from the prepared draft time to actual publication, preserving original effective times. sharing and school-links have explicit pending envelopes because no public Status siteKey exists; do not invent keys or add products under this release.
+
+Rollback requires a reviewed forward Git revert of exact changed files, preserving later accepted work, and the existing native guarded publisher. Baseline deployments are recorded in frontend-baseline.json beside the report. Never deploy from an archive or blindly reset main. Docs-only commits use [CF-Pages-Skip] per [Cloudflare's GitHub integration](https://developers.cloudflare.com/pages/configuration/git-integration/github-integration/) and must leave the four accepted deployments unchanged. Guard, policies and build configuration remain pinned and unchanged.
+
 
 
 ## Governed automatic release — 2026-09-20
