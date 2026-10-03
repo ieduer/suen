@@ -137,3 +137,8 @@ $('load-subscription').addEventListener('click', async () => {
   } catch (error) { notice(`讀取失敗：${error.name === 'AbortError' ? '等待超時。' : error.message} 可直接貼上訂閱內容；網站也可能不允許跨來源讀取。`); }
   finally { clearTimeout(timer); reading = false; $('load-subscription').disabled = false; }
 });
+
+// Enable submission only after the module and all event handlers are ready.
+const generateButton = document.querySelector('.primary');
+generateButton.innerHTML = '生成二維碼 <span aria-hidden="true">↗</span>';
+generateButton.disabled = false;

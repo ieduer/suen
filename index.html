@@ -4,7 +4,7 @@
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="把網址、郵件、電話、應用連結與文字轉為二維碼。瀏覽器內生成，支援批次及 PNG、SVG 下載。">
   <meta name="theme-color" content="#fffdf6"><title>Sub2QR · 連結成碼</title>
-  <link rel="stylesheet" href="/qr-assets/app.css"><script type="module" src="/qr-assets/app.mjs"></script>
+  <link rel="stylesheet" href="/qr-assets/app.css"><script data-cfasync="false" type="module" src="/qr-assets/app.mjs"></script>
 </head>
 <body>
 <a class="skip" href="#content">跳至內容</a>
@@ -22,7 +22,7 @@
           <div class="examples" id="examples" aria-label="試用範例"><span>試一試</span><button type="button" data-example="url">網頁</button><button type="button" data-example="email">郵件</button><button type="button" data-example="tel">電話</button><button type="button" data-example="text">文字</button></div>
           <div id="subscription-options" hidden><label for="format">輸出方式</label><select id="format"><option value="original">原始連結／逐個節點</option><option value="shadowrocket">Shadowrocket 訂閱</option><option value="sr-install">Shadowrocket 匯入</option><option value="aggregate">多節點 sub:// 合集</option><option value="clash">Clash 匯入</option><option value="bundle">節點文字合集</option></select><p class="hint">支援訂閱網址、節點列表、Base64 與 sing-box JSON。匯入連結由對應應用處理。JSON 轉換僅支援既有 VMess、VLESS Reality、Hysteria2、TUIC 格式；請核對生成內容。</p><button type="button" id="load-subscription" class="secondary">讀取訂閱網址</button><p class="hint">僅在按下此按鈕時直接連線到你輸入的網站；該網站須允許跨來源讀取。</p><button type="button" id="clash-yaml" class="text-button">下載 Clash Meta 設定</button></div>
           <div class="settings"><label for="ecc">容錯等級</label><select id="ecc"><option value="M">標準 · M</option><option value="L">較低 · L</option><option value="Q">較高 · Q</option><option value="H">最高 · H</option></select><span id="byte-count">0 位元組</span></div>
-          <button type="submit" class="primary">生成二維碼 <span aria-hidden="true">↗</span></button>
+          <button type="submit" class="primary" disabled>正在準備生成器…</button>
         </form>
         <p id="notice" role="status" aria-live="polite"></p>
       </section>
