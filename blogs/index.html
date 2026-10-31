@@ -1,20 +1,36 @@
 <!doctype html>
 <html lang="zh-Hant"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="NOW · 當下。時光無需另候，此刻便可啟程。"><meta name="theme-color" content="#fffdf6">
-<title>NOW · 當下</title><link rel="stylesheet" href="./now.css"><script data-cfasync="false" type="module" src="./now.mjs"></script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="NOW · 當下。初雪落在此刻的字上：時光無需另候，此刻便可啟程。"><meta name="theme-color" content="#ece6d8">
+<title>NOW · 當下</title><link rel="preload" href="./fonts/HuWenMingChaoTi.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="./now.css"><script data-cfasync="false" type="module" src="./now.mjs"></script>
 </head><body>
 <a class="skip" href="#main">跳至正文</a>
 <div class="page">
-<header><a href="/" class="wordmark" aria-label="NOW 當下首頁"><span class="seal" aria-hidden="true">當<br>下</span><span>NOW <i>此刻之書</i></span></a><div class="date"><span id="date">今日</span><span id="time">此時</span></div></header>
+<header><a href="/" class="wordmark" aria-label="NOW 當下首頁"><span class="seal" aria-hidden="true">當<br>下</span><span>NOW<i>此刻之書</i></span></a><p class="date"><span id="date">今日</span><span id="time">此時</span></p></header>
 <main id="main">
-<section class="composition" aria-label="當下時盤">
-  <div class="text-column"><p class="chapter">卷一 · 此刻</p><h1>萬事可待，<br>此刻<span>不再。</span></h1><p class="opening">不必等風來，不必等花開。<br>把未竟之事，交予眼前這一刻。</p><div class="motto"><span>念起</span><span class="rule"></span><span>即行</span></div></div>
-  <div class="clock-column"><div class="clock-wrap"><div class="vertical-note" aria-hidden="true">歲月無聲 · 行止在我</div><svg id="clock" viewBox="0 0 500 500" role="img" aria-label="顯示本地時間的當下時盤"><circle class="outer-circle" cx="250" cy="250" r="237"/><circle class="inner-circle" cx="250" cy="250" r="198"/><g id="marks" aria-hidden="true"></g><g id="labels" aria-hidden="true"></g><text class="clock-center" x="250" y="220" text-anchor="middle">當下</text><text class="clock-sub" x="250" y="298" text-anchor="middle">ONLY NOW</text><g id="hour-hand"><path d="M246 269 L248 151 Q250 139 252 151 L254 269 Z"/></g><g id="minute-hand"><path d="M247 275 L249 98 Q250 88 251 98 L253 275 Z"/></g><g id="second-hand"><line x1="250" y1="285" x2="250" y2="65"/><circle cx="250" cy="111" r="5"/></g><circle class="pin" cx="250" cy="250" r="7"/></svg></div><p class="clock-caption"><span id="clock-state">十二刻，皆是當下。</span><span class="caption-rule"></span><span>NOW</span></p></div>
+<section class="hero" aria-label="當下">
+  <canvas class="branch" id="branch" aria-hidden="true"></canvas>
+  <div class="verticals">
+    <h1 class="title" data-snow>當下</h1>
+    <p class="lede" data-snow>萬事可待<br>此刻不再</p>
+    <p class="season" data-snow aria-hidden="true">初雪　歲月無聲　行止在我</p>
+  </div>
+  <figure class="enso">
+    <div class="enso-face"><canvas id="enso" aria-hidden="true"></canvas><svg id="clock" viewBox="0 0 500 500" role="img" aria-label="顯示本地時間的當下時盤"><g id="ticks" aria-hidden="true"></g><g id="hour-hand"><path d="M245 262 C246 220 247 180 249 152 Q250 146 251 152 C253 180 254 220 255 262 Z"/></g><g id="minute-hand"><path d="M246.5 268 C247.5 200 248.5 140 249.4 104 Q250 99 250.6 104 C251.5 140 252.5 200 253.5 268 Z"/></g><g id="second-hand"><circle cx="250" cy="78" r="5.5"/></g><circle class="pin" cx="250" cy="250" r="6"/></svg></div>
+    <figcaption class="clock-caption"><span id="clock-state">十二刻，皆是當下。</span><span class="caption-rule" data-snow-edge></span><span lang="ja">いま</span></figcaption>
+  </figure>
 </section>
-<section class="reflection" aria-label="此刻寄語"><span class="reflection-label">此刻寄語</span><p id="message" role="status" aria-live="polite">把心收回眼前，把事落在手上。<br>今日的一小步，也有它的分量。</p><button type="button" id="next" aria-label="換一句此刻寄語">換一句 <span aria-hidden="true">↗</span></button></section>
-<section class="controls" aria-label="時盤控制"><div class="modes" role="group" aria-label="提醒方式"><button type="button" id="calm" aria-pressed="true">靜觀</button><span aria-hidden="true">／</span><button type="button" id="awake" aria-pressed="false">警醒</button></div><p id="mode-note">心定，然後行。</p><button type="button" id="freeze" aria-pressed="false">暫停指針</button></section>
+<section class="verse" aria-label="序">
+  <p class="chapter">卷一 · 初雪</p>
+  <p class="opening" data-snow>不必等風來，不必等花開。<br>把未竟之事，交予眼前這一刻。</p>
+  <p class="hint" id="hint">雪會落在字上。拂過字面，便可掃去。</p>
+</section>
+<section class="reflection" aria-label="此刻寄語" data-snow-edge><span class="reflection-label">此刻寄語</span><p id="message" data-snow role="status" aria-live="polite">把心收回眼前，把事落在手上。
+今日的一小步，也有它的分量。</p><button type="button" id="next" data-snow-edge aria-label="換一句此刻寄語">換一句</button></section>
+<section class="controls" aria-label="時盤與落雪"><div class="modes" role="group" aria-label="提醒方式"><button type="button" id="calm" aria-pressed="true">靜觀</button><span aria-hidden="true">／</span><button type="button" id="awake" aria-pressed="false">警醒</button></div><p id="mode-note">心定，然後行。細雪無聲。</p><button type="button" id="freeze" data-snow-edge aria-pressed="false">暫停指針</button></section>
 </main>
-<footer><p>時光無需另候，<span>此刻便可啟程。</span></p><div><span>NOW · 當下</span><a href="https://status.bdfz.net/?site=blogs">服務狀態 ↗</a></div></footer>
-</div><noscript>此刻便可啟程。啟用 JavaScript 後可查看即時時盤與切換寄語。</noscript>
+<footer data-snow-edge><p>時光無需另候，<span>此刻便可啟程。</span></p><div><span>NOW · 當下</span><a href="https://status.bdfz.net/?site=blogs">服務狀態 ↗</a></div></footer>
+</div>
+<canvas class="snow" id="snow" aria-hidden="true"></canvas>
+<noscript><p class="noscript">此刻便可啟程。啟用 JavaScript 後可查看即時時盤與落雪。</p></noscript>
 </body></html>
