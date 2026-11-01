@@ -1,3 +1,20 @@
+## Accepted frontend release — 2026-10-31 UTC (NOW first snow)
+
+NOW at https://bdfzer.com is now a wabi-sabi first-snow page: washi paper texture, sumi-ink ensō clock, a plum branch with bengara blossoms, vertical Mincho type, and snow that falls in front of the page and settles on the real strokes of the DOM text, the ensō and the branch. Ledges come from the rendered glyph geometry (`blogs/snow.mjs`), so text stays selectable and accessible in every browser; Chrome's HTML-in-Canvas origin trial is not required. Dragging (mouse) or tapping (touch) brushes snow off. Calm/awake also sets light snow versus storm, pausing the hands suspends the snow, and reduced motion renders a still, dusted scene. The local HuWenMingChaoTi subset covers every glyph used; clock, sayings, modes, status link and privacy page are kept.
+
+Runtime source `3a04390167ece19522b0e2d06b73aea81b1251ae` (redesign `1ec508d`, then a paper-texture seam fix). Measured in headless Chrome: 60 fps at 1440×900 DPR 2 with about 1 ms script per frame, and 60 fps on a 390×844 phone profile at 4× CPU throttling. `t.bdfzer.com/blogs/*` mirrors the same files because the sub target stages the whole repository; sharing and school-links outputs are byte-identical and only advanced provenance.
+
+| Pages target | Accepted deployment | Change |
+| --- | --- | --- |
+| blogs | 3b4049fc-fe8f-4ec9-b290-65b253573635 | NOW redesign (effective 2026-10-31T15:51:06Z; seam fix 15:56Z) |
+| sub | a30b08f1-15db-4030-8382-c9bda95d8c19 | Sub2QR unchanged; `blogs/*` mirror updated |
+| sharing | 1a342e34-3b54-47f5-b6a5-fb10484bbf28 | byte-identical, provenance only |
+| school-links | b6fb1126-dabf-4b5c-8052-167d52d4f851 | byte-identical, provenance only |
+
+Public record: [NOW first snow](https://status.bdfz.net/?update=20261031-now-first-snow&revision=1).
+
+Rollback: forward-revert `3a04390` and `1ec508d` on main (preserving later work) and let the same guarded native publisher rebuild; previous accepted runtime is `e373bbbc40fa5a5ffcc7ac790b60f242f5d2facd`. Private evidence: `/Users/ylsuen/CF/reports/operations/bdfzer-snow-wabi-20261031/REPORT.md`.
+
 ## Accepted frontend release — 2026-10-02 PDT / 2026-10-03 UTC
 
 Canonical source is GitHub `ieduer/suen`, branch `main`. The local `/Users/ylsuen/CF/suen` compatibility path is historical archive, not a publishing checkout. Accepted runtime source is `e373bbbc40fa5a5ffcc7ac790b60f242f5d2facd`; later documentation commits do not change the runtime acceptance.
